@@ -40,7 +40,7 @@ export default function Index() {
       {/* Footer */}
       <View className="bg-pink-700 p-4">
         <Text className="text-center text-white font-bold">
-          @all rights reserved @aashisrjl
+          @all rights reserved @aashisrijal
         </Text>
       </View>
     </View>
