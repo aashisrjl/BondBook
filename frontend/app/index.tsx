@@ -33,7 +33,7 @@ export default function Index() {
           className="p-4 bg-blue-500 w-[160px] rounded-lg text-white text-center font-medium"
           href={{ pathname: "/auth/Register" }}
         >
-          REGISTER
+          REGISTER NOW
         </Link>
       </View>
 
