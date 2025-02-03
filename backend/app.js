@@ -1,13 +1,17 @@
-const dotnev = require('dotenv');
-dotnev.config();
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT
+const port = process.env.PORT || 3000
 
 app.get("/",(req,res)=>{
-    console.log("this is home");
+    res.send("this is home");
 })
 
-app.listen(PORT,()=>{
-    console.log("server is running on port:"+ PORT)
+//about page
+
+
+
+app.listen(port,()=>{
+    console.log("server is running on port:"+ port)
 })
