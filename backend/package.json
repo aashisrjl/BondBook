@@ -1,39 +1,103 @@
 {
-  "keywords": [],
-  "author": "Your Name or Organization",
-  "license": "ISC",
-  "description": "A brief description of your project.",
+
   "name": "bondbook",
+
+
   "version": "1.0.0",
+
   "main": "index.js",
+
+
   "scripts": {
+
+
     "start": "nodemon app.js",
+
+
     "test": "echo \"Error: no test specified\" && exit 1"
+
+
   },
+
+
   "repository": {
+
+
     "type": "git",
+
+
     "url": "git+https://github.com/aashisrjl/BondBook.git"
+
+
   },
+
   "bugs": {
+
+
     "url": "https://github.com/aashisrjl/BondBook/issues"
+
+
   },
+
+
   "homepage": "https://github.com/aashisrjl/BondBook#readme",
+
+
   "dependencies": {
+
+
     "axios": "^1.7.9",
+
+
     "bcryptjs": "^2.4.3",
+
+
     "cookie-parser": "^1.4.7",
+
+
     "cors": "^2.8.5",
+
+
     "dotenv": "^16.4.7",
+
+
     "express": "^4.21.2",
+
+
     "express-session": "^1.18.1",
+
+
     "jsonwebtoken": "^9.0.2",
+
+
     "mongodb": "^6.13.0",
+
+
     "mongoose": "^8.9.6",
+
+
     "multer": "^1.4.5-lts.1",
+
+
     "nodemailer": "^6.10.0",
+
+
     "nodemon": "^3.1.9",
+
+
     "passport": "^0.7.0",
+
+
     "passport-facebook": "^3.0.0",
-    "passport-google-oauth": "^2.0.0"
+
+
+    "passport-google-oauth": "^2.0.0",
+
+
+    "validator": "^13.12.0"
+
+
   }
-}
+
+
+
