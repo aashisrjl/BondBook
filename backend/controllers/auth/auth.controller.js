@@ -3,6 +3,14 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../../database/models/user.model");
 
+exports.getuser= async(req,res)=>{
+    const user = await User.find();
+    res.status(200).json({
+        message: "user find",
+        user
+    })
+};
+
 exports.handleRegister = async (req, res) => {
     const { name, email, password } = req.body;
     
@@ -18,7 +26,7 @@ exports.handleRegister = async (req, res) => {
         })
     }
     const image = req.file.filename;
-    const alreadyExituser = await User.findOne({ where: { email } });
+    const alreadyExituser = await User.findOne({  email });
     if (alreadyExituser) {
         res.status(400).json({
             message: "User with that email already exists",

@@ -26,9 +26,17 @@ app.get("/",(req,res)=>{
     res.send("this is home of BondBook");
 })
 
-const authRoute  = require('./routes/authRoute/auth.route')
+const authRoute  = require('./routes/authRoute/auth.route');
+const User = require('./database/models/user.model');
 app.use("/",authRoute)
-
+const router = express.Router()
+router.get("/user", async(req,res)=>{
+    const user = await User.findAll();
+    res.status(200).json({
+        message: "user find",
+        user
+    })
+});
 
 connectToDatabase()
     .then(() => {
