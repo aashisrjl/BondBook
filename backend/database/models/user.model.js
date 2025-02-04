@@ -46,7 +46,6 @@ const userSchema = new mongoose.Schema(
 
     address: {
       type: String,
-      required: true,
     },
 
     photoUrl: {
@@ -79,7 +78,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: {
         values: ["Happy", "Sad", "Angry", "Calm", "Excited", "Bored"],
-        message: `${values} don't accepted`,
+        message: `{values} don't accepted`,
       },
     },
 
