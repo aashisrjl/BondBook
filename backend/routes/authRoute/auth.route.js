@@ -5,7 +5,7 @@ const { errorHandler } = require('../../utils/catchError/catchAsyncError')
 const router = express.Router()
 
 router.route("/login").post(errorHandler(handleLogin))
-router.route("/register").post(upload.single('image'),errorHandler(handleRegister))
+router.route("/register").post(upload.single('photoUrl'),errorHandler(handleRegister))
 router.route("/logout").get(errorHandler(handleLogout))
 module.exports = router
 
