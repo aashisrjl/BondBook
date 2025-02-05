@@ -27,7 +27,7 @@ app.get("/",(req,res)=>{
 })
 
 const authRoute  = require('./routes/authRoute/auth.route')
-app.use("/",authRoute)
+app.use("/api",authRoute)
 
 
 connectToDatabase()

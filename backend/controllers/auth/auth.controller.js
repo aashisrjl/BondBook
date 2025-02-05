@@ -48,7 +48,8 @@ exports.handleLogin = async (req, res) => {
                 });
                 return;
         }
-        const user = await User.findOne({ where: { email } });
+        const user = await User.findOne({email});
+        console.log("User is ",user)
         if (!user) {
             res.status(400).json({
                 message: "User not found",
@@ -65,7 +66,7 @@ exports.handleLogin = async (req, res) => {
             }
             //cookies 
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET , {
-                expiresIn: process.env.JWT_EXPIRES_IN,
+                expiresIn:'30d'
             });
             res.cookie("token", token, {
                 httpOnly: true
