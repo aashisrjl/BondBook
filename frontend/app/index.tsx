@@ -38,11 +38,7 @@ export default function Index() {
       </View>
 
       {/* Footer */}
-      <View className="bg-pink-700 p-4">
-        <Text className="text-center text-white font-bold">
-          @all rights reserved @aashisrijal
-        </Text>
-      </View>
+
     </View>
   );
 }
