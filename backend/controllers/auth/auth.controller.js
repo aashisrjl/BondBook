@@ -40,6 +40,7 @@ exports.handleRegister = async (req, res) => {
         password: await bcrypt.hash(password, 10),
         photoUrl: image
     });
+    await user.save();
 
     res.status(200).json({
         message: "User registered",
@@ -56,7 +57,8 @@ exports.handleLogin = async (req, res) => {
                 });
                 return;
         }
-        const user = await User.findOne({ where: { email } });
+        const user = await User.findOne({ where: { email: email } });
+        console.log("user===================",user)
         if (!user) {
             res.status(400).json({
                 message: "User not found",
