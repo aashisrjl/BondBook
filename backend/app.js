@@ -27,16 +27,12 @@ app.get("/",(req,res)=>{
 })
 
 const authRoute  = require('./routes/authRoute/auth.route');
-const User = require('./database/models/user.model');
-app.use("/",authRoute)
-const router = express.Router()
-router.get("/user", async(req,res)=>{
-    const user = await User.findAll();
-    res.status(200).json({
-        message: "user find",
-        user
-    })
-});
+const diaryRoute = require('./routes/diaryRoute/diary.route');
+const addressRouter = require("./routes/addressRoute/address.route")
+app.use("/",authRoute);
+app.use("/",diaryRoute);
+app.use("/",addressRouter);
+
 
 connectToDatabase()
     .then(() => {

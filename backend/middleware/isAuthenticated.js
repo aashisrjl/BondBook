@@ -4,8 +4,10 @@ const User = require("../database/models/user.model");
 
 
 exports.isAuthenticated = async(req,res,next)=>{
+    console.log("Auth middleware is called")
     try {
-        const token = req.headers.authorization;
+        const token = req.cookies.token;
+        console.log("Token is:",token)
     if(!token){
         return res.status(401).json({
             success:false,
@@ -13,16 +15,16 @@ exports.isAuthenticated = async(req,res,next)=>{
         });
     }
     const decoded = await promisify(jwt.verify)(token,process.env.JWT_SECRET)
-    console.log(decoded)
+    console.log("Decoded id is:",decoded)
     if(!decoded){
         console.log("can't decode")
         return
-    }
-   const user =  await User.findOne({
-        where:{
-            id: decoded.id
-        }
-    })
+    };
+
+    const decodedId = decoded.id;
+    console.log("DecodedId is",decodedId)
+   const user =  await User.findById({_id:decodedId})
+    console.log("User is:",user)
     if(!user){
         return res.status(401).json({
             success:false,
