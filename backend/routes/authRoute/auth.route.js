@@ -1,6 +1,6 @@
 const express = require('express')
 const { upload } = require('../../middleware/multerConfig')
-const { handleLogout, handleRegister, handleLogin } = require('../../controllers/auth/auth.controller')
+const { handleLogout, handleRegister, handleLogin, getuser } = require('../../controllers/auth/auth.controller')
 const { errorHandler } = require('../../utils/catchError/catchAsyncError')
 const router = express.Router()
 
