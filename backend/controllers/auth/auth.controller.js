@@ -106,21 +106,21 @@ exports.googleCallback = async (req, res) => {
             });
         } else {
             // New user
-            const newUser = await users.create({
-                username: userProfile.displayName,
+            const newUser = await User.create({
+                name: userProfile.displayName,
                 email: userProfile.emails[0].value,
                 password: Math.random().toString(36).substring(2, 10),
                 googleId: userProfile.id,
-                imgUrl: userProfile.photos[0].value,
+                photoUrl: userProfile.photos[0].value,
             });
 
-            token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
+            token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
                 expiresIn: process.env.JWT_EXPIRES_IN,
             });
         }
 
         res.cookie('token', token);
-        res.redirect('http://localhost:5173/settings');
+        // res.redirect('http://localhost:5173/loginsuccess');
    
 };
 
@@ -134,26 +134,25 @@ exports.facebookCallback = async (req, res) => {
         let token;
         if (user) {
             // Existing user
-            token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+            token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
                 expiresIn: process.env.JWT_EXPIRES_IN,
             });
         } else {
             // New user
-            const newUser = await users.create({
-                username: userProfile.displayName,
+            const newUser = await User.create({
+                name: userProfile.displayName,
                 email: userProfile.emails[0].value,
                 password: Math.random().toString(36).substring(2, 10),
                 facebookId: userProfile.id,
-                imgUrl: userProfile.photos[0].value,
+                photoUrl: userProfile.photos[0].value,
             });
 
-            token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
+            token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
                 expiresIn: process.env.JWT_EXPIRES_IN, 
             });
         }
 
         res.cookie('token', token);
-        res.redirect('http://localhost:5173/settings');
     
 };
 

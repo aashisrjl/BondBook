@@ -7,9 +7,8 @@ const app = express();
 
 //database connect
 const connectToDatabase = require('./database/connection/connection');
-// const passport = require('./services/passport/passport')
+const passport = require('./services/passport/passport')
 const cookieParser = require("cookie-parser");
-
 
 const port = process.env.PORT;
 
@@ -17,9 +16,18 @@ const port = process.env.PORT;
 app.use(cookieParser());
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
-// //app.use(passport.initialize());//
+app.use(passport.initialize());
 app.use(express.static('./uploads/'));
 
+// cors origin setup
+const cors = require("cors");
+const corsOption ={
+    origin:"http://localhost:8081",
+    methods:["GET", "POST", "PUT", "DELETE","PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
+}
+app.use(cors(corsOption));
 
 
 app.get("/",(req,res)=>{
