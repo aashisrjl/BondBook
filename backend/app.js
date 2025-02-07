@@ -26,8 +26,12 @@ app.get("/",(req,res)=>{
     res.send("this is home of BondBook");
 })
 
-const authRoute  = require('./routes/authRoute/auth.route')
-app.use("/api",authRoute)
+const authRoute  = require('./routes/authRoute/auth.route');
+const diaryRoute = require('./routes/diaryRoute/diary.route');
+const addressRouter = require("./routes/addressRoute/address.route")
+app.use("/",authRoute);
+app.use("/",diaryRoute);
+app.use("/",addressRouter);
 
 
 connectToDatabase()

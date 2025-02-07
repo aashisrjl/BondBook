@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.route("/login").post(errorHandler(handleLogin))
 router.route("/register").post(upload.single('photoUrl'),errorHandler(handleRegister))
-router.route("/logout").get(errorHandler(handleLogout))
+router.route("/logout").post(errorHandler(handleLogout))
 module.exports = router
 
 // // Google authentication routes

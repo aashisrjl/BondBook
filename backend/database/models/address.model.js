@@ -5,12 +5,17 @@ const addressSchema = new mongoose.Schema(
 
     location:{
         type:[Number],
-        required:true
+        // required:true
     },
 
     placeName:{
         type:String,
         required:true,
+    },
+
+    photoUrl:{
+      type: String,
+      required:false,
     },
 
     userId:{
