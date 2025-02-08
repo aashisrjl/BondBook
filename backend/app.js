@@ -17,18 +17,10 @@ app.use(cookieParser());
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
-const corsOption = {
-    origin: ["http://localhost:8081", "http://192.168.1.74:8081"],
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true
-}
-
-app.use(cors(corsOption));
-// //app.use(passport.initialize());//
 
 app.use(passport.initialize());
 
+// static file
 app.use(express.static('./uploads/'));
 
 // cors origin setup
