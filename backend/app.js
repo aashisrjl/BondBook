@@ -4,7 +4,7 @@ dotenv.config();
 
 const express = require('express');
 const app = express();
-
+const cors = require('cors')
 //database connect
 const connectToDatabase = require('./database/connection/connection');
 const passport = require('./services/passport/passport')
@@ -16,7 +16,19 @@ const port = process.env.PORT;
 app.use(cookieParser());
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
+
+const corsOption = {
+    origin: ["http://localhost:8081", "http://192.168.1.74:8081"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
+}
+
+app.use(cors(corsOption));
+// //app.use(passport.initialize());//
+
 app.use(passport.initialize());
+
 app.use(express.static('./uploads/'));
 
 // cors origin setup
