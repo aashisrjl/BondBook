@@ -15,7 +15,7 @@ import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const BASE_URL = "http://localhost:4000"; // Replace with your actual backend URL
+const BASE_URL = "http://localhost:3000"; // Replace with your actual backend URL
 
 export default function RegisterScreen() {
   const [name, setName] = useState<string>("");
@@ -32,33 +32,22 @@ export default function RegisterScreen() {
       Alert.alert("Permission Required", "You need to allow access to photos.");
       return;
     }
-  
+
     // Launch the image picker
-    const pickImage = async () => {
-        // Request permission to access the media library
-        let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (!permissionResult.granted) {
-          Alert.alert("Permission Required", "You need to allow access to photos.");
-          return;
-        }
-      
-        // Launch the image picker
-        let result = await ImagePicker.launchImageLibraryAsync({
-            cameraType: ImagePicker.CameraType.front,  // Use MediaType.photo here
-            allowsEditing: true,     // Allow user to edit image (crop)
-            aspect: [4, 3],         // Aspect ratio of the crop box
-            quality: 1,             // Quality of the selected image (1 = highest)
-          });
-      
-        // Check if the user picked an image or canceled the selection
-        if (!result.canceled && result.assets && result.assets.length > 0) {
-          setImage(result.assets[0].uri);
-        } else {
-          Alert.alert("No image selected", "Please select an image to upload.");
-        }
-      };
+    let result = await ImagePicker.launchImageLibraryAsync({
+      cameraType: ImagePicker.CameraType.front,  // Use MediaType.photo here
+      allowsEditing: true,     // Allow user to edit image (crop)
+      aspect: [4, 3],         // Aspect ratio of the crop box
+      quality: 1,             // Quality of the selected image (1 = highest)
+    });
+
+    // Check if the user picked an image or canceled the selection
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setImage(result.assets[0].uri);
+    } else {
+      Alert.alert("No image selected", "Please select an image to upload.");
+    }
   };
-  
 
   const handleRegister = async () => {
     if (!image) {
@@ -71,7 +60,7 @@ export default function RegisterScreen() {
     formData.append("email", email);
     formData.append("password", password);
 
-    formData.append("photo", {
+    formData.append("photoUrl", {
       uri: image,
       type: "image/jpeg", 
       name: "profile.jpg",
@@ -129,6 +118,14 @@ export default function RegisterScreen() {
               onChangeText={setPassword}
             />
 
+            {/* Show Selected Image */}
+            {image && (
+              <Image
+                source={{ uri: image }}
+                className="w-32 h-32 rounded-full mx-auto mb-4"
+              />
+            )}
+
             {/* Image Picker Button */}
             <TouchableOpacity
               className="bg-gray-300 p-3 rounded-lg mb-3"
@@ -137,13 +134,7 @@ export default function RegisterScreen() {
               <Text className="text-center">Pick an Image</Text>
             </TouchableOpacity>
 
-            {/* Show Selected Image */}
-            {image && (
-              <Image
-                source={{ uri: image }}
-                className="w-32 h-32 rounded-full mx-auto mb-4"
-              />
-            )}
+            
 
             {/* Register Button */}
             <TouchableOpacity
