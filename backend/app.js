@@ -4,11 +4,11 @@ dotenv.config();
 
 const express = require('express');
 const app = express();
-const cors = require('cors')
 //database connect
 const connectToDatabase = require('./database/connection/connection');
 const passport = require('./services/passport/passport')
 const cookieParser = require("cookie-parser");
+// const session = require('express-session');
 
 const port = process.env.PORT;
 

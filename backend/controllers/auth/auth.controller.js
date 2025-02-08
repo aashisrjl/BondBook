@@ -91,75 +91,78 @@ exports.handleLogin = async (req, res) => {
 }
  
 
-// Google callback handler
+/// Google callback handler
 exports.googleCallback = async (req, res) => {
-        const userProfile = req.user; 
-        const user = await User.findOne({
-            where: { email: userProfile.emails[0].value },
+    const userProfile = req.user;
+    
+    // Check for existing user using email
+    const user = await User.findOne({
+        where: { email: userProfile.emails[0].value },
+    });
+
+    let token;
+    if (user) {
+        // Existing user
+        token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRES_IN,
+        });
+    } else {
+        // New user
+        const newUser = await User.create({
+            name: userProfile.displayName,
+            email: userProfile.emails[0].value,
+            password: "google", // No password needed for OAuth
+            googleId: userProfile.id,
+            photoUrl: userProfile.photos[0].value,
         });
 
-        let token;
-        if (user) {
-            // Existing user
-            token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-                expiresIn: process.env.JWT_EXPIRES_IN,
-            });
-        } else {
-            // New user
-            const newUser = await User.create({
-                name: userProfile.displayName,
-                email: userProfile.emails[0].value,
-                password: Math.random().toString(36).substring(2, 10),
-                googleId: userProfile.id,
-                photoUrl: userProfile.photos[0].value,
-            });
+        token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRES_IN,
+        });
+    }
 
-            token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-                expiresIn: process.env.JWT_EXPIRES_IN,
-            });
-        }
-
-        res.cookie('token', token);
-        // res.redirect('http://localhost:5173/loginsuccess');
-   
+    // Set token in cookie
+    res.cookie('token', token);
+    
+    // Optionally, you could redirect to your frontend URL
+    // res.redirect('http://localhost:5173/loginsuccess');
+    res.status(200).json({ message: 'Login successful', token });
 };
 
 // Facebook callback handler
 exports.facebookCallback = async (req, res) => {
-        const userProfile = req.user;
-        const user = await User.findOne({
-            where: { email: userProfile.emails[0].value },
+    const userProfile = req.user;
+    
+    // Check for existing user using email
+    const user = await User.findOne({
+        where: { email: userProfile.emails[0].value },
+    });
+
+    let token;
+    if (user) {
+        // Existing user
+        token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRES_IN || '30d',
+        });
+    } else {
+        // New user
+        const newUser = await User.create({
+            name: userProfile.displayName,
+            email: userProfile.emails[0].value,
+            password: "facebook", // No password needed for OAuth
+            facebookId: userProfile.id,
+            photoUrl: userProfile.photos[0].value,
         });
 
-        let token;
-        if (user) {
-            // Existing user
-            token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-                expiresIn: process.env.JWT_EXPIRES_IN,
-            });
-        } else {
-            // New user
-            const newUser = await User.create({
-                name: userProfile.displayName,
-                email: userProfile.emails[0].value,
-                password: Math.random().toString(36).substring(2, 10),
-                facebookId: userProfile.id,
-                photoUrl: userProfile.photos[0].value,
-            });
+        token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRES_IN || '30d',
+        });
+    }
 
-            token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-                expiresIn: process.env.JWT_EXPIRES_IN, 
-            });
-        }
-
-        res.cookie('token', token);
+    // Set token in cookie
+    res.cookie('token', token);
     
+    // Optionally, you could redirect to your frontend URL
+    // res.redirect('http://localhost:5173/loginsuccess');
+    res.status(200).json({ message: 'Login successful', token });
 };
-
-
-exports.handleLogout= async(req,res)=>{
-    res.clearCookie("token");
-    res.status(200).json({
-        message: "Logout success",
-    });
-}
