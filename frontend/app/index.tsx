@@ -160,7 +160,7 @@ export default function Index() {
 
 
         <TouchableOpacity className="items-center">
-          <Link href="./setting">
+          <Link href="./setting/SettingPage">
           <Ionicons name="settings" size={35} color="black" />
           </Link>
         </TouchableOpacity>
