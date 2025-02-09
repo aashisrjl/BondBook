@@ -24,13 +24,14 @@ app.use(passport.initialize());
 app.use(express.static('./uploads/'));
 
 // cors origin setup
-const cors = require("cors");
+const cors = require("cor
 
 const corsOption = {
     origin:"*",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
+
 }
 app.use(cors(corsOption));
 
@@ -50,7 +51,7 @@ app.use("/",addressRouter);
 connectToDatabase()
     .then(() => {
         console.log('Database connection established...');
-        app.listen(port, () => {
+        app.listen(port, '0.0.0.0',() => {
             console.log('Server is running on port : '+port);
         });
     })

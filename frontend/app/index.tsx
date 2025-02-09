@@ -8,49 +8,51 @@ import {
 } from "react-native";
 import { Link } from "expo-router";
 import { useState } from "react";
+import tw from 'twrnc';
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import Footer from "./component/Footer"; // Add the Footer component if needed
 
 export default function Index() {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <View className={`flex-1 ${darkMode ? "bg-black" : "bg-white"}`}>
-      <ScrollView className="flex-grow bg-white p-6">
+    <View style={tw`flex-1 ${darkMode ? "bg-black" : "bg-white"}`}>
+      <ScrollView style={tw`flex-grow p-6`}>
         {/* Header */}
-        <View className="items-center mb-8 mt-4">
-          <Text className="text-4xl font-bold text-blue-800 mt-5">
+        <View style={tw`items-center mb-8 mt-4`}>
+          <Text style={tw`text-4xl font-bold text-blue-800 mt-5`}>
             My BondBook
           </Text>
-          <Text className="text-sm text-red-600">
+          <Text style={tw`text-sm text-red-600`}>
             Oops! You haven't shared BondBook to anyone yet!!
           </Text>
         </View>
 
         {/* Add Someone Section */}
-        <View className="mb-14">
+        <View style={tw`mb-14`}>
           <TextInput
             placeholder="Add someone..."
-            className="border border-gray-300 rounded-md p-3"
+            style={tw`border border-gray-300 rounded-md p-3`}
           />
-          <Text className="p-2">Invite your partner by email address!</Text>
+          <Text style={tw`p-2`}>Invite your partner by email address!</Text>
         </View>
 
         {/* Suggestion Section */}
-        <View className="mb-5">
-          <Text className="text-lg font-semibold mb-5">Suggestion</Text>
+        <View style={tw`mb-5`}>
+          <Text style={tw`text-lg font-semibold mb-5`}>Suggestion</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View className="flex-row gap-4">
+            <View style={tw`flex-row gap-4`}>
               {[...Array(4)].map((_, index) => (
                 <TouchableOpacity
                   key={index}
-                  className="w-[150px] bg-gray-100 rounded-lg shadow-lg p-3"
+                  style={tw`w-[150px] bg-gray-100 rounded-lg shadow-lg p-3`}
                 >
                   <Image
                     source={require("./assets/logo.png")}
-                    className="w-full h-32 rounded-md"
+                    style={tw`w-full h-32 rounded-md`}
                   />
-                  <Text className="text-center mt-2">Young and Beautiful</Text>
-                  <Text className="text-center text-sm">Lana Del Rey</Text>
+                  <Text style={tw`text-center mt-2`}>Young and Beautiful</Text>
+                  <Text style={tw`text-center text-sm`}>Lana Del Rey</Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -58,34 +60,34 @@ export default function Index() {
         </View>
 
         {/* Add Moments Section */}
-        <View className="mb-5 mt-10">
-          <Text className="text-xl p-3">Interact Directly from here</Text>
-          <View className="mt-10 flex-row justify-around">
-            <TouchableOpacity className="items-center">
+        <View style={tw`mb-5 mt-10`}>
+          <Text style={tw`text-xl p-3`}>Interact Directly from here</Text>
+          <View style={tw`mt-10 flex-row justify-around`}>
+            <TouchableOpacity style={tw`items-center`}>
               <MaterialIcons name="note" size={70} color="green" />
-              <Text className="font-bold">Add Note</Text>
+              <Text style={tw`font-bold`}>Add Note</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="items-center">
+            <TouchableOpacity style={tw`items-center`}>
               <Ionicons name="musical-notes" size={70} color="green" />
-              <Text className="font-bold">Add Music</Text>
+              <Text style={tw`font-bold`}>Add Music</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="items-center">
+            <TouchableOpacity style={tw`items-center`}>
               <MaterialIcons name="photo" size={70} color="green" />
-              <Text className="font-bold">Add Photo</Text>
+              <Text style={tw`font-bold`}>Add Photo</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="items-center">
+            <TouchableOpacity style={tw`items-center`}>
               <MaterialIcons name="videocam" size={70} color="green" />
-              <Text className="font-bold">Add Video</Text>
+              <Text style={tw`font-bold`}>Add Video</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        {/* Login & Register Buttons (Fixed for iPhone X) */}
-        <View className="pb-20 flex-col justify-center items-center">
-          <TouchableOpacity className="w-[95%]">
+        {/* Login & Register Buttons */}
+        <View style={tw`pb-20 flex-col justify-center items-center mt-14`}>
+          <TouchableOpacity style={tw`w-[95%]`}>
             <Link
               href="./auth/Login"
-              className="bg-green-600 p-6 rounded-2xl text-center text-2xl text-white"
+              style={tw`bg-green-600 p-6 rounded-2xl text-center text-2xl text-white`}
             >
               <MaterialIcons name="login" size={20} /> Login
             </Link>
@@ -100,6 +102,10 @@ export default function Index() {
             </Link>
           </TouchableOpacity>
         </View>
+
+        {/* Optional Footer Component */}
+        <Footer />
+
       </ScrollView>
 
       {/* Bottom Navigation Bar */}

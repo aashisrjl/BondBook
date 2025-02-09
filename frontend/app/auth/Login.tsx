@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import tw from 'twrnc'; // Import tw from twrnc
 
 const BASE_URL = "http://192.168.254.13:3000"; // Replace with your actual backend URL
 
@@ -29,12 +30,12 @@ export default function LoginScreen() {
   };
 
   return (
-    <View className="flex-1 justify-center items-center bg-gray-100 p-6">
-      <View className="w-full max-w-sm bg-white p-6 rounded-2xl shadow-lg">
-        <Text className="text-2xl font-bold text-center mb-4">Login</Text>
+    <View style={tw`flex-1 justify-center items-center bg-gray-100 p-6`}>
+      <View style={tw`w-full max-w-sm bg-white p-6 rounded-2xl shadow-lg`}>
+        <Text style={tw`text-2xl font-bold text-center mb-4`}>Login</Text>
 
         <TextInput
-          className="w-full bg-gray-200 p-3 rounded-lg mb-3"
+          style={tw`w-full bg-gray-200 p-3 rounded-lg mb-3`}
           placeholder="Email"
           keyboardType="email-address"
           value={email}
@@ -42,7 +43,7 @@ export default function LoginScreen() {
         />
 
         <TextInput
-          className="w-full bg-gray-200 p-3 rounded-lg mb-4"
+          style={tw`w-full bg-gray-200 p-3 rounded-lg mb-4`}
           placeholder="Password"
           secureTextEntry
           value={password}
@@ -50,10 +51,10 @@ export default function LoginScreen() {
         />
 
         <TouchableOpacity
-          className="bg-blue-500 p-3 rounded-lg"
+          style={tw`bg-blue-500 p-3 rounded-lg`}
           onPress={handleLogin}
         >
-          <Text className="text-white text-center font-bold">Login</Text>
+          <Text style={tw`text-white text-center font-bold`}>Login</Text>
         </TouchableOpacity>
       </View>
     </View>

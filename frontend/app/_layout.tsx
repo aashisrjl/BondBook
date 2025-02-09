@@ -14,7 +14,7 @@ export default function RootLayout() {
           color:'white',
           fontSize: 25,
         },
-        headerTitleAlign: "center"
+        headerTitleAlign: "left"
       }
       }
       >
@@ -22,6 +22,8 @@ export default function RootLayout() {
             <Stack.Screen name="about" options={{ title: 'About' }} />
             <Stack.Screen name="auth/Login" options={{ title: 'Login' }} />
             <Stack.Screen name="auth/Register" options={{ title: 'Register' }} />
+            <Stack.Screen name="setting/SettingPage" options={{ title: 'Setting' }} />
+            <Stack.Screen name="profile/ProfilePage" options={{ title: 'Profile' }} />
 
       </Stack>
 
