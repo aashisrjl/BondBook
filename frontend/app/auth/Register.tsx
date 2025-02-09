@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
+import tw from 'twrnc'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const BASE_URL = "http://192.168.254.13:3000"; // Replace with your actual backend URL
@@ -83,17 +84,17 @@ export default function RegisterScreen() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : undefined} // Adjust for iOS and Android
-      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      style={tw`flex-1`}
     >
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View className="flex-1 justify-center items-center bg-gray-100 p-6">
-          <View className="w-full max-w-sm bg-white p-6 rounded-2xl shadow-lg">
-            <Text className="text-2xl font-bold text-center mb-4">Register</Text>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={tw`flex-1 justify-center items-center bg-gray-100 p-6`}>
+          <View style={tw`w-full max-w-sm bg-white p-6 rounded-2xl shadow-lg`}>
+            <Text style={tw`text-2xl font-bold text-center mb-4`}>Register</Text>
 
             {/* Name Input */}
             <TextInput
-              className="w-full bg-gray-200 p-3 rounded-lg mb-3"
+              style={tw`w-full bg-gray-200 p-3 rounded-lg mb-3`}
               placeholder="Enter your name"
               value={name}
               onChangeText={setName}
@@ -101,7 +102,7 @@ export default function RegisterScreen() {
 
             {/* Email Input */}
             <TextInput
-              className="w-full bg-gray-200 p-3 rounded-lg mb-3"
+              style={tw`w-full bg-gray-200 p-3 rounded-lg mb-3`}
               placeholder="Enter your email"
               keyboardType="email-address"
               value={email}
@@ -110,7 +111,7 @@ export default function RegisterScreen() {
 
             {/* Password Input */}
             <TextInput
-              className="w-full bg-gray-200 p-3 rounded-lg mb-4"
+              style={tw`w-full bg-gray-200 p-3 rounded-lg mb-4`}
               placeholder="Enter your password"
               secureTextEntry
               value={password}
@@ -121,26 +122,24 @@ export default function RegisterScreen() {
             {image && (
               <Image
                 source={{ uri: image }}
-                className="w-32 h-32 rounded-full mx-auto mb-4"
+                style={tw`w-32 h-32 rounded-full mx-auto mb-4`}
               />
             )}
 
             {/* Image Picker Button */}
             <TouchableOpacity
-              className="bg-gray-300 p-3 rounded-lg mb-3"
+              style={tw`bg-gray-300 p-3 rounded-lg mb-3`}
               onPress={pickImage}
             >
-              <Text className="text-center">Pick an Image</Text>
+              <Text style={tw`text-center`}>Pick an Image</Text>
             </TouchableOpacity>
-
-            
 
             {/* Register Button */}
             <TouchableOpacity
-              className="bg-blue-500 p-3 rounded-lg"
+              style={tw`bg-blue-500 p-3 rounded-lg`}
               onPress={handleRegister}
             >
-              <Text className="text-white text-center font-bold">Register</Text>
+              <Text style={tw`text-white text-center font-bold`}>Register</Text>
             </TouchableOpacity>
           </View>
         </View>
