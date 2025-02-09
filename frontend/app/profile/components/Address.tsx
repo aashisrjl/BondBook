@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, PermissionsAndroid, Platform, Button, Image } from 'react-native';
+import { View, PermissionsAndroid, Platform, Button, Image, Alert } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { Searchbar } from 'react-native-paper';
 import Geolocation from 'react-native-geolocation-service';
@@ -16,7 +16,7 @@ export default function Address() {
   });
 
   const [userLocation, setUserLocation] = useState(null);
-  const [imageUri, setImageUri] = useState(null); // To store captured image
+  const [imageUri, setImageUri] = useState(null); // Store captured image URI
 
   // Request location permission
   const requestLocationPermission = async () => {
@@ -90,7 +90,7 @@ export default function Address() {
           longitudeDelta: 0.0421,
         });
       } else {
-        alert('Location not found!');
+        Alert.alert('Error', 'Location not found!');
       }
     } catch (error) {
       console.error('Error fetching location:', error);
@@ -108,10 +108,12 @@ export default function Address() {
       (response) => {
         if (response.didCancel) {
           console.log('User cancelled camera');
-        } else if ((response as any).error) {
-          console.error('Camera error:', (response as any).error);
-        } else {
+        } else if (response.errorCode) {
+          console.error('Camera error:', response.errorMessage);
+        } else if (response.assets && response.assets.length > 0) {
           setImageUri(response.assets[0].uri); // Store captured image URI
+        } else {
+          Alert.alert('Error', 'Failed to capture photo.');
         }
       }
     );
@@ -135,7 +137,9 @@ export default function Address() {
       <Button title="Capture Photo" onPress={takePhoto} />
 
       {/* Display Captured Image */}
-      {imageUri && <Image source={{ uri: imageUri }} style={tw`w-full h-64 mt-4 rounded`} />}
+      {imageUri && (
+        <Image source={{ uri: imageUri }} style={tw`w-full h-64 mt-4 rounded-lg`} />
+      )}
     </View>
   );
 }
