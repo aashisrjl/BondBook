@@ -15,7 +15,7 @@ export default function Index() {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <View className={`flex-1 ${darkMode ? "bg-black" : "bg-white"} p-6`}>
+    <View className={`flex ${darkMode ? "bg-black" : "bg-white"} p-6`}>
       {/* Header */}
       <View className="items-center mb-8 mt-4">
         <Text className="text-4xl font-bold text-blue-800 mt-5">
@@ -145,7 +145,7 @@ export default function Index() {
         </TouchableOpacity>
       </View>
     
-      <View className="flex-row justify-around mt-10 p-4 border-t border-gray-300 mt-auto">
+      <View className="flex-row justify-around p-5 border-t border-gray-300 mt-auto">
         <TouchableOpacity className="items-center">
         <Link href="/">
           <Ionicons name="home" size={35} color="black" />
