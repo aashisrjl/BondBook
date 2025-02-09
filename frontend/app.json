@@ -1,0 +1,10 @@
+{
+    "expo": {
+      "name": "BondBook",
+      "slug": "bondbook",
+      "android": {
+        "package": "com.aashisrjl.bondbook"
+      }
+    }
+  }
+  

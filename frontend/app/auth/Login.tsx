@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const BASE_URL = "http://localhost:4000"; // Replace with your machine's IP or deployed backend URL
+const BASE_URL = "http://localhost:3000"; // Replace with your machine's IP or deployed backend URL
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");

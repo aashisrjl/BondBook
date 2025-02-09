@@ -17,7 +17,15 @@ export default function RootLayout() {
         headerTitleAlign: "center"
       }
       }
-      />
+      >
+            <Stack.Screen name="index" options={{ title: 'Home' }} />
+            <Stack.Screen name="about" options={{ title: 'About' }} />
+            <Stack.Screen name="auth/Login" options={{ title: 'Login' }} />
+            <Stack.Screen name="auth/Register" options={{ title: 'Register' }} />
+
+      </Stack>
+
+
 
   );
 }

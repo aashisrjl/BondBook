@@ -25,17 +25,19 @@ export default function Index() {
       <View className="flex flex-row justify-between  px-10">
         <Link
           className="p-4 bg-green-500 w-[130px] rounded-lg text-white text-center font-medium"
-          href={{ pathname: "/auth/Login" }}
+          href="/auth/Login"
         >
           LOGIN
         </Link>
         <Link
           className="p-4 bg-blue-500 w-[160px] rounded-lg text-white text-center font-medium"
-          href={{ pathname: "/auth/Register" }}
+          href="/auth/Register"
         >
           REGISTER NOW
         </Link>
       </View>
+      {/* // checking the link */}
+      <Link href="/about"> Go to about page</Link>
 
       {/* Footer */}
       <View className="bg-pink-700 p-4">
