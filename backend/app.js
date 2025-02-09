@@ -25,9 +25,10 @@ app.use(express.static('./uploads/'));
 
 // cors origin setup
 const cors = require("cors");
-const corsOption ={
-    origin:"http://localhost:8081",
-    methods:["GET", "POST", "PUT", "DELETE","PATCH"],
+
+const corsOption = {
+    origin:"*",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
 }
