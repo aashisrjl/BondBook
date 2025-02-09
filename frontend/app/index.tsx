@@ -15,7 +15,7 @@ export default function Index() {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <View className={`flex-1 ${darkMode ? "bg-black" : "bg-white"} p-6`}>
+    <ScrollView className="flex-1 flex-grow bg-white p-6">
       {/* Header */}
       <View className="items-center mb-8 mt-4">
         <Text className="text-4xl font-bold text-blue-800 mt-5">
@@ -32,145 +32,98 @@ export default function Index() {
           placeholder="Add someone..."
           className="border border-gray-300 rounded-md p-3"
         />
-        <Text  className="p-2">Invite your partner by email address!</Text>
+        <Text className="p-2">Invite your partner by email address!</Text>
       </View>
 
       {/* Suggestion Section */}
-      <View className={`mb-5 ${darkMode ? "bg-black" : "bg-white"} `}>
+      <View className="mb-5">
         <Text className="text-lg font-semibold mb-5">Suggestion</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View className="flex-row justify-center align-center gap-4">
-            {/* Card 1 */}
-            <TouchableOpacity className="w-[150px] bg-gray-100 rounded-lg shadow-lg p-3">
-              <Image
-                source={require("./assets/logo.png")}
-                className="w-full h-32 rounded-md"
-              />
-              <Text className="text-center mt-2">Young and Beautiful</Text>
-              <Text className="text-center text-sm">Lana Del Rey</Text>
-            </TouchableOpacity>
-
-            {/* Card 1 */}
-            <TouchableOpacity className="w-[150px] bg-gray-100 rounded-lg shadow-lg p-3">
-              <Image
-                source={require("./assets/logo.png")}
-                className="w-full h-32 rounded-md"
-              />
-              <Text className="text-center mt-2">Young and Beautiful</Text>
-              <Text className="text-center text-sm">Lana Del Rey</Text>
-            </TouchableOpacity>
-
-            {/* Card 1 */}
-            <TouchableOpacity className="w-[150px] bg-gray-100 rounded-lg shadow-lg p-3">
-              <Image
-                source={require("./assets/logo.png")}
-                className="w-full h-32 rounded-md"
-              />
-              <Text className="text-center mt-2">Young and Beautiful</Text>
-              <Text className="text-center text-sm">Lana Del Rey</Text>
-            </TouchableOpacity>
-
-            {/* Card 1 */}
-            <TouchableOpacity className="w-[150px] bg-gray-100 rounded-lg shadow-lg p-3">
-              <Image
-                source={require("./assets/logo.png")}
-                className="w-full h-32 rounded-md"
-              />
-              <Text className="text-center mt-2">Young and Beautiful</Text>
-              <Text className="text-center text-sm">Lana Del Rey</Text>
-            </TouchableOpacity>
-
-            {/* Card 2 */}
-            <TouchableOpacity className="w-[150px] bg-gray-100 rounded-lg shadow-lg p-3">
-              <Image
-                source={require("./assets/logo.png")}
-                className="w-full h-32 rounded-md"
-              />
-              <Text className="text-center mt-2">Do I Wanna Know</Text>
-              <Text className="text-center text-sm">Arctic Monkeys</Text>
-            </TouchableOpacity>
+          <View className="flex-row gap-4">
+            {[...Array(4)].map((_, index) => (
+              <TouchableOpacity
+                key={index}
+                className="w-[150px] bg-gray-100 rounded-lg shadow-lg p-3"
+              >
+                <Image
+                  source={require("./assets/logo.png")}
+                  className="w-full h-32 rounded-md"
+                />
+                <Text className="text-center mt-2">Young and Beautiful</Text>
+                <Text className="text-center text-sm">Lana Del Rey</Text>
+              </TouchableOpacity>
+            ))}
           </View>
         </ScrollView>
       </View>
 
       {/* Add Moments Section */}
-      <View className={`mb-5  mt-10 ${darkMode ? "bg-black" : "bg-white"} `}>
+      <View className="mb-5 mt-10">
         <Text className="text-xl p-3">Interact Directly from here</Text>
-      <View
-        className={`mt-10 flex-row justify-around ${
-          darkMode ? "bg-black" : "bg-white"
-        } `}
-      >
-        <TouchableOpacity className="items-center">
-          <MaterialIcons name="note" size={70} color="green" />
-          <Text className="font-bold">Add Note</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity className="items-center">
-          <Ionicons name="musical-notes" size={70} color="green" />          
-          <Text className="font-bold">Add music </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity className="items-center">
-          <MaterialIcons name="photo" size={70} color="green" />
-          <Text className="font-bold">Add photo</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity className="items-center">
-        <MaterialIcons name="videocam" size={70} color="green" />
-          <Text className="font-bold">Add photo</Text>
-        </TouchableOpacity>
-
-        
-      </View>
+        <View className="mt-10 flex-row justify-around">
+          <TouchableOpacity className="items-center">
+            <MaterialIcons name="note" size={70} color="green" />
+            <Text className="font-bold">Add Note</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className="items-center">
+            <Ionicons name="musical-notes" size={70} color="green" />
+            <Text className="font-bold">Add Music</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className="items-center">
+            <MaterialIcons name="photo" size={70} color="green" />
+            <Text className="font-bold">Add Photo</Text>
+          </TouchableOpacity>
+          <TouchableOpacity className="items-center">
+            <MaterialIcons name="videocam" size={70} color="green" />
+            <Text className="font-bold">Add Video</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
-      {/* buttons */}
-      <View className="mt-auto flex-col justify-center align-center">
-        <TouchableOpacity className="flex-col justify-center align-center gap-5 ml">
+      {/* Login & Register Buttons (Fixed for iPhone X) */}
+      <View className="mt-auto pb-20 flex-col justify-center items-center">
+        <TouchableOpacity className="w-[95%]">
           <Link
             href="./auth/Login"
-            className="bg-green-600 p-6 rounded-2xl w-[95%] text-center text-2xl"
+            className="bg-green-600 p-6 rounded-2xl text-center text-2xl text-white"
           >
-           <MaterialIcons name="login" size={20} /> 
-           Login{" "}
+            <MaterialIcons name="login" size={20} /> Login
           </Link>
+        </TouchableOpacity>
+
+        <TouchableOpacity className="w-[95%] mt-4">
           <Link
             href="./auth/Register"
-            className="bg-blue-600 p-6 rounded-2xl w-[95%] text-center text-2xl"
+            className="bg-blue-600 p-6 rounded-2xl text-center text-2xl text-white"
           >
-            <MaterialIcons name="login" size={20} /> 
-            Register{" "}
+            <MaterialIcons name="person-add" size={20} /> Register
           </Link>
         </TouchableOpacity>
       </View>
-    
-      <View className="flex-row justify-around mt-10 p-4 border-t border-gray-300 mt-auto">
-        <TouchableOpacity className="items-center">
-        <Link href="/">
-          <Ionicons name="home" size={35} color="black" />
-        </Link>
+
+      {/* Bottom Navigation Bar */}
+      <View className="flex-row justify-around p-4 border-t border-gray-300 mt-auto">
+        <TouchableOpacity>
+          <Link href="/">
+            <Ionicons name="home" size={35} color="black" />
+          </Link>
         </TouchableOpacity>
-
-        <TouchableOpacity className="items-center">
-        <Link href="./about">
-          <Ionicons name="information-circle" size={35} color="black" />
-        </Link>
+        <TouchableOpacity>
+          <Link href="./about">
+            <Ionicons name="information-circle" size={35} color="black" />
+          </Link>
         </TouchableOpacity>
-
-
-        <TouchableOpacity className="items-center">
+        <TouchableOpacity>
           <Link href="./setting">
-          <Ionicons name="settings" size={35} color="black" />
+            <Ionicons name="settings" size={35} color="black" />
           </Link>
         </TouchableOpacity>
-
-        <TouchableOpacity className="items-center">
-         <Link href="./profile">
-         <Ionicons name="person" size={35} color="black" />
-         </Link>
+        <TouchableOpacity>
+          <Link href="./profile">
+            <Ionicons name="person" size={35} color="black" />
+          </Link>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
