@@ -76,9 +76,8 @@ export default function RegisterScreen() {
       await AsyncStorage.setItem("token", res.data.token);
       Alert.alert("Registration Successful");
     } catch (error) {
-      const errorMessage =
-        (error as any)?.response?.data?.message || "Registration Failed!";
-      Alert.alert("Error", errorMessage);
+      // const errorMessage = (error as any)?.response?.data?.message || "Registration Failed!";
+      Alert.alert("Error", "Error while Registration");
     }
   };
 

@@ -114,9 +114,11 @@ export default function Index() {
             <Ionicons name="information-circle" size={35} color="black" />
           </Link>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Link href="./setting">
-            <Ionicons name="settings" size={35} color="black" />
+
+        <TouchableOpacity className="items-center">
+          <Link href="./setting/SettingPage">
+          <Ionicons name="settings" size={35} color="black" />
+
           </Link>
         </TouchableOpacity>
         <TouchableOpacity>
