@@ -15,7 +15,7 @@ import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const BASE_URL = "http://localhost:3000"; // Replace with your actual backend URL
+const BASE_URL = "http://192.168.254.13:3000"; // Replace with your actual backend URL
 
 export default function RegisterScreen() {
   const [name, setName] = useState<string>("");
