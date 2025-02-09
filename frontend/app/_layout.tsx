@@ -23,6 +23,7 @@ export default function RootLayout() {
             <Stack.Screen name="auth/Login" options={{ title: 'Login' }} />
             <Stack.Screen name="auth/Register" options={{ title: 'Register' }} />
             <Stack.Screen name="setting/SettingPage" options={{ title: 'Setting' }} />
+            <Stack.Screen name="profile/ProfilePage" options={{ title: 'Profile' }} />
 
       </Stack>
 

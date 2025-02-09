@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
+import Footer from './component/Footer';
 
 export function AboutPage() {
     const features = [
@@ -28,6 +29,7 @@ export function AboutPage() {
     ];
 
     return (
+      <>
         <ScrollView style={tw`flex-1 bg-white`}>
             {/* Hero Section */}
             <View style={tw`bg-pink-50 px-4 py-12`}>
@@ -102,6 +104,8 @@ export function AboutPage() {
                 </Text>
             </View>
         </ScrollView>
+        <Footer />
+        </>
     );
 }
 
