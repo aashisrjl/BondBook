@@ -4,7 +4,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import tw from 'twrnc'; // Import tw from twrnc
 
-const BASE_URL = "http://192.168.254.13:3000"; // Replace with your actual backend URL
+const BASE_URL = "http://192.168.254.13:3000" || "http://.168.1.74:3000 "; // Replace with your actual backend URL
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
