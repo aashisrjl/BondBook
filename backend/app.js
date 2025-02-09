@@ -50,7 +50,7 @@ app.use("/",addressRouter);
 connectToDatabase()
     .then(() => {
         console.log('Database connection established...');
-        app.listen(port, () => {
+        app.listen(port,'0.0.0.0', () => {
             console.log('Server is running on port : '+port);
         });
     })
