@@ -8,16 +8,16 @@ import {
 } from "react-native";
 import { Link } from "expo-router";
 import { useState } from "react";
-import tw from 'twrnc'
+import tw from 'twrnc';
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import Footer from "./component/Footer";
+import Footer from "./component/Footer"; // Add the Footer component if needed
 
 export default function Index() {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
     <View style={tw`flex-1 ${darkMode ? "bg-black" : "bg-white"}`}>
-      <ScrollView style={tw`flex-grow bg-white p-6`}>
+      <ScrollView style={tw`flex-grow p-6`}>
         {/* Header */}
         <View style={tw`items-center mb-8 mt-4`}>
           <Text style={tw`text-4xl font-bold text-blue-800 mt-5`}>
@@ -93,18 +93,44 @@ export default function Index() {
             </Link>
           </TouchableOpacity>
 
-          <TouchableOpacity style={tw`w-[95%] mt-4`}>
+          <TouchableOpacity className="w-[95%] mt-4">
             <Link
               href="./auth/Register"
-              style={tw`bg-blue-600 p-6 rounded-2xl text-center text-2xl text-white`}
+              className="bg-blue-600 p-6 rounded-2xl text-center text-2xl text-white"
             >
               <MaterialIcons name="person-add" size={20} /> Register
             </Link>
           </TouchableOpacity>
         </View>
+
+        {/* Optional Footer Component */}
+        <Footer />
+
       </ScrollView>
 
-     <Footer />
+      {/* Bottom Navigation Bar */}
+      <View className="flex-row justify-around p-4 border-t border-gray-300">
+        <TouchableOpacity>
+          <Link href="/">
+            <Ionicons name="home" size={35} color="black" />
+          </Link>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Link href="./about">
+            <Ionicons name="information-circle" size={35} color="black" />
+          </Link>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Link href="./setting">
+            <Ionicons name="settings" size={35} color="black" />
+          </Link>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Link href="./profile">
+            <Ionicons name="person" size={35} color="black" />
+          </Link>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
