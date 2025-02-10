@@ -14,20 +14,20 @@ const Footer = () => {
     </TouchableOpacity>
 
     <TouchableOpacity   style={tw`items-center`}>
-    <Link href="../about">
+    <Link href="../pages/about/about">
       <Ionicons name="information-circle" size={35} color="black" />
     </Link>
     </TouchableOpacity>
 
 
     <TouchableOpacity   style={tw`items-center`}>
-      <Link href="../setting/SettingPage">
+      <Link href="../pages/setting/SettingPage">
       <Ionicons name="settings" size={35} color="black" />
       </Link>
     </TouchableOpacity>
 
     <TouchableOpacity  style={tw`items-center`} >
-     <Link href="../profile/ProfilePage">
+     <Link href="../pages/profile/ProfilePage">
      <Ionicons name="person" size={35} color="black" />
      </Link>
     </TouchableOpacity>

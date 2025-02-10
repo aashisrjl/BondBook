@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
-import Footer from './component/Footer';
+import Footer from '../../component/Footer';
 
 export function AboutPage() {
     const features = [

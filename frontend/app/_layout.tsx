@@ -19,11 +19,11 @@ export default function RootLayout() {
       }
       >
             <Stack.Screen name="index" options={{ title: 'Home' }} />
-            <Stack.Screen name="about" options={{ title: 'About' }} />
+            <Stack.Screen name="pages/about/about" options={{ title: 'About' }} />
             <Stack.Screen name="auth/Login" options={{ title: 'Login' }} />
             <Stack.Screen name="auth/Register" options={{ title: 'Register' }} />
-            <Stack.Screen name="setting/SettingPage" options={{ title: 'Setting' }} />
-            <Stack.Screen name="profile/ProfilePage" options={{ title: 'Profile' }} />
+            <Stack.Screen name="pages/setting/SettingPage" options={{ title: 'Setting' }} />
+            <Stack.Screen name="pages/profile/ProfilePage" options={{ title: 'Profile' }} />
 
       </Stack>
 

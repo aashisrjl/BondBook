@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { View, PermissionsAndroid, Platform, Button, Image, Alert } from 'react-native';
+import { View, PermissionsAndroid, Platform, Button, Image, Alert, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { Searchbar } from 'react-native-paper';
 import Geolocation from 'react-native-geolocation-service';
 import * as ImagePicker from 'react-native-image-picker';
 import tw from 'twrnc';
+import Footer from '../../../component/Footer';
 
 export default function Address() {
   const [searchQuery, setSearchQuery] = useState('');
   const [region, setRegion] = useState({
-    latitude: 37.7749, // Default: San Francisco
+    latitude: 37.7749, 
     longitude: -122.4194,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
 
-  const [userLocation, setUserLocation] = useState(null);
+  const [userLocation, setUserLocation] = useState({ latitude: 0, longitude: 0 });
   const [imageUri, setImageUri] = useState(null); // Store captured image URI
 
   // Request location permission
@@ -35,6 +36,7 @@ export default function Address() {
     }
     return true; // iOS automatically handles permissions
   };
+
 
   // Get user location
   const getCurrentLocation = () => {
@@ -97,27 +99,66 @@ export default function Address() {
     }
   };
 
-  // Capture photo using the camera
-  const takePhoto = () => {
-    ImagePicker.launchCamera(
-      {
-        mediaType: 'photo',
-        quality: 1,
-        saveToPhotos: true, // Saves image to gallery
-      },
-      (response) => {
-        if (response.didCancel) {
-          console.log('User cancelled camera');
-        } else if (response.errorCode) {
-          console.error('Camera error:', response.errorMessage);
-        } else if (response.assets && response.assets.length > 0) {
-          setImageUri(response.assets[0].uri); // Store captured image URI
-        } else {
-          Alert.alert('Error', 'Failed to capture photo.');
+  const requestPermissions = async () => {
+    if (Platform.OS === 'android') {
+      const grantedCamera = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Camera Permission',
+          message: 'This app needs access to your camera.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
         }
-      }
-    );
+      );
+  
+      const grantedStorage = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'Storage Permission',
+          message: 'This app needs access to your storage.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        }
+      );
+  
+      return (
+        grantedCamera === PermissionsAndroid.RESULTS.GRANTED &&
+        grantedStorage === PermissionsAndroid.RESULTS.GRANTED
+      );
+    }
+    return true; // iOS automatically handles permissions
   };
+
+  const takePhoto = async () => {
+    const hasPermission = await requestPermissions();
+    if (!hasPermission) {
+      Alert.alert('Permission denied', 'You need to grant camera and storage permissions to use this feature.');
+      return;
+    }
+  
+    const options: any = {
+      title: 'Take Photo',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+  
+    ImagePicker.launchCamera(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = { uri: response.uri };
+        setImageUri(source);
+      }
+    });
+  }
 
   return (
     <View style={tw`flex-1 p-4`}>
@@ -128,18 +169,23 @@ export default function Address() {
         onSubmitEditing={() => searchLocation(searchQuery)}
         style={tw`mb-4`}
       />
-      <MapView style={{ flex: 1, height: 400 }} region={region} onRegionChangeComplete={setRegion}>
+      <MapView style={tw`flex-1 h-vh w-[32rem]`} region={region} onRegionChangeComplete={setRegion}>
         {userLocation && <Marker coordinate={userLocation} title="Your Location" />}
         <Marker coordinate={region} title="Searched Location" />
       </MapView>
 
       {/* Capture Photo Button */}
+      <TouchableOpacity>
       <Button title="Capture Photo" onPress={takePhoto} />
+      </TouchableOpacity>
 
       {/* Display Captured Image */}
       {imageUri && (
         <Image source={{ uri: imageUri }} style={tw`w-full h-64 mt-4 rounded-lg`} />
       )}
+      <View style={tw`mt-4 mb-0`}> 
+      < Footer />
+      </View>
     </View>
   );
 }

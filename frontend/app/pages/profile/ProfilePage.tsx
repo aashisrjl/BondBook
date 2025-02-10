@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Address from "./components/Address";
+import Address from "./profileComponents/Address";
 import {
   View,
   Text,
@@ -36,7 +36,7 @@ const ProfilePageScreen = () => {
       {/* Profile Header */}
       <View style={tw`bg-white p-4 flex-row items-center`}>
         <Image
-          source={require("../assets/logo.png")}
+          source={require("../../assets/logo.png")}
           style={tw`w-16 h-16 rounded-full mr-4`}
         />
         <View>
