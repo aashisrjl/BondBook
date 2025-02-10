@@ -93,7 +93,7 @@ export default function Index() {
             </Link>
           </TouchableOpacity>
 
-          <TouchableOpacity className="w-[95%] mt-4">
+          <TouchableOpacity style={tw `w-[95%] mt-4` }>
             <Link
               href="./auth/Register"
               className="bg-blue-600 p-6 rounded-2xl text-center text-2xl text-white"
@@ -103,34 +103,10 @@ export default function Index() {
           </TouchableOpacity>
         </View>
 
-        {/* Optional Footer Component */}
-        <Footer />
-
       </ScrollView>
 
       {/* Bottom Navigation Bar */}
-      <View className="flex-row justify-around p-4 border-t border-gray-300">
-        <TouchableOpacity>
-          <Link href="/">
-            <Ionicons name="home" size={35} color="black" />
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Link href="./about">
-            <Ionicons name="information-circle" size={35} color="black" />
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Link href="./setting">
-            <Ionicons name="settings" size={35} color="black" />
-          </Link>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Link href="./profile">
-            <Ionicons name="person" size={35} color="black" />
-          </Link>
-        </TouchableOpacity>
-      </View>
+    < Footer />
     </View>
   );
 }
