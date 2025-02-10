@@ -109,7 +109,7 @@ export default function Index() {
       </ScrollView>
 
       {/* Bottom Navigation Bar */}
-      <View className="flex-row justify-around p-4 border-t border-gray-300">
+      <View style={tw `flex-row justify-around p-4 border-t border-gray-300`}>
         <TouchableOpacity>
           <Link href="/">
             <Ionicons name="home" size={35} color="black" />

@@ -24,7 +24,7 @@ app.use(passport.initialize());
 app.use(express.static('./uploads/'));
 
 // cors origin setup
-const cors = require("cor
+const cors = require("cors")
 
 const corsOption = {
     origin:"*",

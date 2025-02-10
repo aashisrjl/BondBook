@@ -51,13 +51,9 @@ const ProfilePageScreen = () => {
         {sections.map((section) => (
           <TouchableOpacity
             key={section.id }
-            style={[
-              tw`p-3`,
-              selectedSection === section.id && tw`border-b-2 border-blue-500`,
-            ]}
-            onPress={() => setSelectedSection(section.id)}
-          >
-            <MaterialIcons name={section.icon} size={24} color="gray" />
+            style={[tw`p-3`,selectedSection === section.id && tw`border-b-2 border-blue-500`,]}
+            onPress={() => setSelectedSection(section.id)}>
+            <MaterialIcons name={section.icon } size={24} color="gray" />
             <Text style={tw`text-center text-gray-700`}>
               {section.title }
             </Text>
