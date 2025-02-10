@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Address from "./components/Address";
 import {
   View,
   Text,
@@ -26,6 +27,8 @@ const ProfilePageScreen = () => {
     { id: "timeline", title: "Timeline ", icon: "timeline" },
     { id: "photos", title: "Photos ", icon: "photo-library" },
     { id: "videos", title: "Videos ", icon: "video-library" },
+    { id: "address", title: "Address ", icon: "map" },
+
   ];
 
   return (
@@ -62,13 +65,16 @@ const ProfilePageScreen = () => {
         ))}
       </View>
 
+
       {/* Content Section */}
-      <ScrollView style={tw`p-4`}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={tw`p-4`}>
         {selectedSection === "diary" && <Text>Your Diary Entries...</Text>}
         {selectedSection === "notes" && <Text>Your Notes...</Text>}
         {selectedSection === "timeline" && <Text>Your Timelines...</Text>}
         {selectedSection === "photos" && <Text>Your Photo Gallery...</Text>}
         {selectedSection === "videos" && <Text>Your Videos...</Text>}
+        {selectedSection === "address" && <><Address/></>}
+
       </ScrollView>
     </View>
   );
