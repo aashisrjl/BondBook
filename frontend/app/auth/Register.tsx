@@ -13,36 +13,32 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
-import tw from 'twrnc'
+import tw from 'twrnc';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesome } from '@expo/vector-icons';
 
-const BASE_URL = "http://192.168.254.13:3000"; // Replace with your actual backend URL
+const BASE_URL = "http://192.168.1.81:3000"; // Replace with your actual backend URL
 
 export default function RegisterScreen() {
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [image, setImage] = useState<string | null>(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [image, setImage] = useState(null);
 
   // Function to pick an image
   const pickImage = async () => {
-    // Request permission to access the media library
     let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
-      // Show an alert if permission is denied
       Alert.alert("Permission Required", "You need to allow access to photos.");
       return;
     }
 
-    // Launch the image picker
     let result = await ImagePicker.launchImageLibraryAsync({
-      cameraType: ImagePicker.CameraType.front,  // Use MediaType.photo here
-      allowsEditing: true,     // Allow user to edit image (crop)
-      aspect: [4, 3],         // Aspect ratio of the crop box
-      quality: 1,             // Quality of the selected image (1 = highest)
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
     });
 
-    // Check if the user picked an image or canceled the selection
     if (!result.canceled && result.assets && result.assets.length > 0) {
       setImage(result.assets[0].uri);
     } else {
@@ -60,12 +56,11 @@ export default function RegisterScreen() {
     formData.append("name", name);
     formData.append("email", email);
     formData.append("password", password);
-
     formData.append("photoUrl", {
       uri: image,
-      type: "image/jpeg", 
+      type: "image/jpeg,image/png",
       name: "profile.jpg",
-    } as any);
+    });
 
     try {
       const res = await axios.post(`${BASE_URL}/register`, formData, {
@@ -77,7 +72,6 @@ export default function RegisterScreen() {
       await AsyncStorage.setItem("token", res.data.token);
       Alert.alert("Registration Successful");
     } catch (error) {
-      // const errorMessage = (error as any)?.response?.data?.message || "Registration Failed!";
       Alert.alert("Error", "Error while Registration");
     }
   };
@@ -89,7 +83,11 @@ export default function RegisterScreen() {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={tw`flex-1 justify-center items-center bg-gray-100 p-6`}>
-          <View style={tw`w-full max-w-sm bg-white p-6 rounded-2xl shadow-lg`}>
+          <View style={tw`w-[90%]  bg-white p-6 rounded-2xl shadow-lg`}>
+          <Image
+          source={require('../assets/logo.png')}
+          style={tw`w-35 h-30 mx-auto mb-6`}
+        />
             <Text style={tw`text-2xl font-bold text-center mb-4`}>Register</Text>
 
             {/* Name Input */}
@@ -136,10 +134,35 @@ export default function RegisterScreen() {
 
             {/* Register Button */}
             <TouchableOpacity
-              style={tw`bg-blue-500 p-3 rounded-lg`}
+              style={tw`bg-blue-500 p-3 rounded-lg mb-4`}
               onPress={handleRegister}
             >
               <Text style={tw`text-white text-center font-bold`}>Register</Text>
+            </TouchableOpacity>
+
+            {/* Divider */}
+            <View style={tw`flex-row items-center justify-center mb-4`}>
+              <View style={tw`flex-1 h-0.5 bg-gray-300`} />
+              <Text style={tw`mx-2 text-gray-500`}>OR</Text>
+              <View style={tw`flex-1 h-0.5 bg-gray-300`} />
+            </View>
+
+            {/* Google Login Button */}
+            <TouchableOpacity
+              style={tw`flex-row items-center bg-red-500 p-3 rounded-lg mb-3`}
+              onPress={() => Alert.alert("Google Login")}
+            >
+              <FontAwesome name="google" size={20} color="white" style={tw`mr-2`} />
+              <Text style={tw`text-white text-center font-bold`}>Sign in with Google</Text>
+            </TouchableOpacity>
+
+            {/* Facebook Login Button */}
+            <TouchableOpacity
+              style={tw`flex-row items-center bg-blue-700 p-3 rounded-lg`}
+              onPress={() => Alert.alert("Facebook Login")}
+            >
+              <FontAwesome name="facebook" size={20} color="white" style={tw`mr-2`} />
+              <Text style={tw`text-white text-center font-bold`}>Sign in with Facebook</Text>
             </TouchableOpacity>
           </View>
         </View>

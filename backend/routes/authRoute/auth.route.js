@@ -1,6 +1,6 @@
 const express = require('express')
 const { upload } = require('../../middleware/multerConfig')
-const { handleLogout, handleRegister, handleLogin, googleCallback, facebookCallback} = require('../../controllers/auth/auth.controller')
+const { handleLogout, handleRegister, handleLogin, googleCallback, facebookCallback, googleAuthHandler} = require('../../controllers/auth/auth.controller')
 const { errorHandler } = require('../../utils/catchError/catchAsyncError')
 const passport = require('passport')
 const router = express.Router()
@@ -15,10 +15,12 @@ router.get('/auth/google',
     passport.authenticate('google', { scope: ['profile', 'email'], session: false })
 );
 
-router.get('/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: '/login', session: false }),
-    errorHandler(googleCallback)
-);
+// router.get('/auth/google/callback',
+//     passport.authenticate('google', { failureRedirect: '/login', session: false }),
+//     errorHandler(googleAuthHandler)
+// );
+
+router.route('/google').post(googleAuthHandler);
 
 // Facebook authentication routes
 router.get('/auth/facebook',

@@ -132,33 +132,32 @@ export default function Address() {
   };
 
   const takePhoto = async () => {
+    // Request camera and storage permissions
     const hasPermission = await requestPermissions();
     if (!hasPermission) {
       Alert.alert('Permission denied', 'You need to grant camera and storage permissions to use this feature.');
       return;
     }
-  
-    const options: any = {
-      title: 'Take Photo',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
+    // Define options for ImagePicker
+    const options: ImagePicker.CameraOptions = {
+      mediaType: 'photo', // Specify that you want to capture a photo
+      quality: 1, // Highest quality
+      saveToPhotos: true, // Save the captured image to the device's photo library
+      includeBase64: false, // Don't include base64 encoded data
     };
-  
+    // Launch the camera
     ImagePicker.launchCamera(options, (response) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        const source = { uri: response.uri };
-        setImageUri(source);
+      } else if (response.errorCode) {
+        console.log('ImagePicker Error: ', response.errorMessage);
+      } else if (response.assets && response.assets.length > 0) {
+        // Access the first asset (image) from the response
+        const source = { uri: response.assets[0].uri };
+        setImageUri(source); // Update the state with the captured image URI
       }
     });
-  }
+  };
 
   return (
     <View style={tw`flex-1 p-4`}>

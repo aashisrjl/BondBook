@@ -1,12 +1,13 @@
 import { Ionicons } from '@expo/vector-icons'
 import { Link } from 'expo-router'
 import React from 'react'
-import tw from 'twrnc'
+import tw from 'twrnc';
 import { TouchableOpacity, View } from 'react-native'
 
 const Footer = () => {
   return (
     <View style={tw`flex-row justify-around mt-10 p-4 border-t border-gray-300 mt-auto`}>
+
     <TouchableOpacity  style={tw`items-center`}>
     <Link href="/">
       <Ionicons name="home" size={35} color="black" />
@@ -14,23 +15,24 @@ const Footer = () => {
     </TouchableOpacity>
 
     <TouchableOpacity   style={tw`items-center`}>
-    <Link href="../pages/about/about">
+    <Link href="/../pages/about/about">
       <Ionicons name="information-circle" size={35} color="black" />
     </Link>
     </TouchableOpacity>
 
 
     <TouchableOpacity   style={tw`items-center`}>
-      <Link href="../pages/setting/SettingPage">
+      <Link href="/../pages/setting/SettingPage">
       <Ionicons name="settings" size={35} color="black" />
       </Link>
     </TouchableOpacity>
 
     <TouchableOpacity  style={tw`items-center`} >
-     <Link href="../pages/profile/ProfilePage">
+     <Link href="/../pages/profile/ProfilePage">
      <Ionicons name="person" size={35} color="black" />
      </Link>
     </TouchableOpacity>
+    
   </View>
   )
 }
