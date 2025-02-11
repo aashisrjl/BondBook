@@ -3,7 +3,7 @@ import { View, PermissionsAndroid, Platform, Button, Image, Alert, TouchableOpac
 import MapView, { Marker } from 'react-native-maps';
 import { Searchbar } from 'react-native-paper';
 import Geolocation from 'react-native-geolocation-service';
-import * as ImagePicker from 'react-native-image-picker';
+import * as ImagePicker from 'expo-image-picker';
 import tw from 'twrnc';
 import Footer from '../../../component/Footer';
 
@@ -132,31 +132,23 @@ export default function Address() {
   };
 
   const takePhoto = async () => {
-    // Request camera and storage permissions
-    const hasPermission = await requestPermissions();
-    if (!hasPermission) {
-      Alert.alert('Permission denied', 'You need to grant camera and storage permissions to use this feature.');
+    // Request camera permissions using Expo's built-in method
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission denied', 'You need to allow camera access.');
       return;
     }
-    // Define options for ImagePicker
-    const options: ImagePicker.CameraOptions = {
-      mediaType: 'photo', // Specify that you want to capture a photo
-      quality: 1, // Highest quality
-      saveToPhotos: true, // Save the captured image to the device's photo library
-      includeBase64: false, // Don't include base64 encoded data
-    };
-    // Launch the camera
-    ImagePicker.launchCamera(options, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.errorCode) {
-        console.log('ImagePicker Error: ', response.errorMessage);
-      } else if (response.assets && response.assets.length > 0) {
-        // Access the first asset (image) from the response
-        const source = { uri: response.assets[0].uri };
-        setImageUri(source); // Update the state with the captured image URI
-      }
+    // Open camera
+    const result = await ImagePicker.launchCameraAsync({
+      mediaType: 'photo',
+      quality: 1,
+      allowsEditing: true,
+      base64: false,
+      saveToPhotos: true,
     });
+    if (!result.canceled && result.assets.length > 0) {
+      setImageUri(result.assets[0].uri); // Store the captured image
+    }
   };
 
   return (
