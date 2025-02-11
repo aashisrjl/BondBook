@@ -91,43 +91,51 @@ exports.handleLogin = async (req, res) => {
 }
  
 
-/// Google callback handler
-exports.googleCallback = async (req, res) => {
-    const userProfile = req.user;
-    
-    // Check for existing user using email
-    const user = await User.findOne({
-        where: { email: userProfile.emails[0].value },
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.O_CLIENT_ID);
+
+exports.googleAuthHandler = async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    // Verify the Google token
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.O_CLIENT_ID,
     });
 
-    let token;
-    if (user) {
-        // Existing user
-        token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRES_IN,
-        });
-    } else {
-        // New user
-        const newUser = await User.create({
-            name: userProfile.displayName,
-            email: userProfile.emails[0].value,
-            password: "google", // No password needed for OAuth
-            googleId: userProfile.id,
-            photoUrl: userProfile.photos[0].value,
-        });
+    const payload = ticket.getPayload();
+    console.log('payload',payload)
 
-        token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRES_IN,
-        });
+    // Find or create user
+    const existingUser = await User.findOne({ where: { email: payload.email } });
+
+    let userToken;
+    if (existingUser) {
+      // Generate JWT for existing user
+      userToken = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      });
+    } else {
+      // Create a new user if none exists
+      const newUser = await User.create({
+        name: payload.name,
+        email: payload.email,
+        photoUrl: payload.picture,
+        password: 'google-oauth', // No password required for OAuth
+      });
+
+      userToken = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      });
     }
 
-    // Set token in cookie
-    res.cookie('token', token);
-    
-    // Optionally, you could redirect to your frontend URL
-    // res.redirect('http://localhost:5173/loginsuccess');
-    res.status(200).json({ message: 'Login successful', token });
-};
+    res.status(200).json({ message: 'Login successful', token: userToken });
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid Google token', error: error.message });
+  }
+}
+
 
 // Facebook callback handler
 exports.facebookCallback = async (req, res) => {

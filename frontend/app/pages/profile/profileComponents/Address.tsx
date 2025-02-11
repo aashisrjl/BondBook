@@ -3,7 +3,7 @@ import { View, PermissionsAndroid, Platform, Button, Image, Alert, TouchableOpac
 import MapView, { Marker } from 'react-native-maps';
 import { Searchbar } from 'react-native-paper';
 import Geolocation from 'react-native-geolocation-service';
-import * as ImagePicker from 'react-native-image-picker';
+import * as ImagePicker from 'expo-image-picker';
 import tw from 'twrnc';
 import Footer from '../../../component/Footer';
 
@@ -132,33 +132,24 @@ export default function Address() {
   };
 
   const takePhoto = async () => {
-    const hasPermission = await requestPermissions();
-    if (!hasPermission) {
-      Alert.alert('Permission denied', 'You need to grant camera and storage permissions to use this feature.');
+    // Request camera permissions using Expo's built-in method
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission denied', 'You need to allow camera access.');
       return;
     }
-  
-    const options: any = {
-      title: 'Take Photo',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-  
-    ImagePicker.launchCamera(options, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        const source = { uri: response.uri };
-        setImageUri(source);
-      }
+    // Open camera
+    const result = await ImagePicker.launchCameraAsync({
+      mediaType: 'photo',
+      quality: 1,
+      allowsEditing: true,
+      base64: false,
+      saveToPhotos: true,
     });
-  }
+    if (!result.canceled && result.assets.length > 0) {
+      setImageUri(result.assets[0].uri); // Store the captured image
+    }
+  };
 
   return (
     <View style={tw`flex-1 p-4`}>

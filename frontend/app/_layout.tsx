@@ -1,5 +1,6 @@
 import { View, StyleSheet } from 'react-native';
 import { Stack } from 'expo-router';
+import logo from './assets/logo.png';
 
 export default function RootLayout() {
   return (
@@ -18,7 +19,7 @@ export default function RootLayout() {
       }
       }
       >
-            <Stack.Screen name="index" options={{ title: 'Home' }} />
+            <Stack.Screen name="index" options={{ title: 'BondBook' }} />
             <Stack.Screen name="pages/about/about" options={{ title: 'About' }} />
             <Stack.Screen name="auth/Login" options={{ title: 'Login' }} />
             <Stack.Screen name="auth/Register" options={{ title: 'Register' }} />
