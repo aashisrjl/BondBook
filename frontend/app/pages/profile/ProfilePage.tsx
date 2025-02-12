@@ -10,7 +10,7 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import tw from "twrnc";
 
-const ProfilePageScreen = () => {
+const ProfilePageScreen= ()=>  {
   const [selectedSection, setSelectedSection] = useState("diary");
 
   const userData = {
@@ -76,4 +76,4 @@ const ProfilePageScreen = () => {
   );
 };
 
-export default ProfilePageScreen;
+export default ProfilePageScreen

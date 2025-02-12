@@ -5,7 +5,6 @@ import { Searchbar } from 'react-native-paper';
 import Geolocation from 'react-native-geolocation-service';
 import * as ImagePicker from 'expo-image-picker';
 import tw from 'twrnc';
-import Footer from '../../../component/Footer';
 
 export default function Address() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -134,10 +133,24 @@ export default function Address() {
   const takePhoto = async () => {
     // Request camera permissions using Expo's built-in method
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
+
+
     if (status !== 'granted') {
       Alert.alert('Permission denied', 'You need to allow camera access.');
       return;
     }
+
+  
+    // Open camera
+    const result = await ImagePicker.launchCameraAsync({
+      mediaType: 'photo', 
+      quality: 1, 
+      allowsEditing: true, 
+      base64: false, 
+      saveToPhotos: true,
+    });
+  
+
     // Open camera
     const result = await ImagePicker.launchCameraAsync({
       mediaType: 'photo',
@@ -146,10 +159,12 @@ export default function Address() {
       base64: false,
       saveToPhotos: true,
     });
+
     if (!result.canceled && result.assets.length > 0) {
       setImageUri(result.assets[0].uri); // Store the captured image
     }
   };
+n
 
   return (
     <View style={tw`flex-1 p-4`}>
@@ -175,7 +190,6 @@ export default function Address() {
         <Image source={{ uri: imageUri }} style={tw`w-full h-64 mt-4 rounded-lg`} />
       )}
       <View style={tw`mt-4 mb-0`}> 
-      < Footer />
       </View>
     </View>
   );
