@@ -11,8 +11,10 @@ import { useState } from "react";
 import tw from 'twrnc';
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Footer from "./component/Footer"; // Add the Footer component if needed
+import { useNavigation } from "@react-navigation/native";
 
 export default function Index() {
+  const navigation = useNavigation();
   const [darkMode, setDarkMode] = useState(false);
 
   return (
@@ -82,26 +84,29 @@ export default function Index() {
           </View>
         </View>
 
-        {/* Login & Register Buttons */}
         <View style={tw`pb-20 flex-col justify-center items-center mt-14`}>
-          <TouchableOpacity style={tw`w-[95%]`}>
-            <Link
-              href="./auth/Login"
-              style={tw`bg-green-600 p-6 rounded-2xl text-center text-2xl text-white`}
-            >
-              <MaterialIcons name="login" size={20} /> Login
-            </Link>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={tw `w-[95%] mt-4` }>
-            <Link
-              href="./auth/Register"
-              className="bg-blue-600 p-6 rounded-2xl text-center text-2xl text-white"
-            >
-              <MaterialIcons name="person-add" size={20} /> Register
-            </Link>
-          </TouchableOpacity>
+      {/* Login Button */}
+      <TouchableOpacity 
+        style={tw`w-[95%] bg-green-600 p-6 rounded-2xl items-center`}
+        onPress={() => navigation.navigate('Login')}
+      >
+        <View style={tw`flex-row items-center`}>
+          <MaterialIcons name="login" size={20} color="white" />
+          <Text style={tw`text-2xl text-white ml-2`}>Login </Text>
         </View>
+      </TouchableOpacity>
+
+      {/* Register Button */}
+      <TouchableOpacity 
+        style={tw`w-[95%] bg-blue-600 p-6 rounded-2xl items-center mt-4`}
+        onPress={() => navigation.navigate('Register')}
+      >
+        <View style={tw`flex-row items-center`}>
+          <MaterialIcons name="person-add" size={20} color="white" />
+          <Text style={tw`text-2xl text-white ml-2`}>Register </Text>
+        </View>
+      </TouchableOpacity>
+    </View>
 
       </ScrollView>
 
