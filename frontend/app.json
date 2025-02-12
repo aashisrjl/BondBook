@@ -4,7 +4,8 @@
       "slug": "bondbook",
       "android": {
         "package": "com.aashisrjl.bondbook"
-      }
+      },
+      "newArchEnabled": true
     }
   }
   
