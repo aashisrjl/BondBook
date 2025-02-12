@@ -133,11 +133,13 @@ export default function Address() {
   const takePhoto = async () => {
     // Request camera permissions using Expo's built-in method
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    
+
+
     if (status !== 'granted') {
       Alert.alert('Permission denied', 'You need to allow camera access.');
       return;
     }
+
   
     // Open camera
     const result = await ImagePicker.launchCameraAsync({
@@ -148,11 +150,21 @@ export default function Address() {
       saveToPhotos: true,
     });
   
+
+    // Open camera
+    const result = await ImagePicker.launchCameraAsync({
+      mediaType: 'photo',
+      quality: 1,
+      allowsEditing: true,
+      base64: false,
+      saveToPhotos: true,
+    });
+
     if (!result.canceled && result.assets.length > 0) {
       setImageUri(result.assets[0].uri); // Store the captured image
     }
   };
-  
+n
 
   return (
     <View style={tw`flex-1 p-4`}>
