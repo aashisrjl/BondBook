@@ -1,57 +1,102 @@
-import React, { useState, useEffect } from 'react';
-import { View, PermissionsAndroid, Platform, Button, Image, Alert, TouchableOpacity } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
-import { Searchbar } from 'react-native-paper';
-import Geolocation from 'react-native-geolocation-service';
-import * as ImagePicker from 'expo-image-picker';
-import tw from 'twrnc';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  PermissionsAndroid,
+  Platform,
+  Button,
+  Image,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
+import MapView, { Marker } from "react-native-maps";
+import { Searchbar } from "react-native-paper";
+import Geolocation from "react-native-geolocation-service";
+import * as ImagePicker from "expo-image-picker";
+import tw from "twrnc";
+import Footer from "../../../component/Footer";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "expo-router";
+
+const BASE_URL = "http://192.168.1.81:3000"; // Replace with your actual backend URL
 
 export default function Address() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [region, setRegion] = useState({
-    latitude: 37.7749, 
-    longitude: -122.4194,
+  const navigation = useNavigation();
+  const checkToken = async () => {
+    const token = await AsyncStorage.getItem("token");
+    if (!token) {
+      navigation.navigate("Login");
+    }
+    console.log("Token:", token);
+  };
+
+  const [location, setLocation] = useState({
+    latitude: 0,
+    longitude: 0,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
 
-  const [userLocation, setUserLocation] = useState({ latitude: 0, longitude: 0 });
-  const [imageUri, setImageUri] = useState(null); // Store captured image URI
+  const [placeName, setPlaceName] = useState("");
+  const [photoUrl, setPhotoUrl] = useState("");
+
+  const saveAddress = async () => {
+    try {
+      if (!location.latitude || !location.longitude) {
+        console.log("Error: Latitude and Longitude are required.");
+        return;
+      }
+  
+      const formattedLocation = [location.latitude, location.longitude]; // Convert to [lat, lon]
+  
+      console.log("Sending data:", { location: formattedLocation, placeName, photoUrl });
+  
+      const response = await axios.post(
+        BASE_URL + "/saveAddress",
+        { location: formattedLocation, placeName, photoUrl },
+        { withCredentials: true }
+      );
+  
+      console.log("Address saved:", response.data);
+    } catch (error) {
+      console.error("Server error while saving address:", error?.response?.data || error);
+    }
+  };
+  
+  
+
 
   // Request location permission
   const requestLocationPermission = async () => {
-    if (Platform.OS === 'android') {
+    if (Platform.OS === "android") {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
-          title: 'Location Permission',
-          message: 'This app needs access to your location.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
+          title: "Location Permission",
+          message: "This app needs access to your location.",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK",
         }
       );
       return granted === PermissionsAndroid.RESULTS.GRANTED;
     }
-    return true; // iOS automatically handles permissions
+    return true;
   };
-
 
   // Get user location
   const getCurrentLocation = () => {
     Geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        setUserLocation({ latitude, longitude });
-        setRegion({
+        setLocation((prev) => ({
+          ...prev,
           latitude,
           longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        });
+        }));
       },
       (error) => {
-        console.error('Error getting location:', error);
+        console.error("Error getting location:", error);
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
@@ -65,17 +110,20 @@ export default function Address() {
       }
     };
     fetchLocation();
+    checkToken();
   }, []);
 
-  // Search for a location using OpenStreetMap Nominatim API
+  // Search location using OpenStreetMap
   const searchLocation = async (query) => {
     try {
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`,
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          query
+        )}`,
         {
           headers: {
-            'User-Agent': 'MyApp/1.0 (your-email@example.com)', // Replace with your email
-            'Accept-Language': 'en',
+            "User-Agent": "MyApp/1.0 (your-email@example.com)", // Replace with your email
+            "Accept-Language": "en",
           },
         }
       );
@@ -84,113 +132,80 @@ export default function Address() {
 
       if (data.length > 0) {
         const { lat, lon } = data[0];
-        setRegion({
+        setLocation({
           latitude: parseFloat(lat),
           longitude: parseFloat(lon),
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         });
       } else {
-        Alert.alert('Error', 'Location not found!');
+        Alert.alert("Error", "Location not found!");
       }
     } catch (error) {
-      console.error('Error fetching location:', error);
+      console.error("Error fetching location:", error);
     }
   };
 
-  const requestPermissions = async () => {
-    if (Platform.OS === 'android') {
-      const grantedCamera = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        {
-          title: 'Camera Permission',
-          message: 'This app needs access to your camera.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        }
-      );
-  
-      const grantedStorage = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        {
-          title: 'Storage Permission',
-          message: 'This app needs access to your storage.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        }
-      );
-  
-      return (
-        grantedCamera === PermissionsAndroid.RESULTS.GRANTED &&
-        grantedStorage === PermissionsAndroid.RESULTS.GRANTED
-      );
-    }
-    return true; // iOS automatically handles permissions
-  };
-
+  // Take a photo
   const takePhoto = async () => {
-    // Request camera permissions using Expo's built-in method
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
-
-
-    if (status !== 'granted') {
-      Alert.alert('Permission denied', 'You need to allow camera access.');
+    if (status !== "granted") {
+      Alert.alert("Permission denied", "You need to allow camera access.");
       return;
     }
 
-  
-    // Open camera
     const result = await ImagePicker.launchCameraAsync({
-      mediaType: 'photo', 
-      quality: 1, 
-      allowsEditing: true, 
-      base64: false, 
-      saveToPhotos: true,
-    });
-  
-
-    // Open camera
-    const result = await ImagePicker.launchCameraAsync({
-      mediaType: 'photo',
+      mediaType: "photo",
       quality: 1,
       allowsEditing: true,
-      base64: false,
       saveToPhotos: true,
     });
 
-    if (!result.canceled && result.assets.length > 0) {
-      setImageUri(result.assets[0].uri); // Store the captured image
-    }
+    if (!result.assets || result.assets.length === 0) return;
+
+    setPhotoUrl(result.assets[0].uri);
   };
-n
 
   return (
-    <View style={tw`flex-1 p-4`}>
-      <Searchbar
-        placeholder="Search for an address"
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-        onSubmitEditing={() => searchLocation(searchQuery)}
-        style={tw`mb-4`}
-      />
-      <MapView style={tw`flex-1 h-vh w-[32rem]`} region={region} onRegionChangeComplete={setRegion}>
-        {userLocation && <Marker coordinate={userLocation} title="Your Location" />}
-        <Marker coordinate={region} title="Searched Location" />
-      </MapView>
+    <View style={tw`flex-1 p-6 bg-gray-100 w-full`}>
+  <Searchbar
+    placeholder="Search for an address"
+    onChangeText={setPlaceName}
+    value={placeName}
+    onSubmitEditing={() => searchLocation(placeName)}
+    style={tw`mb-4 w-full rounded-lg`}
+  />
+  
+  <View style={tw`flex-1 w-full overflow-hidden rounded-lg`}>
+    <MapView
+      style={tw`w-full h-64 rounded-lg`}
+      region={location}
+      onRegionChangeComplete={setLocation}
+    >
+      <Marker coordinate={location} title="Selected Location" />
+    </MapView>
+  </View>
 
-      {/* Capture Photo Button */}
-      <TouchableOpacity>
-      <Button title="Capture Photo" onPress={takePhoto} />
-      </TouchableOpacity>
+  {/* Capture Photo Button */}
+  <TouchableOpacity style={tw`w-full mt-5`}>
+    <Button title="Capture Photo" onPress={takePhoto} color="#007AFF" />
+  </TouchableOpacity>
 
-      {/* Display Captured Image */}
-      {imageUri && (
-        <Image source={{ uri: imageUri }} style={tw`w-full h-64 mt-4 rounded-lg`} />
-      )}
-      <View style={tw`mt-4 mb-0`}> 
-      </View>
-    </View>
+  {/* Display Captured Image */}
+  {photoUrl && (
+    <Image source={{ uri: photoUrl }} style={tw`w-full h-48 mt-4 rounded-lg`} />
+  )}
+
+  {/* Share Location Button */}
+  <TouchableOpacity style={tw`w-full mt-5`}>
+    <Button title="Share Location" onPress={saveAddress} color="#34D399" />
+  </TouchableOpacity>
+
+  {/* Footer */}
+  <View style={tw`w-full mt-4`}>
+    <Footer />
+  </View>
+</View>
+
   );
 }
