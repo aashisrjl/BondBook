@@ -1,5 +1,4 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -15,7 +14,7 @@ const Stack = createNativeStackNavigator();
 
 export default function RootLayout() {
   return (
-    <NavigationContainer>
+   
       <Stack.Navigator
         screenOptions={{
           headerStyle: { backgroundColor: 'blue' },
@@ -31,6 +30,6 @@ export default function RootLayout() {
         <Stack.Screen name="Setting" component={SettingPage} options={{ title: 'Setting' }} />
         <Stack.Screen name="Profile" component={ProfilePage} options={{ title: 'Profile' }} />
       </Stack.Navigator>
-    </NavigationContainer>
+
   );
 }

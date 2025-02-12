@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
-import Footer from '../component/Footer';
+// import Footer from '../../component/Footer';
 import { Link } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 
 export function SettingsPage() {
+    const navigation = useNavigation();
     const [activeSection, setActiveSection] = useState('profile');
     
     const renderContent = () => {
@@ -27,14 +29,14 @@ export function SettingsPage() {
         <View style={tw`flex-1 flex-row bg-gray-100`}>
             {/* Sidebar */}
             <View style={tw`w-[70px] bg-white border-r border-gray-200`}>
-            <TouchableOpacity 
+            <TouchableOpacity  onPress={() => navigation.navigate('Index')}
                     style={tw`p-4 mt-4 ${activeSection === 'home' ? 'bg-blue-100' : ''}`}
             
                 >
-                    <Link href="/" style={tw`items-center flex flex-col`}> 
+                    <View style={tw`items-center flex flex-col`} >
                     <Icon name="home" size={30} style={tw`mb-1 text-gray-700`} />
                     <Text style={tw`text-xs text-center text-gray-700`}>  Home</Text>
-                    </Link>
+                    </View>
                 </TouchableOpacity>
 
                 <TouchableOpacity 
