@@ -167,45 +167,48 @@ export default function Address() {
   };
 
   return (
-    <View style={tw`flex-1 p-6 bg-gray-100 w-full`}>
-  <Searchbar
-    placeholder="Search for an address"
-    onChangeText={setPlaceName}
-    value={placeName}
-    onSubmitEditing={() => searchLocation(placeName)}
-    style={tw`mb-4 w-full rounded-lg`}
-  />
-  
-  <View style={tw`flex-1 w-full overflow-hidden rounded-lg`}>
-    <MapView
-      style={tw`w-full h-64 rounded-lg`}
-      region={location}
-      onRegionChangeComplete={setLocation}
-    >
-      <Marker coordinate={location} title="Selected Location" />
-    </MapView>
-  </View>
+    <View style={tw`flex-1 p-6 bg-[#821F1F] w-full`}>
+      {/* Searchbar */}
+      <Searchbar
+        placeholder="Search for an address"
+        onChangeText={setPlaceName}
+        value={placeName}
+        onSubmitEditing={() => searchLocation(placeName)}
+        style={tw`mb-4 w-full rounded-lg bg-[#962424] text-white`}
+        inputStyle={{ color: "white" }} // Text color inside input
+      />
+      
+      {/* Map Container */}
+      <View style={tw`flex-1 w-full overflow-hidden rounded-lg bg-[#962424] p-2`}>
+        <MapView
+          style={tw`w-full h-full rounded-lg`}
+          region={location}
+          onRegionChangeComplete={setLocation}
+        >
+          <Marker coordinate={location} title="Selected Location" />
+        </MapView>
+      </View>
 
-  {/* Capture Photo Button */}
-  <TouchableOpacity style={tw`w-full mt-5`}>
-    <Button title="Capture Photo" onPress={takePhoto} color="#007AFF" />
-  </TouchableOpacity>
+      {/* Capture Photo Button */}
+      <TouchableOpacity style={tw`w-full mt-5  rounded-lg bg-[#6C1212]`}>
+        <Button title="Capture Photo" onPress={takePhoto} color="white" />
+      </TouchableOpacity>
 
-  {/* Display Captured Image */}
-  {photoUrl && (
-    <Image source={{ uri: photoUrl }} style={tw`w-full h-48 mt-4 rounded-lg`} />
-  )}
+      {/* Display Captured Image */}
+      {photoUrl && (
+        <Image source={{ uri: photoUrl }} style={tw`w-full h-48 mt-4 rounded-lg`} />
+      )}
 
-  {/* Share Location Button */}
-  <TouchableOpacity style={tw`w-full mt-5`}>
-    <Button title="Share Location" onPress={saveAddress} color="#34D399" />
-  </TouchableOpacity>
+      {/* Share Location Button */}
+      <TouchableOpacity style={tw`w-full mt-5 rounded-lg bg-[#6C1212]`}>
+        <Button title="Share Location" onPress={saveAddress} color="white" />
+      </TouchableOpacity>
 
-  {/* Footer */}
-  <View style={tw`w-full mt-4`}>
-    <Footer />
-  </View>
-</View>
+      {/* Footer */}
+      <View style={tw`w-full mt-4`}>
+        <Footer />
+      </View>
+    </View>
 
   );
 }
