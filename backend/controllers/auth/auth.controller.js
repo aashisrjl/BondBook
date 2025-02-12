@@ -1,15 +1,7 @@
-
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../../database/models/user.model");
 
-exports.getuser= async(req,res)=>{
-    const user = await User.find();
-    res.status(200).json({
-        message: "user find",
-        user
-    })
-};
 
 exports.handleRegister = async (req, res) => {
     const { name, email, password } = req.body;
@@ -91,86 +83,78 @@ exports.handleLogin = async (req, res) => {
 }
  
 
-const { OAuth2Client } = require('google-auth-library');
-const client = new OAuth2Client(process.env.O_CLIENT_ID);
 
-exports.googleAuthHandler = async (req, res) => {
-  const { token } = req.body;
-
-  try {
-    // Verify the Google token
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.O_CLIENT_ID,
-    });
-
-    const payload = ticket.getPayload();
-    console.log('payload',payload)
-
-    // Find or create user
-    const existingUser = await User.findOne({ where: { email: payload.email } });
-
-    let userToken;
-    if (existingUser) {
-      // Generate JWT for existing user
-      userToken = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN,
+exports.googleCallback = async (req, res) => {
+    const userProfile = req.user;
+    console.log("Google user profile:", userProfile);
+    
+    try {
+      const user = await User.findOne({
+        where: { email: userProfile.emails[0].value },
       });
-    } else {
-      // Create a new user if none exists
-      const newUser = await User.create({
-        name: payload.name,
-        email: payload.email,
-        photoUrl: payload.picture,
-        password: 'google-oauth', // No password required for OAuth
-      });
-
-      userToken = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-      });
+  
+      let token;
+      if (user) {
+        token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+          expiresIn: '30d',
+        });
+      } else {
+        const newUser = await User.create({
+          name: userProfile.displayName,
+          email: userProfile.emails[0].value,
+          password: "google", 
+          googleId: userProfile.id,
+          photoUrl: userProfile.photos[0].value,
+        });
+  
+        token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+          expiresIn: '30d',
+        });
+      }
+  
+      res.cookie("token", token);
+      res.status(200).json({ message: "Login successful", token });
+    } catch (error) {
+      console.error("Error during Google login:", error);
+      res.status(500).json({ message: "An error occurred while logging in." });
     }
-
-    res.status(200).json({ message: 'Login successful', token: userToken });
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid Google token', error: error.message });
-  }
-}
+  };
+  
 
 
 // Facebook callback handler
 exports.facebookCallback = async (req, res) => {
     const userProfile = req.user;
+    console.log("Facebook user profile:", userProfile);
     
-    // Check for existing user using email
-    const user = await User.findOne({
+    try {
+      const user = await User.findOne({
         where: { email: userProfile.emails[0].value },
-    });
-
-    let token;
-    if (user) {
-        // Existing user
+      });
+  
+      let token;
+      if (user) {
         token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRES_IN || '30d',
+          expiresIn: '30d',
         });
-    } else {
-        // New user
+      } else {
         const newUser = await User.create({
-            name: userProfile.displayName,
-            email: userProfile.emails[0].value,
-            password: "facebook", // No password needed for OAuth
-            facebookId: userProfile.id,
-            photoUrl: userProfile.photos[0].value,
+          name: userProfile.displayName,
+          email: userProfile.emails[0].value,
+          password: "facebook",
+          facebookId: userProfile.id,
+          photoUrl: userProfile.photos[0].value,
         });
-
+  
         token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRES_IN || '30d',
+          expiresIn: '30d',
         });
+      }
+  
+      res.cookie("token", token);
+      res.status(200).json({ message: "Login successful", token });
+    } catch (error) {
+      console.error("Error during Facebook login:", error);
+      res.status(500).json({ message: "An error occurred while logging in." });
     }
-
-    // Set token in cookie
-    res.cookie('token', token);
-    
-    // Optionally, you could redirect to your frontend URL
-    // res.redirect('http://localhost:5173/loginsuccess');
-    res.status(200).json({ message: 'Login successful', token });
-};
+  };

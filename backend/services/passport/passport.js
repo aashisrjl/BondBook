@@ -1,16 +1,17 @@
 const passport = require('passport');
+const User = require('../../database/models/user.model');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 
-// Serialize and deserialize user
 passport.serializeUser((user, cb) => {
-    cb(null, user);
-});
-
-passport.deserializeUser((id, cb) => {
-    cb(null, id);
-});
-
+    cb(null, user.id);  // Storing only the user ID
+  });
+  
+  passport.deserializeUser(async (id, cb) => {
+    const user = await User.findById(id);
+    cb(null, user);  // Fetching the user based on ID
+  });
+  
 // Google strategy
 passport.use(
     new GoogleStrategy(

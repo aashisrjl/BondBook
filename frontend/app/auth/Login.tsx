@@ -4,7 +4,6 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import tw from 'twrnc'; // Import tw from twrnc
 import { FontAwesome } from '@expo/vector-icons';
-import { GoogleLogin } from "./component/googleLogin";
 
 const BASE_URL = "http://192.168.1.81:3000" || "http://.168.1.74:3000"; // Replace with your actual backend URL
 
@@ -28,12 +27,7 @@ export default function LoginScreen() {
     }
   };
 
-  const handleGoogleLogin = GoogleLogin();
-
-  const handleFacebookLogin = () => {
-    Alert.alert("Facebook Login", "Redirecting to Facebook Login...");
-    // Handle Facebook login logic here
-  };
+ 
 
   return (
     <View style={tw`flex-1 justify-center items-center bg-gray-100 p-8`}> 
@@ -82,7 +76,7 @@ export default function LoginScreen() {
         {/* Google Login Button */}
         <TouchableOpacity
           style={tw`flex-row items-center bg-red-500 p-3 rounded-lg mb-3`}
-          onPress={handleGoogleLogin}
+          // onPress={googleSignInFunction}
         >
           <FontAwesome name="google" size={20} color="white" style={tw`mr-2`} />
           <Text style={tw`text-white text-center font-bold flex-1`}>Login with Google</Text>
@@ -91,7 +85,7 @@ export default function LoginScreen() {
         {/* Facebook Login Button */}
         <TouchableOpacity
           style={tw`flex-row items-center bg-blue-700 p-3 rounded-lg`}
-          onPress={handleFacebookLogin}
+          // onPress={facebookSignInFunction}
         >
           <FontAwesome name="facebook" size={20} color="white" style={tw`mr-2`} />
           <Text style={tw`text-white text-center font-bold flex-1`}>Login with Facebook</Text>
