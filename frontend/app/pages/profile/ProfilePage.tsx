@@ -66,7 +66,7 @@ const ProfilePageScreen= ()=>  {
       </View>
 
       {/* Sidebar Navigation */}
-      <View style={tw`flex-row justify-around bg-gray-200 py-2`}>
+      <View style={tw`flex-row justify-around w-90% py-2`}>
         {sections.map((section) => (
           <TouchableOpacity
             key={section.id }
