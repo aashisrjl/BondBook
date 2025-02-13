@@ -4,10 +4,13 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import tw from 'twrnc'; // Import tw from twrnc
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+
 
 const BASE_URL = "http://192.168.1.81:3000" || "http://.168.1.74:3000"; // Replace with your actual backend URL
 
 export default function LoginScreen() {
+  const navigation = useNavigation()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,6 +24,7 @@ export default function LoginScreen() {
       });
       await AsyncStorage.setItem("token", res.data.token); // Save token
       Alert.alert("Login Successful");
+      navigation.navigate("Index");
     } catch (error) {
       const errorMessage = (error?.response?.data?.message || "Login Failed!");
       Alert.alert('Error', errorMessage);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Address from "./profileComponents/Address";
 import {
   View,
@@ -9,8 +9,27 @@ import {
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import tw from "twrnc";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProfilePageScreen= ()=>  {
+  const navigation = useNavigation();
+  
+
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem("token");
+  
+      if (!token) {
+        navigation.navigate("Login");
+      }
+      console.log("Token:", token);
+      
+    };
+    checkToken();
+  },[navigation]);
+  
+
   const [selectedSection, setSelectedSection] = useState("diary");
 
   const userData = {
