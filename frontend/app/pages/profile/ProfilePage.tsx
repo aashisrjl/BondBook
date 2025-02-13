@@ -11,6 +11,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Diary from "./profileComponents/Diary";
+import Reminders from "./profileComponents/Remainder";
+import Timeline from "./profileComponents/Timeline";
+// import checkToken from "../../functions/checkToken";
 
 const ProfilePageScreen= ()=>  {
   const navigation = useNavigation();
@@ -21,7 +25,7 @@ const ProfilePageScreen= ()=>  {
       const token = await AsyncStorage.getItem("token");
   
       if (!token) {
-        navigation.navigate("Login");
+        navigation.replace("Login");
       }
       console.log("Token:", token);
       
@@ -42,7 +46,7 @@ const ProfilePageScreen= ()=>  {
 
   const sections = [
     { id: "diary", title: "Diary ", icon: "book" },
-    { id: "notes", title: "Notes ", icon: "notes" },
+    { id: "remind", title: "Remind  ", icon: "watch" },
     { id: "timeline", title: "Timeline ", icon: "timeline" },
     { id: "photos", title: "Photos ", icon: "photo-library" },
     { id: "videos", title: "Videos ", icon: "video-library" },
@@ -83,9 +87,9 @@ const ProfilePageScreen= ()=>  {
 
       {/* Content Section */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={tw`p-4`}>
-        {selectedSection === "diary" && <Text>Your Diary Entries...</Text>}
-        {selectedSection === "notes" && <Text>Your Notes...</Text>}
-        {selectedSection === "timeline" && <Text>Your Timelines...</Text>}
+        {selectedSection === "diary" && <> < Diary/> </>}
+        {selectedSection === "remind" && <> <Reminders /> </>}
+        {selectedSection === "timeline" && <> <Timeline /> </>}
         {selectedSection === "photos" && <Text>Your Photo Gallery...</Text>}
         {selectedSection === "videos" && <Text>Your Videos...</Text>}
         {selectedSection === "address" && <><Address/></>}
