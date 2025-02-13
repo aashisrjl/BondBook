@@ -11,10 +11,12 @@ import { useState } from "react";
 import tw from 'twrnc';
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Footer from "./component/Footer"; // Add the Footer component if needed
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "./component/types";
 
 export default function Index() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>(); // Use react-navigation for navigation
+
   const [darkMode, setDarkMode] = useState(false);
 
   return (
