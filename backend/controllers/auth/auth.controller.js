@@ -1,3 +1,4 @@
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../../database/models/user.model");
@@ -39,6 +40,13 @@ exports.handleRegister = async (req, res) => {
         user,
     });
 }
+
+exports.handleLogout = async (req, res) => {
+    res.clearCookie("token");
+    res.status(200).json({
+        message: "Logout success",
+    });
+  }
 
 exports.handleLogin = async (req, res) => {
     console.log(req.body)
@@ -158,3 +166,4 @@ exports.facebookCallback = async (req, res) => {
       res.status(500).json({ message: "An error occurred while logging in." });
     }
   };
+  

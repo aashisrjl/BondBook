@@ -41,9 +41,9 @@ export default function Index() {
 
         {/* Suggestion Section */}
         <View style={tw`mb-5`}>
-          <Text style={tw`text-lg font-semibold mb-5`}>Suggestion</Text>
+          <Text style={tw`text-lg font-bold mb-5`}>Suggestion</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={tw`flex-row gap-4`}>
+            <View style={tw`flex-row gap-4 h-64`}>
               {[...Array(4)].map((_, index) => (
                 <TouchableOpacity
                   key={index}
@@ -63,22 +63,22 @@ export default function Index() {
 
         {/* Add Moments Section */}
         <View style={tw`mb-5 mt-10`}>
-          <Text style={tw`text-xl p-3`}>Interact Directly from here</Text>
+          <Text style={tw`text-xl p-3`}>Create Memories</Text>
           <View style={tw`mt-10 flex-row justify-around`}>
             <TouchableOpacity style={tw`items-center`}>
-              <MaterialIcons name="note" size={70} color="green" />
+              <MaterialIcons name="note" size={70} color="gray" />
               <Text style={tw`font-bold`}>Add Note</Text>
             </TouchableOpacity>
             <TouchableOpacity style={tw`items-center`}>
-              <Ionicons name="musical-notes" size={70} color="green" />
+              <Ionicons name="musical-notes" size={70} color="gray" />
               <Text style={tw`font-bold`}>Add Music</Text>
             </TouchableOpacity>
             <TouchableOpacity style={tw`items-center`}>
-              <MaterialIcons name="photo" size={70} color="green" />
+              <MaterialIcons name="photo" size={70} color="gray" />
               <Text style={tw`font-bold`}>Add Photo</Text>
             </TouchableOpacity>
             <TouchableOpacity style={tw`items-center`}>
-              <MaterialIcons name="videocam" size={70} color="green" />
+              <MaterialIcons name="videocam" size={70} color="gray" />
               <Text style={tw`font-bold`}>Add Video</Text>
             </TouchableOpacity>
           </View>

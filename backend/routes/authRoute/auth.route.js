@@ -1,13 +1,13 @@
 const express = require('express')
 const { upload } = require('../../middleware/multerConfig')
-const { handleLogout, handleRegister, handleLogin, googleCallback, facebookCallback, googleAuthHandler} = require('../../controllers/auth/auth.controller')
+const {  handleRegister, handleLogin, googleCallback, facebookCallback, googleAuthHandler, handleLogout} = require('../../controllers/auth/auth.controller')
 const { errorHandler } = require('../../utils/catchError/catchAsyncError')
 const passport = require('passport')
 const router = express.Router()
 
 router.route("/login").post(errorHandler(handleLogin))
 router.route("/register").post(upload.single('photoUrl'),errorHandler(handleRegister))
-router.route("/logout").post(errorHandler(handleLogout))
+router.route("/logout").post(handleLogout)
 module.exports = router
 
 // Google authentication routes

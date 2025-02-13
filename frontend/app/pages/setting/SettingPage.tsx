@@ -5,6 +5,8 @@ import tw from 'twrnc';
 // import Footer from '../../component/Footer';
 import { Link } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export function SettingsPage() {
     const navigation = useNavigation();
@@ -192,8 +194,19 @@ function PartnerSection() {
 }
 
 function LogoutSection() {
-    const handleLogout = () => {
+    const navigation = useNavigation();
+
+    const handleLogout = async () => {
         // Handle logout logic
+        await AsyncStorage.removeItem('token');
+        navigation.navigate('Login');
+        //hit logout api
+        axios.post("http://192.168.1.81:3000/logout",{
+            withCredentials: true,
+        })
+        .then((res) => {
+            console.log(res.data);
+        })
     };
 
     return (
