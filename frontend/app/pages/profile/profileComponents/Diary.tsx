@@ -37,7 +37,7 @@ const diaryEntries = [
 
 const Diary = () => {
   return (
-    <View style={tw`flex-1 bg-gray-50 w-140`}>
+    <View style={tw`flex-1 bg-gray-50 w-[28rem]`}>
       {/* Header */}
       <View style={tw`bg-white px-4 py-6 shadow-sm`}>
         <View style={tw`flex-row items-center mb-2`}>
@@ -52,7 +52,7 @@ const Diary = () => {
       </View>
 
       {/* Diary List */}
-      <ScrollView style={tw`flex-1 px-4 pt-4`}>
+      <ScrollView style={tw`flex-1 px-4 pt-4 `}>
         {diaryEntries.map((entry) => (
           <TouchableOpacity
             key={entry.id}
@@ -67,7 +67,7 @@ const Diary = () => {
             <Text style={tw`text-gray-800 text-lg font-semibold mb-2`}>
               {entry.title}
             </Text>
-            <Text style={tw`text-gray-600 leading-5`} numberOfLines={3}>
+            <Text style={tw`text-gray-600 leading-5`} >
               {entry.content}
             </Text>
           </TouchableOpacity>

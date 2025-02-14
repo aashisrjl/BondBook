@@ -8,22 +8,26 @@ const Footer = () => {
   const navigation = useNavigation(); // Use react-navigation for navigation
 
   return (
-    <View style={tw`flex-row justify-around p-4 border-t border-gray-300 bg-[#2E004F] mt-auto`}>
+    <View style={tw`flex-row justify-around p-2 h-14 border-t border-gray-300 bg-[#2E004F] mt-auto`}>
+      <TouchableOpacity style={tw`items-center`} onPress={() => navigation.navigate('Index')}>
+        <Ionicons name="chatbubble" size={30} color="white" />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={tw`items-center`} onPress={() => navigation.navigate('About')}>
+        <Ionicons name="information-circle" size={30} color="white" />
+      </TouchableOpacity>
       
       <TouchableOpacity style={tw`items-center`} onPress={() => navigation.navigate('Index')}>
         <Ionicons name="home" size={35} color="white" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={tw`items-center`} onPress={() => navigation.navigate('About')}>
-        <Ionicons name="information-circle" size={35} color="white" />
-      </TouchableOpacity>
 
       <TouchableOpacity style={tw`items-center`} onPress={() => navigation.navigate('Setting')}>
-        <Ionicons name="settings" size={35} color="white" />
+        <Ionicons name="settings" size={30} color="white" />
       </TouchableOpacity>
 
       <TouchableOpacity style={tw`items-center`} onPress={() => navigation.navigate('Profile')}>
-        <Ionicons name="person" size={35} color="white" />
+        <Ionicons name="person" size={30} color="white" />
       </TouchableOpacity>
     
     </View>

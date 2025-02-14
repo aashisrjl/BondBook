@@ -167,19 +167,19 @@ export default function Address() {
   };
 
   return (
-    <View style={tw`flex-1 p-6 bg-[#821F1F] w-full`}>
+    <View style={tw`flex-1 p-6 bg-gray-50  w-[28rem]`}>
       {/* Searchbar */}
       <Searchbar
         placeholder="Search for an address"
         onChangeText={setPlaceName}
         value={placeName}
         onSubmitEditing={() => searchLocation(placeName)}
-        style={tw`mb-4 w-full rounded-lg bg-[#962424] text-white`}
-        inputStyle={{ color: "white" }} // Text color inside input
+        style={tw`mb-4 w-full rounded-lg  text-white`}
+        inputStyle={{ color: "black" }} // Text color inside input
       />
       
       {/* Map Container */}
-      <View style={tw`flex-1 w-full overflow-hidden rounded-lg bg-[#962424] p-2`}>
+      <View style={tw`flex-1 w-full overflow-hidden rounded-lg bg-gray-50  p-2`}>
         <MapView
           style={tw`w-full h-full rounded-lg`}
           region={location}
@@ -190,8 +190,8 @@ export default function Address() {
       </View>
 
       {/* Capture Photo Button */}
-      <TouchableOpacity style={tw`w-full mt-5  rounded-lg bg-[#6C1212]`}>
-        <Button title="Capture Photo" onPress={takePhoto} color="white" />
+      <TouchableOpacity style={tw`w-full mt-5  rounded-lg bg-gray-50 `}>
+        <Button title="Capture Photo" onPress={takePhoto} color="blue" />
       </TouchableOpacity>
 
       {/* Display Captured Image */}
@@ -201,13 +201,13 @@ export default function Address() {
 
       {/* Share Location Button */}
       <TouchableOpacity style={tw`w-full mt-5 rounded-lg bg-[#6C1212]`}>
-        <Button title="Share Location" onPress={saveAddress} color="white" />
+        <Button title="Share Location" onPress={saveAddress} color="green" />
       </TouchableOpacity>
 
-      {/* Footer */}
+      {/* Footer
       <View style={tw`w-full mt-4`}>
         <Footer />
-      </View>
+      </View> */}
     </View>
 
   );

@@ -14,6 +14,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Diary from "./profileComponents/Diary";
 import Reminders from "./profileComponents/Remainder";
 import Timeline from "./profileComponents/Timeline";
+import Footer from "../../component/Footer";
+import Photo from "./profileComponents/Photo";
 // import checkToken from "../../functions/checkToken";
 
 const ProfilePageScreen= ()=>  {
@@ -71,30 +73,33 @@ const ProfilePageScreen= ()=>  {
 
       {/* Sidebar Navigation */}
       <View style={tw`flex-row justify-around bg-gray-200 py-2`}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {sections.map((section) => (
           <TouchableOpacity
             key={section.id }
             style={[tw`p-3`,selectedSection === section.id && tw`border-b-2 border-blue-500`,]}
             onPress={() => setSelectedSection(section.id)}>
-            <MaterialIcons name={section.icon } size={24} color="gray" />
+            <MaterialIcons name={section.icon } size={30} color="gray" />
             <Text style={tw`text-center text-gray-700`}>
               {section.title }
             </Text>
           </TouchableOpacity>
         ))}
+        </ScrollView>
       </View>
 
 
       {/* Content Section */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={tw`p-4`}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={tw`p-2`}>
         {selectedSection === "diary" && <> < Diary/> </>}
         {selectedSection === "remind" && <> <Reminders /> </>}
         {selectedSection === "timeline" && <> <Timeline /> </>}
-        {selectedSection === "photos" && <Text>Your Photo Gallery...</Text>}
+        {selectedSection === "photos" && <Text> <Photo/> </Text>}
         {selectedSection === "videos" && <Text>Your Videos...</Text>}
         {selectedSection === "address" && <><Address/></>}
 
       </ScrollView>
+      <Footer />
     </View>
   );
 };
