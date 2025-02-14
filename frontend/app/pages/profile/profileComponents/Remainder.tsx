@@ -44,7 +44,7 @@ const formatDate = (dateString: string) => {
 
 const Reminders = () => {
   return (
-    <View style={tw`flex-1 bg-gray-50 w-140`}>
+    <View style={tw`flex-1 bg-gray-50 w-[28rem]`}>
       {/* Header */}
       <View style={tw`bg-white px-4 py-6 shadow-sm`}>
         <View style={tw`flex-row items-center mb-2`}>
