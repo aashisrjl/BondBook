@@ -16,6 +16,7 @@ import axios from "axios";
 import tw from 'twrnc';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
 
 const BASE_URL = "http://192.168.1.81:3000"; // Replace with your actual backend URL
 
@@ -47,6 +48,7 @@ export default function RegisterScreen() {
   };
 
   const handleRegister = async () => {
+    const navigation = useNavigation();
     if (!image) {
       Alert.alert("Error", "Please select an image.");
       return;
@@ -71,6 +73,7 @@ export default function RegisterScreen() {
 
       await AsyncStorage.setItem("token", res.data.token);
       Alert.alert("Registration Successful");
+      navigation.navigate("Login");
     } catch (error) {
       Alert.alert("Error", "Error while Registration");
     }

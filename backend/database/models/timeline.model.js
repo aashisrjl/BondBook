@@ -8,14 +8,17 @@ const timelineSchema = new mongoose.Schema(
     },
     photo: {
       type: string,
-      validate(value) {
-        if (!validator.isURL(value)) {
-          throw new Error("Invalid Photo Url:", value);
-        }
-      },
+      // validate(value) {
+      //   if (!validator.isURL(value)) {
+      //     throw new Error("Invalid Photo Url:", value);
+      //   }
+      // },
     },
     description: {
       type: String,
+    },
+    title:{
+      type: String
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,

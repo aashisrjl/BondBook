@@ -208,12 +208,6 @@ export default function Address() {
         <View style={tw`py-2`}>
           <Text style={tw`text-center text-slate-700`}>Share Location</Text>
         </View>
-      </TouchableOpacity>
-
-      {/* Footer */}
-      <View style={tw`w-full mt-4`}>
-      <Footer />
-      </View>
     </View>
 
   );
