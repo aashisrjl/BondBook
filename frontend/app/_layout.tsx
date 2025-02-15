@@ -9,6 +9,7 @@ import LoginScreen from './auth/Login';
 import RegisterScreen from './auth/Register';
 import SettingPage from './pages/setting/SettingPage';
 import ProfilePage from './pages/profile/ProfilePage';
+import ChatSection from './pages/chat/chat';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,7 @@ export default function RootLayout() {
         <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
         <Stack.Screen name="Setting" component={SettingPage} options={{ title: 'Setting' }} />
         <Stack.Screen name="Profile" component={ProfilePage} options={{ title: 'Profile' }} />
+        <Stack.Screen name="Chat" component={ChatSection} options={{ title: 'Chat' }} />
       </Stack.Navigator>
 
   );

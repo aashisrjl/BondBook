@@ -16,6 +16,7 @@ import Reminders from "./profileComponents/Remainder";
 import Timeline from "./profileComponents/Timeline";
 import Footer from "../../component/Footer";
 import Photo from "./profileComponents/Photo";
+import VideoGallery from "./profileComponents/Video";
 // import checkToken from "../../functions/checkToken";
 
 const ProfilePageScreen= ()=>  {
@@ -94,8 +95,8 @@ const ProfilePageScreen= ()=>  {
         {selectedSection === "diary" && <> < Diary/> </>}
         {selectedSection === "remind" && <> <Reminders /> </>}
         {selectedSection === "timeline" && <> <Timeline /> </>}
-        {selectedSection === "photos" && <Text> <Photo/> </Text>}
-        {selectedSection === "videos" && <Text>Your Videos...</Text>}
+        {selectedSection === "photos" && <> <Photo/> </>}
+        {selectedSection === "videos" && <> <VideoGallery /> </>}
         {selectedSection === "address" && <><Address/></>}
 
       </ScrollView>
