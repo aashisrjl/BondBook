@@ -7,7 +7,7 @@ const timelineSchema = new mongoose.Schema(
       required: true
     },
     photo: {
-      type: string,
+      type: String,
       // validate(value) {
       //   if (!validator.isURL(value)) {
       //     throw new Error("Invalid Photo Url:", value);

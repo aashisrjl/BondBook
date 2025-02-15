@@ -7,7 +7,6 @@ exports.isAuthenticated = async(req,res,next)=>{
     console.log("Auth middleware is called")
     try {
         const token = req.cookies.token;
-        console.log("Token is:",token)
     if(!token){
         return res.status(401).json({
             success:false,
@@ -24,7 +23,7 @@ exports.isAuthenticated = async(req,res,next)=>{
     const decodedId = decoded.id;
     console.log("DecodedId is",decodedId)
    const user =  await User.findById({_id:decodedId})
-    console.log("User is:",user)
+    console.log("User is:",user.email)
     if(!user){
         return res.status(401).json({
             success:false,
