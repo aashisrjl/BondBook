@@ -26,7 +26,7 @@ export default function Address() {
   const checkToken = async () => {
     const token = await AsyncStorage.getItem("token");
     if (!token) {
-      navigation.replace("Login");
+      navigation.navigate("Login");
     }
     console.log("Token:", token);
   };
