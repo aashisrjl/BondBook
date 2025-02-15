@@ -10,12 +10,13 @@ import RegisterScreen from './auth/Register';
 import SettingPage from './pages/setting/SettingPage';
 import ProfilePage from './pages/profile/ProfilePage';
 import ChatSection from './pages/chat/chat';
+import { RootStackParamList } from './component/types';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>(); // Use the RootStackParamList for type safety
 
 export default function RootLayout() {
   return (
-   
+    <NavigationContainer>  {/* Wrap the stack navigator inside NavigationContainer */}
       <Stack.Navigator
         screenOptions={{
           headerStyle: { backgroundColor: '#2E004F' },
@@ -30,8 +31,9 @@ export default function RootLayout() {
         <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
         <Stack.Screen name="Setting" component={SettingPage} options={{ title: 'Setting' }} />
         <Stack.Screen name="Profile" component={ProfilePage} options={{ title: 'Profile' }} />
+
         <Stack.Screen name="Chat" component={ChatSection} options={{ title: 'Chat' }} />
       </Stack.Navigator>
-
+    </NavigationContainer>
   );
 }
