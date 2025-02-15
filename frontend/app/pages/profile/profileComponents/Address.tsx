@@ -168,7 +168,7 @@ export default function Address() {
   };
 
   return (
-    <View style={tw`flex px-1 mr-5 bg-silver w-100`}>
+    <View style={tw`flex px-1 mr-5 bg-silver rounded-lg w-[28rem]`}>
       {/* Searchbar */}
       <Searchbar
       placeholder="Search for an address"
@@ -204,10 +204,11 @@ export default function Address() {
       )}
 
       {/* Share Location Button */}
-      <TouchableOpacity style={tw`w-full mt-5 rounded-lg bg-[#F5F5F5]`} onPress={saveAddress}>
-        <View style={tw`py-2`}>
+      <TouchableOpacity style={tw`w-full mt-5 rounded-lg bg-blue-300`} onPress={saveAddress}>
+        <View style={tw`py-2 `}>
           <Text style={tw`text-center text-slate-700`}>Share Location</Text>
         </View>
+        </TouchableOpacity>
     </View>
 
   );

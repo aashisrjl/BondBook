@@ -88,8 +88,11 @@ exports.deleteDiary = async (req, res) => {
 exports.fetchAllDiary = async(req,res)=>{
   try {
     console.log("Fetch all diary is called!")
+    const userId = req.userId
 
-    const existingDiary= await Diary.find();;
+    const existingDiary= await Diary.find({
+        userId:userId
+    });;
     if(!existingDiary)
     {
       return res.status(500).json({message:"There are no existing diaries available"})

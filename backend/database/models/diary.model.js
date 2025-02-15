@@ -5,26 +5,18 @@ const diarySchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-      validate:{
-        validator: function(v)
-        {
-           const wordCount= v.split(" ").length;
-           return wordCount >=3 && wordCount <= 20;
-        },
-        message:"Title must be between 3 and 20 words"
-      }
+      // validate:{
+      //   validator: function(v)
+      //   {
+      //      const wordCount= v.split(" ").length;
+      //      return wordCount >=3 && wordCount <= 20;
+      //   },
+      //   message:"Title must be between 3 and 20 words"
+      // }
     },
     content: {
       type: String,
       required: true,
-      validate:{
-        validator: function(v)
-        {
-          const wordCount = v.split(" ").length;
-          return wordCount>=20 && wordCount <=500;
-        },
-        message:"Content must be between 20 and 500 words."
-      }
     },
     DiaryType: {
       enum: ["Shared", "Personal"],

@@ -43,9 +43,14 @@ app.get("/",(req,res)=>{
 const authRoute  = require('./routes/authRoute/auth.route');
 const diaryRoute = require('./routes/diaryRoute/diary.route');
 const addressRouter = require("./routes/addressRoute/address.route")
+const remainderRoute = require("./routes/remainderRoute/remainder.route")
+const timelineRoute = require("./routes/timelineRoute/timeline.route")
+
 app.use("/",authRoute);
 app.use("/",diaryRoute);
 app.use("/",addressRouter);
+app.use("/",remainderRoute);
+app.use("/",timelineRoute);
 
 
 connectToDatabase()
