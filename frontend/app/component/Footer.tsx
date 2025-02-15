@@ -9,7 +9,7 @@ const Footer = () => {
 
   return (
     <View style={tw`flex-row justify-around p-2 h-14 border-t border-gray-300 bg-[#2E004F] mt-auto`}>
-      <TouchableOpacity style={tw`items-center`} onPress={() => navigation.navigate('Index')}>
+      <TouchableOpacity style={tw`items-center`} onPress={() => navigation.navigate('Chat')}>
         <Ionicons name="chatbubble" size={30} color="white" />
       </TouchableOpacity>
 

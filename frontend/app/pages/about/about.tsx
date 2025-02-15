@@ -4,7 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import tw from '../../../tw';
 import Footer from '../../component/Footer';
+import { useNavigation } from '@react-navigation/native';
 export function AboutPage() {
+  const navigation = useNavigation();
   const features = [
     {
       icon: 'heart',
@@ -48,7 +50,7 @@ export function AboutPage() {
             <Text style={tw`text-2xl font-bold text-black mb-6 text-center`}>
               Why Choose BondBook?
             </Text>
-            <View style={tw`space-y-6`}>
+            <View style={tw` gap-2`}>
               {features.map((feature, index) => (
                 <View key={index} style={tw`bg-white rounded-lg p-4 shadow-md`}>
                   <View style={tw`flex-row items-center mb-3`}>
@@ -79,7 +81,7 @@ export function AboutPage() {
               <Text style={tw`text-xl font-bold text-black mb-3 text-center`}>
                 Ready to Strengthen Your Bond?
               </Text>
-              <TouchableOpacity style={tw`bg-slate-200 px-6 py-3 rounded-full`}>
+              <TouchableOpacity style={tw`bg-slate-200 px-6 py-3 rounded-full`}onPress={()=>{navigation.navigate('Register')}} >
                 <Text style={tw`text-slate-700 font-semibold`}>Get Started</Text>
               </TouchableOpacity>
             </View>

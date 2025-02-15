@@ -19,9 +19,7 @@ const photoSchema = new mongoose.Schema(
     },
     type:{
       type: String,
-      enum:
-        ['photo','video']
-      
+      enum:['photo','video']
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
