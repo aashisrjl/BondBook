@@ -32,7 +32,7 @@ const ChatSection = () => {
                 : tw`self-start bg-gray-300 p-3 rounded-lg mb-3 max-w-3/4`
             }
           >
-            <Text style={tw`text-white`}>{message.text }</Text>
+            <Text style={tw`text-white`}> { message.text + " " }</Text>
           </View>
         ))}
       </ScrollView>
