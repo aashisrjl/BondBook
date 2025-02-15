@@ -48,6 +48,7 @@ export default function RegisterScreen() {
   };
 
   const handleRegister = async () => {
+    
     const navigation = useNavigation();
     if (!image) {
       Alert.alert("Error", "Please select an image.");
@@ -60,7 +61,7 @@ export default function RegisterScreen() {
     formData.append("password", password);
     formData.append("photoUrl", {
       uri: image,
-      type: "image/jpeg,image/png",
+      type: "image/jpeg",
       name: "profile.jpg",
     });
 
@@ -71,7 +72,6 @@ export default function RegisterScreen() {
         },
       });
 
-      await AsyncStorage.setItem("token", res.data.token);
       Alert.alert("Registration Successful");
       navigation.navigate("Login");
     } catch (error) {
@@ -138,7 +138,7 @@ export default function RegisterScreen() {
             {/* Register Button */}
             <TouchableOpacity
               style={tw`bg-blue-500 p-3 rounded-lg mb-4`}
-              onPress={handleRegister}
+              onPress={()=>{handleRegister()}}
             >
               <Text style={tw`text-white text-center font-bold`}>Register</Text>
             </TouchableOpacity>
