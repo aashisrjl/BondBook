@@ -18,7 +18,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 
-const BASE_URL = "http://192.168.1.81:3000"; // Replace with your actual backend URL
+const BASE_URL = "http://192.168.1.74:3000"; // Replace with your actual backend URL
 
 export default function RegisterScreen() {
   const [name, setName] = useState("");
@@ -47,8 +47,14 @@ export default function RegisterScreen() {
     }
   };
 
+  const navigation = useNavigation();
+
   const handleRegister = async () => {
-    const navigation = useNavigation();
+    console.log("button is clicked")
+    if(!navigation)
+    {
+      console.log("Navigation is not working")
+    }
     if (!image) {
       Alert.alert("Error", "Please select an image.");
       return;
@@ -60,16 +66,23 @@ export default function RegisterScreen() {
     formData.append("password", password);
     formData.append("photoUrl", {
       uri: image,
-      type: "image/jpeg,image/png",
+      type: "image/jpeg",
       name: "profile.jpg",
     });
+    console.log("FormData is",formData)
 
     try {
+      console.log("hello")
       const res = await axios.post(`${BASE_URL}/register`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+
+      if(!res)
+      {
+        console.log("Response is not working")
+      }
 
       await AsyncStorage.setItem("token", res.data.token);
       Alert.alert("Registration Successful");
