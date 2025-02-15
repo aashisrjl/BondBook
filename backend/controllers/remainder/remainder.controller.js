@@ -30,6 +30,68 @@ exports.getRemainders = async(req,res)=>{
     })
 }
 
+exports.updateRemainder = async(req,res)=>{
+    try {
+     console.log("Route is called!");
+     const {date,title}= req.body;
+     if(!date || !title)
+     {
+        res.status(404).json({message:"All fields are required!"})
+        return;
+     }
+     const remainderId= req.params.id;
+     if(!remainderId)
+     {
+        res.status(404).json({message:"RemainderId is required"})
+        return;
+     };
+
+     const RemainderId = await Remainder.findById({id});
+     if(!RemainderId)
+     {
+        res.status(404).json({message:"RemainderId is not available"})
+        return;
+     }
+     const userId = req.userId;
+
+     if(!userId)
+     {
+        res.status(404).json({message:"User is not authenticated!"})
+        return;
+     };
+
+     const existingRemainder = await Remainder.find({
+        $or:[
+            { userId: userId,_id: remainderId },
+        ]
+     })
+
+     if(!existingRemainder)
+     {
+        res.status(404).json({message:"Remainder doesn't exist here"})
+        return;
+     }
+
+    const updateRemainder = await Remainder.findByIdAndUpdate(remainderId, {
+        date: date,
+        title: title
+    });
+     if(!updateRemainder)
+     {
+        res.status(404).json({message:"Remainder fails to be updated"})
+        return;
+     }
+     await updateRemainder.save()
+     return res.status(200).json({message:"Remainder updated successfully",updateRemainder});
+
+    } catch (error) {
+
+        console.log('Server error while updating the remainder')
+        return res.status(500).json({message:"Server error while updating the remainder",error})
+        
+    }
+}
+
 exports.deleteRemainder = async(req,res)=>{
     const remainderId = req.params.id;
     const userId = req.userId;
