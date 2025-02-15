@@ -16,7 +16,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>(); // Use the RootS
 
 export default function RootLayout() {
   return (
-    <NavigationContainer>  {/* Wrap the stack navigator inside NavigationContainer */}
+    
       <Stack.Navigator
         screenOptions={{
           headerStyle: { backgroundColor: '#2E004F' },
@@ -34,6 +34,7 @@ export default function RootLayout() {
 
         <Stack.Screen name="Chat" component={ChatSection} options={{ title: 'Chat' }} />
       </Stack.Navigator>
-    </NavigationContainer>
+      
+  
   );
 }

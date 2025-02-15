@@ -50,11 +50,8 @@ export default function RegisterScreen() {
   const navigation = useNavigation();
 
   const handleRegister = async () => {
-    console.log("button is clicked")
-    if(!navigation)
-    {
-      console.log("Navigation is not working")
-    }
+    
+    const navigation = useNavigation();
     if (!image) {
       Alert.alert("Error", "Please select an image.");
       return;
@@ -79,12 +76,6 @@ export default function RegisterScreen() {
         },
       });
 
-      if(!res)
-      {
-        console.log("Response is not working")
-      }
-
-      await AsyncStorage.setItem("token", res.data.token);
       Alert.alert("Registration Successful");
       navigation.navigate("Login");
     } catch (error) {
@@ -151,7 +142,7 @@ export default function RegisterScreen() {
             {/* Register Button */}
             <TouchableOpacity
               style={tw`bg-blue-500 p-3 rounded-lg mb-4`}
-              onPress={handleRegister}
+              onPress={()=>{handleRegister()}}
             >
               <Text style={tw`text-white text-center font-bold`}>Register</Text>
             </TouchableOpacity>

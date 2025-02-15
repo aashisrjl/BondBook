@@ -33,7 +33,6 @@ exports.handleRegister = async (req, res) => {
         password: await bcrypt.hash(password, 10),
         photoUrl: image
     });
-    await user.save();
 
     res.status(200).json({
         message: "User registered",
