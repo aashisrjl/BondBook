@@ -7,6 +7,7 @@ import {
   Image,
   Alert,
   TouchableOpacity,
+  Text,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { Searchbar } from "react-native-paper";
@@ -25,7 +26,7 @@ export default function Address() {
   const checkToken = async () => {
     const token = await AsyncStorage.getItem("token");
     if (!token) {
-      navigation.navigate("Login");
+      navigation.replace("Login");
     }
     console.log("Token:", token);
   };
@@ -167,47 +168,46 @@ export default function Address() {
   };
 
   return (
-    <View style={tw`flex-1 p-6 bg-gray-50  w-[28rem]`}>
+    <View style={tw`flex px-1 mr-5 bg-silver w-100`}>
       {/* Searchbar */}
       <Searchbar
-        placeholder="Search for an address"
-        onChangeText={setPlaceName}
-        value={placeName}
-        onSubmitEditing={() => searchLocation(placeName)}
-        style={tw`mb-4 w-full rounded-lg  text-white`}
-        inputStyle={{ color: "black" }} // Text color inside input
+      placeholder="Search for an address"
+      onChangeText={setPlaceName}
+      value={placeName}
+      onSubmitEditing={() => searchLocation(placeName)}
+      style={tw`mb-4 w-full rounded-lg bg-silver text-white`}
+      inputStyle={{ color: "black" }} // Text color inside input
       />
       
       {/* Map Container */}
-      <View style={tw`flex-1 w-full overflow-hidden rounded-lg bg-gray-50  p-2`}>
-        <MapView
-          style={tw`w-full h-full rounded-lg`}
-          region={location}
-          onRegionChangeComplete={setLocation}
-        >
-          <Marker coordinate={location} title="Selected Location" />
-        </MapView>
+      <View style={tw`flex-1 w-full overflow-hidden rounded-lg bg-silver p-2`}>
+      <MapView
+        style={tw`w-full h-full  bg-silver rounded-lg`}
+        region={location}
+        onRegionChangeComplete={setLocation}
+      >
+        <Marker coordinate={location} title="Selected Location" />
+      </MapView>
       </View>
 
       {/* Capture Photo Button */}
-      <TouchableOpacity style={tw`w-full mt-5  rounded-lg bg-gray-50 `}>
-        <Button title="Capture Photo" onPress={takePhoto} color="blue" />
+      <TouchableOpacity style={tw`w-full mt-5 rounded-lg bg-[#A5BFCC]`} onPress={takePhoto}>
+        <View style={tw`py-2`}>
+          <Text style={tw`text-center text-slate-700`}>Take Photo</Text>
+        </View>
       </TouchableOpacity>
+
 
       {/* Display Captured Image */}
       {photoUrl && (
-        <Image source={{ uri: photoUrl }} style={tw`w-full h-48 mt-4 rounded-lg`} />
+      <Image source={{ uri: photoUrl }} style={tw`w-full h-48 mt-4 rounded-lg`} />
       )}
 
       {/* Share Location Button */}
-      <TouchableOpacity style={tw`w-full mt-5 rounded-lg bg-[#6C1212]`}>
-        <Button title="Share Location" onPress={saveAddress} color="green" />
-      </TouchableOpacity>
-
-      {/* Footer
-      <View style={tw`w-full mt-4`}>
-        <Footer />
-      </View> */}
+      <TouchableOpacity style={tw`w-full mt-5 rounded-lg bg-[#F5F5F5]`} onPress={saveAddress}>
+        <View style={tw`py-2`}>
+          <Text style={tw`text-center text-slate-700`}>Share Location</Text>
+        </View>
     </View>
 
   );

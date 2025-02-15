@@ -73,6 +73,7 @@ const ProfilePageScreen= ()=>  {
       </View>
 
       {/* Sidebar Navigation */}
+
       <View style={tw`flex-row justify-around bg-gray-200 py-2`}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {sections.map((section) => (
