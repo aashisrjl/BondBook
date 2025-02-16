@@ -1,32 +1,35 @@
-import React from "react";
-import { View, Text, ScrollView, TouchableOpacity, Image, Dimensions } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, ScrollView, TouchableOpacity, Image, Dimensions, Alert } from "react-native";
 import tw from "twrnc";
 import { PlusIcon, Clock } from "lucide-react-native";
+import axios from "axios";
 
 // Dummy timeline data
-const timelineEvents = [
-  {
-    id: 1,
-    title: "Mountain Adventure",
-    eventDate: "2024-03-15T14:30:00",
-    photo: "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=500&auto=format&fit=crop&q=60",
-    description: "Explored the hidden trails of Mount Rainier. The views were absolutely breathtaking, and we even spotted some wildlife along the way!",
-  },
-  {
-    id: 2,
-    title: "Coffee Experience",
-    eventDate: "2024-03-10T12:00:00",
-    photo: "https://images.unsplash.com/photo-1682687221038-404670f01d03?w=500&auto=format&fit=crop&q=60",
-    description: "Coffee tasting session at the new artisanal café downtown. Each blend told its own story of origin and craftsmanship.",
-  },
-  {
-    id: 3,
-    title: "Beach Yoga",
-    eventDate: "2024-03-05T18:45:00",
-    photo: "https://images.unsplash.com/photo-1682687220063-4742bd7fd538?w=500&auto=format&fit=crop&q=60",
-    description: "Sunset yoga session on the beach. The perfect blend of mindfulness and nature's beauty.",
-  }
-];
+// const timelineEvents = [
+//   {
+//     id: 1,
+//     title: "Mountain Adventure",
+//     eventDate: "2024-03-15T14:30:00",
+//     photo: "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=500&auto=format&fit=crop&q=60",
+//     description: "Explored the hidden trails of Mount Rainier. The views were absolutely breathtaking, and we even spotted some wildlife along the way!",
+//   },
+//   {
+//     id: 2,
+//     title: "Coffee Experience",
+//     eventDate: "2024-03-10T12:00:00",
+//     photo: "https://images.unsplash.com/photo-1682687221038-404670f01d03?w=500&auto=format&fit=crop&q=60",
+//     description: "Coffee tasting session at the new artisanal café downtown. Each blend told its own story of origin and craftsmanship.",
+//   },
+//   {
+//     id: 3,
+//     title: "Beach Yoga",
+//     eventDate: "2024-03-05T18:45:00",
+//     photo: "https://images.unsplash.com/photo-1682687220063-4742bd7fd538?w=500&auto=format&fit=crop&q=60",
+//     description: "Sunset yoga session on the beach. The perfect blend of mindfulness and nature's beauty.",
+//   }
+// ];
+
+const BASE_URL='http://192.168.1.81:3000';
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = width - 48; // 24px padding on each side
@@ -43,6 +46,68 @@ const formatDate = (dateString: string) => {
 };
 
 const Timeline = () => {
+  const [addmodal,setAddmodel]= useState(false);
+  const [updatemodal,setUpdateAddmodel]= useState(false);
+  const [title,setTitle]= useState('');
+  const [description,setDescription] = useState('');
+  const [eventDate,setEventDate] = useState('');
+  const [photo,setPhoto] = useState([]);
+  const [timelines,setTimelines] = useState([]);
+
+  useEffect(()=>{
+    fetchTimelines();
+  },[])
+
+  const fetchTimelines = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/getTimeline`);
+      const data = res.data.timeline
+      setTimelines(data);
+      console.log('tmerline',timelines)
+    } catch (error) {
+      console.error("Error fetching timeline:", error);
+    }
+  };
+
+  const handleCreateTimeline = async () => {
+    if (!title.trim() || !eventDate.trim() || !photo.trim()) {
+      Alert.alert("Error", " Fill all fields");
+      return;
+    }
+
+    try {
+      await axios.post(`${BASE_URL}/createTimeline`, { title, description,eventDate,photo });
+      Alert.alert("Success", "Timeline Created!");
+      setTitle("");
+      fetchTimelines();
+    } catch (error) {
+      console.error("Error creating timeline:", error);
+    }
+  };
+
+  // const updateReminder = async () => {
+  //   if (!selectedReminderId) return;
+  //   try {
+  //     await axios.patch(`${BASE_URL}/updateReminder/${selectedReminderId}`, { title, date });
+  //     Alert.alert("Success", "Reminder Updated!");
+  //     setTitle("");
+  //     setSelectedReminderId(null);
+  //     fetchReminders();
+  //   } catch (error) {
+  //     console.error("Error updating reminder:", error);
+  //   }
+  // };
+
+  // const deleteReminder = async (id) => {
+  //   try {
+  //     await axios.delete(`${BASE_URL}/deleteRemainder/${id}`);
+  //     Alert.alert("Success", "Reminder Deleted!");
+  //     fetchReminders();
+  //   } catch (error) {
+  //     console.error("Error deleting reminder:", error);
+  //   }
+  // };
+
   return (
     <View style={tw`flex-1 bg-gray-50 w-[28rem]`}>
       {/* Header */}
@@ -54,16 +119,16 @@ const Timeline = () => {
           </Text>
         </View>
         <Text style={tw`text-gray-500 text-sm`}>
-          {timelineEvents.length} captured moments
+          {timelines.length} captured moments
         </Text>
       </View>
 
       {/* Timeline List */}
       <ScrollView style={tw`flex-1 px-6 pt-6`}>
-        {timelineEvents.map((event, index) => (
+        {timelines.map((event, index) => (
           <View key={event.id} style={tw`mb-8 relative`}>
             {/* Timeline line */}
-            {index !== timelineEvents.length - 1 && (
+            {index !== timelines.length - 1 && (
               <View 
                 style={[
                   tw`absolute left-4 top-[90px] bottom-[-40px] w-0.5 bg-gray-200`,
@@ -90,7 +155,7 @@ const Timeline = () => {
               activeOpacity={0.9}
             >
               <Image
-                source={{ uri: event.photo }}
+                source={{ uri: BASE_URL + "/" + event.photo }}
                 style={[
                   tw`w-full h-48`,
                   { width: CARD_WIDTH - 40 } // Adjust for the left margin
