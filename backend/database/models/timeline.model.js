@@ -8,11 +8,7 @@ const timelineSchema = new mongoose.Schema(
     },
     photo: {
       type: String,
-      // validate(value) {
-      //   if (!validator.isURL(value)) {
-      //     throw new Error("Invalid Photo Url:", value);
-      //   }
-      // },
+
     },
     description: {
       type: String,
