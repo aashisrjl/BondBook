@@ -7,7 +7,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 
 
-const BASE_URL = "http://192.168.1.74:3000"; // Replace with your actual backend URL
+const BASE_URL = "http://192.168.1.74:3000" ; // Replace with your actual backend URL
 
 export default function LoginScreen() {
   const navigation = useNavigation()
