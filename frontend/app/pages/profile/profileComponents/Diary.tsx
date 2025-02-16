@@ -1,21 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Modal, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  TextInput,
+  Modal,
+  ActivityIndicator,
+} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import tw from "twrnc";
 import { PlusIcon, BookOpen, X } from "lucide-react-native";
 import axios from "axios";
 
-const BASE_URL = "http://192.168.1.74:3000"; // Change this to your actual backend URL
+const BASE_URL = "http://192.168.1.81:3000"; // Change this to your actual backend URL
 
 const Diary = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [addModelVisible,setAddModalVisible] = useState(false);
+  const [addModelVisible, setAddModalVisible] = useState(false);
   const [diaryEntries, setDiaryEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [DiaryType, setDiaryType] = useState("");
-  const [selectedDiary, setSelectedDiary] = useState(null);  // Added state for selected diary
+  const [selectedDiary, setSelectedDiary] = useState(null); // Added state for selected diary
 
   const handleCreateDiary = () => {
     axios
@@ -40,14 +48,17 @@ const Diary = () => {
         DiaryType,
       })
       .then((response) => {
-        console.log("updated")
-        setDiaryEntries(diaryEntries.map((entry) => (entry._id === _id ? { ...entry, title, content, DiaryType } : entry))); // Update entry in state
+        console.log("updated");
+        setDiaryEntries(
+          diaryEntries.map((entry) =>
+            entry._id === _id ? { ...entry, title, content, DiaryType } : entry
+          )
+        ); // Update entry in state
       })
       .catch((error) => {
         console.error("Error updating diary entry:", error);
       });
-
-  }
+  };
 
   const handleDeleteDiary = (_id) => {
     axios
@@ -86,9 +97,13 @@ const Diary = () => {
       <View style={tw`bg-white px-4 py-6 shadow-sm`}>
         <View style={tw`flex-row items-center mb-2`}>
           <BookOpen size={24} color="#4B5563" />
-          <Text style={tw`text-gray-800 text-xl font-semibold ml-2`}>My Diary</Text>
+          <Text style={tw`text-gray-800 text-xl font-semibold ml-2`}>
+            My Diary
+          </Text>
         </View>
-        <Text style={tw`text-gray-500 text-sm`}>{diaryEntries.length} entries</Text>
+        <Text style={tw`text-gray-500 text-sm`}>
+          {diaryEntries.length} entries
+        </Text>
       </View>
 
       {/* Diary List */}
@@ -109,12 +124,18 @@ const Diary = () => {
               }}
             >
               <View style={tw`flex-row justify-between items-center mb-2`}>
-                <Text style={tw`text-gray-500 text-sm`}>{new Date(entry.createdAt).toDateString()}</Text>
+                <Text style={tw`text-gray-500 text-sm`}>
+                  {new Date(entry.createdAt).toDateString()}
+                </Text>
                 <View style={tw`bg-blue-100 px-3 py-1 rounded-full`}>
-                  <Text style={tw`text-blue-800 text-xs`}>{entry.DiaryType + " "}</Text>
+                  <Text style={tw`text-blue-800 text-xs`}>
+                    {entry.DiaryType + " "}
+                  </Text>
                 </View>
               </View>
-              <Text style={tw`text-gray-800 text-lg font-semibold mb-2`}>{entry.title}</Text>
+              <Text style={tw`text-gray-800 text-lg font-semibold mb-2`}>
+                {entry.title}
+              </Text>
               <Text style={tw`text-gray-600 leading-5`}>{entry.content}</Text>
             </TouchableOpacity>
           ))
@@ -124,7 +145,10 @@ const Diary = () => {
 
       {/* Floating Add Button */}
       <TouchableOpacity
-        style={[tw`absolute bottom-6 right-6 bg-blue-600 p-4 rounded-full shadow-lg`, { elevation: 4 }]}
+        style={[
+          tw`absolute bottom-6 right-6 bg-blue-600 p-4 rounded-full shadow-lg`,
+          { elevation: 4 },
+        ]}
         onPress={() => setAddModalVisible(true)}
       >
         <PlusIcon size={24} color="white" />
@@ -135,7 +159,9 @@ const Diary = () => {
         <View style={tw`flex-1 justify-center items-center bg-black/50`}>
           <View style={tw`bg-white p-6 rounded-xl w-80 shadow-lg`}>
             <View style={tw`flex-row justify-between items-center mb-4`}>
-              <Text style={tw`text-xl font-semibold text-gray-800`}>Diary Entry</Text>
+              <Text style={tw`text-xl font-semibold text-gray-800`}>
+                Diary Entry
+              </Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
                 <X size={24} color="gray" />
               </TouchableOpacity>
@@ -168,27 +194,36 @@ const Diary = () => {
                 setModalVisible(false);
               }}
             >
-              <Text style={tw`text-white text-center font-semibold`}>Update Entry</Text>
+              <Text style={tw`text-white text-center font-semibold`}>
+                Update Entry
+              </Text>
             </TouchableOpacity>
             {/* Delete Button */}
             {selectedDiary && (
               <TouchableOpacity
                 style={tw`bg-red-600 p-3 rounded-md`}
-                onPress={() => {handleDeleteDiary(selectedDiary._id);setModalVisible(false);}}
+                onPress={() => {
+                  handleDeleteDiary(selectedDiary._id);
+                  setModalVisible(false);
+                }}
               >
-                <Text style={tw`text-white text-center font-semibold`}>Delete Entry</Text>
+                <Text style={tw`text-white text-center font-semibold`}>
+                  Delete Entry
+                </Text>
               </TouchableOpacity>
             )}
           </View>
         </View>
       </Modal>
 
-        {/* Modal Form */}
-        <Modal visible={addModelVisible} transparent animationType="slide">
+      {/* Modal Form */}
+      <Modal visible={addModelVisible} transparent animationType="slide">
         <View style={tw`flex-1 justify-center items-center bg-black/50`}>
           <View style={tw`bg-white p-6 rounded-xl w-80 shadow-lg`}>
             <View style={tw`flex-row justify-between items-center mb-4`}>
-              <Text style={tw`text-xl font-semibold text-gray-800`}>Diary Entry</Text>
+              <Text style={tw`text-xl font-semibold text-gray-800`}>
+                Diary Entry
+              </Text>
               <TouchableOpacity onPress={() => setAddModalVisible(false)}>
                 <X size={24} color="gray" />
               </TouchableOpacity>
@@ -219,9 +254,10 @@ const Diary = () => {
                 setAddModalVisible(false);
               }}
             >
-              <Text style={tw`text-white text-center font-semibold`}>Add Entry</Text>
+              <Text style={tw`text-white text-center font-semibold`}>
+                Add Entry
+              </Text>
             </TouchableOpacity>
-          
           </View>
         </View>
       </Modal>

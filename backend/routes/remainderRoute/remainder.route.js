@@ -9,4 +9,4 @@ router.route("/deleteRemainder/:id").delete(isAuthenticated,deleteRemainder);
 router.route("/updateRemainder/:id").patch(isAuthenticated,updateRemainder);
 
 
-module.exports = router;
+module.exports = router;                                                                      

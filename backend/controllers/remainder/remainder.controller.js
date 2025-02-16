@@ -97,10 +97,10 @@ exports.deleteRemainder = async(req,res)=>{
     const userId = req.userId;
     const remainder = await Remainder.find({_id:remainderId,userId:userId});
     if(!remainder){
-        return res.status(404).json({message:"Remainder not found"})
+        return res.status(404).json({message:"Remainder not found"});
     }
     if(!remainderId){
-        return res.status(400).json({message:"Remainder id is required"})
+        return res.status(400).json({message:"Remainder id is required"});
     }
     const deletedRemainder = await Remainder.findByIdAndDelete(remainderId);
     if(!deletedRemainder){
