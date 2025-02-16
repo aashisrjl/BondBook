@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,14 +9,15 @@ import {
 import tw from "twrnc";
 import { PlusIcon, Bell, X } from "lucide-react-native";
 import { Modal, TextInput, Button } from "react-native-paper";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import axios from "axios";
+// import DateTimePicker from '@react-native-community/datetimepicker';
 
-const reminders = [
-  { id: 1, title: "Team Meeting", date: "2024-03-20T10:00:00", isNotified: false },
-  { id: 2, title: "Doctor's Appointment", date: "2024-03-22T15:30:00", isNotified: true },
-  { id: 3, title: "Birthday Party Planning", date: "2024-03-25T14:00:00", isNotified: false },
-  { id: 4, title: "Project Deadline", date: "2024-03-28T18:00:00", isNotified: false },
-];
+// const reminders = [
+//   { id: 1, title: "Team Meeting", date: "2024-03-20T10:00:00", isNotified: false },
+//   { id: 2, title: "Doctor's Appointment", date: "2024-03-22T15:30:00", isNotified: true },
+//   { id: 3, title: "Birthday Party Planning", date: "2024-03-25T14:00:00", isNotified: false },
+//   { id: 4, title: "Project Deadline", date: "2024-03-28T18:00:00", isNotified: false },
+// ];
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -29,15 +30,65 @@ const formatDate = (dateString) => {
   });
 };
 
+const BASE_URL='http://192.168.1.81:3000';
+
 const Reminders = () => {
   const [addModelVisible, setAddModelVisible] = useState(false);
   const [title, setTitle] = useState("");
   const [date, setDate] = useState(new Date());
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [reminders,setReminders] = useState([]);
+  // const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-  const handleCreateReminder = () => {
-    Alert.alert("Created", `Reminder: ${title} at ${date.toLocaleString()}`);
-    setAddModelVisible(false);
+
+  useEffect(() => {
+    fetchReminders();
+  }, []);
+
+  const fetchReminders = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/getRemainders`);
+      setReminders(res.data.remainders);
+      console.log('remaider',reminders)
+    } catch (error) {
+      console.error("Error fetching reminders:", error);
+    }
+  };
+  const handleCreateReminder = async () => {
+    if (!title.trim()) {
+      Alert.alert("Error", "Title cannot be empty");
+      return;
+    }
+
+    try {
+      await axios.post(`${BASE_URL}/createRemainder`, { title, date });
+      Alert.alert("Success", "Reminder Created!");
+      setTitle("");
+      fetchReminders();
+    } catch (error) {
+      console.error("Error creating reminder:", error);
+    }
+  };
+  // const updateReminder = async () => {
+  //   if (!selectedReminderId) return;
+  //   try {
+  //     await axios.patch(`${BASE_URL}/updateReminder/${selectedReminderId}`, { title, date });
+  //     Alert.alert("Success", "Reminder Updated!");
+  //     setTitle("");
+  //     setSelectedReminderId(null);
+  //     fetchReminders();
+  //   } catch (error) {
+  //     console.error("Error updating reminder:", error);
+  //   }
+  // };
+
+  const deleteReminder = async (id) => {
+    try {
+      await axios.delete(`${BASE_URL}/deleteRemainder/${id}`);
+      Alert.alert("Success", "Reminder Deleted!");
+      fetchReminders();
+    } catch (error) {
+      console.error("Error deleting reminder:", error);
+    }
   };
 
   return (
@@ -58,8 +109,8 @@ const Reminders = () => {
       {/* Reminders List */}
       <ScrollView style={tw`flex-1 px-4 pt-4`}>
         {reminders.map((reminder) => (
-          <TouchableOpacity
-            key={reminder.id}
+          <View
+            key={reminder._id}
             style={tw`bg-white rounded-xl p-4 mb-4 shadow-sm border border-gray-100`}
           >
             <View style={tw`flex-row justify-between items-center mb-2`}>
@@ -76,16 +127,20 @@ const Reminders = () => {
                     reminder.isNotified ? "text-green-800" : "text-yellow-800"
                   } text-xs`}
                 >
-                  {reminder.isNotified ? "Notified" : "Pending"}
+                  {reminder.isNotified ? "Notified " : "Pending "}
                 </Text>
               </View>
             </View>
-            <View style={tw`flex-row items-center`}>
+            <View style={tw`flex-row items-center justify-between`}>
               <Text style={tw`text-gray-500 text-sm`}>
                 {formatDate(reminder.date)}
               </Text>
+              <TouchableOpacity onPress={()=>{deleteReminder(reminder._id)}}
+              style={tw`bg-red-100 p-1 rounded-full px-3  `}>
+                <Text style-={tw`text-yellow-500  text-xs`}>Delete </Text>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
+          </View>
         ))}
         <View style={tw`h-20`} /> {/* Bottom spacing for FAB */}
       </ScrollView>
@@ -97,6 +152,45 @@ const Reminders = () => {
       >
         <PlusIcon size={24} color="white" />
       </TouchableOpacity>
+
+      <Modal visible={addModelVisible} transparent animationType="slide" >
+        <View style={tw` flex justify-center items-center bg-transparent`}>
+          <View style={tw `bg-white p-6 rounded-xl w-80 shadow-lg`}>
+            <View style={tw `flex-row justify-between items-center mb-4`}>
+            <Text style={tw `text-xl font-semibold text-gray-800 text-center `}>Add Reminders</Text>
+            <TouchableOpacity onPress={() => setAddModelVisible(false)}>
+              <X size={24} color="gray" />
+            </TouchableOpacity>
+            </View>
+
+            <TextInput
+            style={tw`border border-gray-300 p-2 rounded mb-3`}
+            placeholder="Title"
+            value={title}
+            onChangeText={setTitle}  />
+
+          <TextInput
+            style={tw`border border-gray-300 p-2 rounded mb-3`}
+            placeholder="Date"
+            value={date}
+            onChangeText={setDate}  />
+
+          <TouchableOpacity 
+          style={tw`bg-blue-600 p-3 rounded-md mb-3`}
+          onPress={()=>{
+            handleCreateReminder();
+            setAddModelVisible(false);
+          }}>
+            <Text style={tw`text-white text-center font-semibold`}> Add</Text>
+            </TouchableOpacity>  
+
+          </View>
+
+
+
+        </View>
+
+      </Modal>
     </View>
   );
 };

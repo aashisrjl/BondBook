@@ -34,11 +34,12 @@ exports.postTimeline = async(req,res)=>{
 }
 
 exports.getTimeline = async(req,res)=>{
-    const timeline = await Timeline.find({
-        where:{
+    const userId = req.userId
+    const timeline = await Timeline.find(
+        {
             userId: userId
         }
-    })
+    )
     if(timeline.length === 0){
         return res.status(404).json({
             message: "No timeline found"
