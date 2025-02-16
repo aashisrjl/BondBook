@@ -1,35 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   PermissionsAndroid,
   Platform,
-  Button,
   Image,
   Alert,
   TouchableOpacity,
   Text,
+  ScrollView,
+  StyleSheet,
+  SafeAreaView,
+  Dimensions,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { Searchbar } from "react-native-paper";
 import Geolocation from "react-native-geolocation-service";
 import * as ImagePicker from "expo-image-picker";
-import tw from "twrnc";
-import Footer from "../../../component/Footer";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "expo-router";
+import { useRouter } from "expo-router";
 
-const BASE_URL = "http://192.168.1.81:3000"; // Replace with your actual backend URL
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const BASE_URL = "http://192.168.1.81:3000";
 
 export default function Address() {
-  const navigation = useNavigation();
-  const checkToken = async () => {
-    const token = await AsyncStorage.getItem("token");
-    if (!token) {
-      navigation.navigate("Login");
-    }
-    console.log("Token:", token);
-  };
+  const router = useRouter();
+  const mapRef = useRef(null);
+  const [isMapReady, setIsMapReady] = useState(false);
 
   const [location, setLocation] = useState({
     latitude: 0,
@@ -40,52 +37,68 @@ export default function Address() {
 
   const [placeName, setPlaceName] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [isCameraActive, setIsCameraActive] = useState(false);
 
-  const saveAddress = async () => {
+  useEffect(() => {
+    checkToken();
+    requestPermissions();
+  }, []);
+
+  const checkToken = async () => {
     try {
-      if (!location.latitude || !location.longitude) {
-        console.log("Error: Latitude and Longitude are required.");
-        return;
+      const token = await AsyncStorage.getItem("token");
+      if (!token) {
+        router.replace("/login");
       }
-  
-      const formattedLocation = [location.latitude, location.longitude]; // Convert to [lat, lon]
-  
-      console.log("Sending data:", { location: formattedLocation, placeName, photoUrl });
-  
-      const response = await axios.post(
-        BASE_URL + "/saveAddress",
-        { location: formattedLocation, placeName, photoUrl },
-        { withCredentials: true }
-      );
-  
-      console.log("Address saved:", response.data);
     } catch (error) {
-      console.error("Server error while saving address:", error?.response?.data || error);
+      console.error("Error checking token:", error);
     }
   };
-  
-  
 
+  const requestPermissions = async () => {
+    try {
+      // Request location permission
+      const locationGranted = await requestLocationPermission();
+      if (locationGranted) {
+        getCurrentLocation();
+      }
 
-  // Request location permission
+      // Pre-request camera permission
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert(
+          "Permission Required",
+          "Camera permission is required to take photos."
+        );
+      }
+    } catch (error) {
+      console.error("Error requesting permissions:", error);
+    }
+  };
+
   const requestLocationPermission = async () => {
     if (Platform.OS === "android") {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: "Location Permission",
-          message: "This app needs access to your location.",
-          buttonNeutral: "Ask Me Later",
-          buttonNegative: "Cancel",
-          buttonPositive: "OK",
-        }
-      );
-      return granted === PermissionsAndroid.RESULTS.GRANTED;
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: "Location Permission",
+            message: "This app needs access to your location.",
+            buttonNeutral: "Ask Me Later",
+            buttonNegative: "Cancel",
+            buttonPositive: "OK",
+          }
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
     }
     return true;
   };
 
-  // Get user location
   const getCurrentLocation = () => {
     Geolocation.getCurrentPosition(
       (position) => {
@@ -95,35 +108,28 @@ export default function Address() {
           latitude,
           longitude,
         }));
+        setIsMapReady(true);
       },
       (error) => {
-        console.error("Error getting location:", error);
+        Alert.alert("Error", "Failed to get location");
+        setIsMapReady(true); // Set map as ready even if location fails
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
   };
 
-  useEffect(() => {
-    const fetchLocation = async () => {
-      const hasPermission = await requestLocationPermission();
-      if (hasPermission) {
-        getCurrentLocation();
-      }
-    };
-    fetchLocation();
-    checkToken();
-  }, []);
-
-  // Search location using OpenStreetMap
   const searchLocation = async (query) => {
+    if (!query.trim()) return;
+    
     try {
+      setLoading(true);
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
           query
         )}`,
         {
           headers: {
-            "User-Agent": "MyApp/1.0 (your-email@example.com)", // Replace with your email
+            "User-Agent": "MyApp/1.0",
             "Accept-Language": "en",
           },
         }
@@ -133,83 +139,203 @@ export default function Address() {
 
       if (data.length > 0) {
         const { lat, lon } = data[0];
-        setLocation({
+        const newLocation = {
           latitude: parseFloat(lat),
           longitude: parseFloat(lon),
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
-        });
+        };
+        setLocation(newLocation);
+        mapRef.current?.animateToRegion(newLocation);
       } else {
         Alert.alert("Error", "Location not found!");
       }
     } catch (error) {
-      console.error("Error fetching location:", error);
+      Alert.alert("Error", "Failed to search location");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Take a photo
   const takePhoto = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert("Permission denied", "You need to allow camera access.");
-      return;
+    try {
+      setIsCameraActive(true);
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.8,
+        base64: false,
+      });
+
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        setPhotoUrl(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.error('Error taking photo:', error);
+      Alert.alert("Error", "Failed to take photo. Please try again.");
+    } finally {
+      setIsCameraActive(false);
     }
+  };
 
-    const result = await ImagePicker.launchCameraAsync({
-      mediaType: "photo",
-      quality: 1,
-      allowsEditing: true,
-      saveToPhotos: true,
-    });
+  const saveAddress = async () => {
+    if (isCameraActive) return; // Prevent saving while camera is active
 
-    if (!result.assets || result.assets.length === 0) return;
+    try {
+      setLoading(true);
+      if (!location.latitude || !location.longitude) {
+        Alert.alert("Error", "Latitude and Longitude are required.");
+        return;
+      }
 
-    setPhotoUrl(result.assets[0].uri);
+      const formattedLocation = [location.latitude, location.longitude];
+      await axios.post(
+        `${BASE_URL}/saveAddress`,
+        { location: formattedLocation, placeName, photoUrl },
+        { withCredentials: true }
+      );
+
+      Alert.alert("Success", "Address saved successfully!");
+    } catch (error) {
+      Alert.alert("Error", "Failed to save address");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onMapReady = () => {
+    setIsMapReady(true);
   };
 
   return (
-    <View style={tw`flex px-1 mr-5 bg-silver rounded-lg w-[28rem]`}>
-      {/* Searchbar */}
-      <Searchbar
-      placeholder="Search for an address"
-      onChangeText={setPlaceName}
-      value={placeName}
-      onSubmitEditing={() => searchLocation(placeName)}
-      style={tw`mb-4 w-full rounded-lg bg-silver text-white`}
-      inputStyle={{ color: "black" }} // Text color inside input
-      />
-      
-      {/* Map Container */}
-      <View style={tw`flex-1 w-full overflow-hidden rounded-lg bg-silver p-2`}>
-      <MapView
-        style={tw`w-full h-full  bg-silver rounded-lg`}
-        region={location}
-        onRegionChangeComplete={setLocation}
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView 
+        style={styles.scrollView}
+        keyboardShouldPersistTaps="handled"
       >
-        <Marker coordinate={location} title="Selected Location" />
-      </MapView>
-      </View>
+        <View style={styles.container}>
+          <Searchbar
+            placeholder="Search for an address"
+            onChangeText={setPlaceName}
+            value={placeName}
+            onSubmitEditing={() => searchLocation(placeName)}
+            style={styles.searchBar}
+            inputStyle={styles.searchInput}
+          />
 
-      {/* Capture Photo Button */}
-      <TouchableOpacity style={tw`w-full mt-5 rounded-lg bg-[#A5BFCC]`} onPress={takePhoto}>
-        <View style={tw`py-2`}>
-          <Text style={tw`text-center text-slate-700`}>Take Photo</Text>
+          <View style={styles.mapContainer}>
+            <MapView
+              ref={mapRef}
+              style={styles.map}
+              region={location}
+              onRegionChangeComplete={setLocation}
+              onMapReady={onMapReady}
+              maxZoomLevel={19}
+              minZoomLevel={3}
+            >
+              {isMapReady && (
+                <Marker coordinate={location} title="Selected Location" />
+              )}
+            </MapView>
+          </View>
+
+          <TouchableOpacity 
+            style={styles.button} 
+            onPress={takePhoto}
+            disabled={loading || isCameraActive}
+          >
+            <Text style={styles.buttonText}>Take Photo</Text>
+          </TouchableOpacity>
+
+          {photoUrl ? (
+            <View style={styles.imageContainer}>
+              <Image 
+                source={{ uri: photoUrl }} 
+                style={styles.image}
+                resizeMode="cover"
+              />
+            </View>
+          ) : null}
+
+          <TouchableOpacity 
+            style={[styles.button, styles.shareButton]} 
+            onPress={saveAddress}
+            disabled={loading || isCameraActive}
+          >
+            <Text style={styles.buttonText}>
+              {loading ? "Saving..." : "Share Location"}
+            </Text>
+          </TouchableOpacity>
         </View>
-      </TouchableOpacity>
-
-
-      {/* Display Captured Image */}
-      {photoUrl && (
-      <Image source={{ uri: photoUrl }} style={tw`w-full h-48 mt-4 rounded-lg`} />
-      )}
-
-      {/* Share Location Button */}
-      <TouchableOpacity style={tw`w-full mt-5 rounded-lg bg-blue-300`} onPress={saveAddress}>
-        <View style={tw`py-2 `}>
-          <Text style={tw`text-center text-slate-700`}>Share Location</Text>
-        </View>
-        </TouchableOpacity>
-    </View>
-
+      </ScrollView>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+    padding: 16,
+    width: SCREEN_WIDTH,
+  },
+  searchBar: {
+    marginBottom: 16,
+    width: SCREEN_WIDTH - 32,
+    alignSelf: 'center',
+    borderRadius: 8,
+    backgroundColor: '#fff',
+  },
+  searchInput: {
+    color: '#000',
+  },
+  mapContainer: {
+    width: SCREEN_WIDTH - 32,
+    height: 300,
+    marginBottom: 16,
+    borderRadius: 8,
+    overflow: 'hidden',
+    alignSelf: 'center',
+  },
+  map: {
+    width: '100%',
+    height: '100%',
+  },
+  button: {
+    width: SCREEN_WIDTH - 32,
+    backgroundColor: '#A5BFCC',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    alignSelf: 'center',
+  },
+  shareButton: {
+    backgroundColor: '#90CAF9',
+  },
+  buttonText: {
+    color: '#2c3e50',
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  imageContainer: {
+    width: SCREEN_WIDTH - 32,
+    height: 200,
+    marginBottom: 16,
+    borderRadius: 8,
+    overflow: 'hidden',
+    alignSelf: 'center',
+    backgroundColor: '#fff',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+});

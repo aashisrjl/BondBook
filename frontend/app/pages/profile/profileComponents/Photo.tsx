@@ -4,7 +4,7 @@ import tw from "twrnc";
 import { PlusIcon, Image as ImageIcon, XCircle } from "lucide-react-native";
 
 const photos = [
-  { id: 1, url: "https://via.placeholder.com/150", caption: "Sunset View", type: "Shared" },
+  { id: 1, url: "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3Vuc2V0fGVufDB8fDB8fHww", caption: "Sunset View", type: "Shared" },
   { id: 2, url: "https://via.placeholder.com/150", caption: "Mountain Trek", type: "Personal" },
   { id: 3, url: "https://via.placeholder.com/150", caption: "Beach Vibes", type: "Shared" },
   { id: 4, url: "https://via.placeholder.com/150", caption: "City Lights", type: "Personal" },
@@ -53,7 +53,7 @@ const Photo = () => {
         <Modal transparent={true} animationType="slide">
           <View style={tw`flex-1 bg-black bg-opacity-80 justify-center items-center p-4`}>
             <View style={tw`bg-white rounded-lg p-4 w-full max-w-md`}> 
-              <TouchableOpacity onPress={() => setSelectedPhoto(null)} style={tw`absolute top-2 right-2`}>
+              <TouchableOpacity onPress={() => setSelectedPhoto(null)} style={tw`absolute top-0 right-0`}>
                 <XCircle size={24} color="black" />
               </TouchableOpacity>
               <Image source={{ uri: selectedPhoto.url }} style={tw`w-full h-60 rounded-lg`} />
