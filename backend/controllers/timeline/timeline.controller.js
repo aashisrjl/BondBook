@@ -68,3 +68,23 @@ exports.getPartnerTimeline = async(req,res)=>{
         timeline
     })
 }
+
+exports.deleteTimeline = async(req,res)=>{
+    const userId = req.userId
+    const timelineId = req.params.id
+    const timeline = await Timeline.findOne({
+        where:{
+            userId: userId,
+            _id: timelineId
+        }
+    })
+    if(!timeline){
+        return res.status(404).json({
+            message: "Timeline not found"
+        })
+    }
+    await Timeline.findByIdAndDelete(timelineId)
+    res.status(200).json({
+        message: "Timeline deleted successfully"
+    })
+}
