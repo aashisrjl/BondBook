@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity, Image, Dimensions, Alert } from "react-native";
 import tw from "twrnc";
-import { PlusIcon, Clock } from "lucide-react-native";
+import { PlusIcon, Clock, X } from "lucide-react-native";
 import axios from "axios";
+import { Modal, TextInput } from "react-native-paper";
+import * as ImagePicker from "expo-image-picker";
 
-// Dummy timeline data
 // const timelineEvents = [
 //   {
 //     id: 1,
@@ -46,13 +47,14 @@ const formatDate = (dateString: string) => {
 };
 
 const Timeline = () => {
-  const [addmodal,setAddmodel]= useState(false);
-  const [updatemodal,setUpdateAddmodel]= useState(false);
+  const [addModal,setAddModal]= useState(false);
+  const [updateModal,setUpdateModal]= useState(false);
   const [title,setTitle]= useState('');
   const [description,setDescription] = useState('');
   const [eventDate,setEventDate] = useState('');
-  const [photo,setPhoto] = useState([]);
+  const [photo,setPhoto] = useState(null);
   const [timelines,setTimelines] = useState([]);
+  const [selectedMTimeline,setSelectedTimeline] = useState('');
 
   useEffect(()=>{
     fetchTimelines();
@@ -79,6 +81,11 @@ const Timeline = () => {
       await axios.post(`${BASE_URL}/createTimeline`, { title, description,eventDate,photo });
       Alert.alert("Success", "Timeline Created!");
       setTitle("");
+      setDescription("");
+      setEventDate("");
+      setPhoto(null);
+      setAddModal(false);
+          
       fetchTimelines();
     } catch (error) {
       console.error("Error creating timeline:", error);
@@ -108,6 +115,28 @@ const Timeline = () => {
   //   }
   // };
 
+   const pickImage = async () => {
+      let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permissionResult.granted) {
+        Alert.alert("Permission Required", "You need to allow access to photos.");
+        return;
+      }
+  
+      let result = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      console.log('result',result)
+  
+      if (result.assets) {
+        setPhoto(result.assets[0].uri);
+      } else {
+        Alert.alert("No image selected", "Please select an image to upload.");
+        return;
+      }
+    };
+
   return (
     <View style={tw`flex-1 bg-gray-50 w-[28rem]`}>
       {/* Header */}
@@ -126,7 +155,7 @@ const Timeline = () => {
       {/* Timeline List */}
       <ScrollView style={tw`flex-1 px-6 pt-6`}>
         {timelines.map((event, index) => (
-          <View key={event.id} style={tw`mb-8 relative`}>
+          <View key={event._id} style={tw`mb-8 relative`}>
             {/* Timeline line */}
             {index !== timelines.length - 1 && (
               <View 
@@ -177,7 +206,8 @@ const Timeline = () => {
       </ScrollView>
 
       {/* Floating Add Button */}
-      <TouchableOpacity 
+      <TouchableOpacity
+      onPress={()=>{setAddModal(true)}}
         style={[
           tw`absolute bottom-6 right-6 bg-blue-500 p-4 rounded-full shadow-lg`,
           { elevation: 4 }
@@ -185,6 +215,60 @@ const Timeline = () => {
       >
         <PlusIcon size={24} color="white" />
       </TouchableOpacity>
+         {/* Modal Form */}
+      <Modal visible={addModal} transparent animationType="slide">
+        <View style={tw`flex justify-center items-center bg-black/50`}>
+          <View style={tw`bg-white p-6 rounded-xl w-90 shadow-lg`}>
+            <View style={tw`flex-row justify-between items-center mb-4`}>
+              <Text style={tw`text-xl font-semibold text-gray-800`}>
+                Timeline Entry
+              </Text>
+              <TouchableOpacity onPress={() => setAddModal(false)}>
+                <X size={24} color="gray" />
+              </TouchableOpacity>
+            </View>
+            <TextInput
+              style={tw`border border-gray-300 p-1 rounded-md mb-3`}
+              placeholder="Title"
+              onChangeText={setTitle}
+            />
+            <TextInput
+              style={tw`border border-gray-300 p-1 rounded-md mb-3 h-20`}
+              placeholder="Description"
+              multiline
+              onChangeText={setDescription}
+            />
+            <TextInput
+              style={tw`border border-gray-300 p-1 rounded-md mb-3 h-20`}
+              placeholder="Date"
+              onChangeText={setEventDate}
+            />
+            {photo &&(
+              <Text style={tw`text-green-600`} >uploaded Successfully</Text>
+            ) }
+             <TouchableOpacity
+              style={tw`bg-gray-300 p-3 rounded-lg mb-3`}
+              onPress={pickImage}
+            >
+              <Text style={tw`text-center`}>Upload Image</Text>
+            </TouchableOpacity>
+
+           
+            <TouchableOpacity
+              style={tw`bg-blue-600 p-3 rounded-md mb-3`}
+              onPress={() => {
+                handleCreateTimeline();
+                setAddModal(false);
+              }}
+            >
+              <Text style={tw`text-white text-center font-semibold`}>
+                Add New
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      
     </View>
   );
 };
