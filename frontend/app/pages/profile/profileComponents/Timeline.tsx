@@ -30,7 +30,8 @@ import * as ImagePicker from "expo-image-picker";
 //   }
 // ];
 
-const BASE_URL='http://192.168.1.81:3000';
+const BASE_URL = "http://192.168.1.74:3000"; // Replace with your actual backend URL
+
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = width - 48; // 24px padding on each side
