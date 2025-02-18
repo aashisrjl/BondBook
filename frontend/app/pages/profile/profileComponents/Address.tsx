@@ -21,7 +21,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const BASE_URL = "http://192.168.1.81:3000";
+const BASE_URL = window.location.hostname === "192.168.1.81" 
+  ? "http://192.168.1.81:3000" 
+  : "http://192.168.1.74:3000";
+
 
 export default function Address() {
   const router = useRouter();
@@ -169,7 +172,7 @@ export default function Address() {
       });
 
       if (!result.canceled && result.assets && result.assets.length > 0) {
-        setPhotoUrl(result.assets[0].uri);
+        setPhotoUrl(result.assets[0].fileName);
       }
     } catch (error) {
       console.error('Error taking photo:', error);
