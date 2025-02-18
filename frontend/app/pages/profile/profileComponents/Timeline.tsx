@@ -6,29 +6,6 @@ import axios from "axios";
 import { Modal, TextInput } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 
-// const timelineEvents = [
-//   {
-//     id: 1,
-//     title: "Mountain Adventure",
-//     eventDate: "2024-03-15T14:30:00",
-//     photo: "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=500&auto=format&fit=crop&q=60",
-//     description: "Explored the hidden trails of Mount Rainier. The views were absolutely breathtaking, and we even spotted some wildlife along the way!",
-//   },
-//   {
-//     id: 2,
-//     title: "Coffee Experience",
-//     eventDate: "2024-03-10T12:00:00",
-//     photo: "https://images.unsplash.com/photo-1682687221038-404670f01d03?w=500&auto=format&fit=crop&q=60",
-//     description: "Coffee tasting session at the new artisanal café downtown. Each blend told its own story of origin and craftsmanship.",
-//   },
-//   {
-//     id: 3,
-//     title: "Beach Yoga",
-//     eventDate: "2024-03-05T18:45:00",
-//     photo: "https://images.unsplash.com/photo-1682687220063-4742bd7fd538?w=500&auto=format&fit=crop&q=60",
-//     description: "Sunset yoga session on the beach. The perfect blend of mindfulness and nature's beauty.",
-//   }
-// ];
 
 const BASE_URL = window.location.hostname === "192.168.1.81" 
   ? "http://192.168.1.81:3000" 
