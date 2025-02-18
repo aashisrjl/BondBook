@@ -45,12 +45,14 @@ const diaryRoute = require('./routes/diaryRoute/diary.route');
 const addressRouter = require("./routes/addressRoute/address.route")
 const remainderRoute = require("./routes/remainderRoute/remainder.route")
 const timelineRoute = require("./routes/timelineRoute/timeline.route")
+const photoRoute = require('./routes/photoRoute/photo.route')
 
 app.use("/",authRoute);
 app.use("/",diaryRoute);
 app.use("/",addressRouter);
 app.use("/",remainderRoute);
 app.use("/",timelineRoute);
+app.use("/",photoRoute);
 
 
 connectToDatabase()
