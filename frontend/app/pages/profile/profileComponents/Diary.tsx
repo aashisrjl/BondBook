@@ -12,8 +12,10 @@ import { Picker } from "@react-native-picker/picker";
 import tw from "twrnc";
 import { PlusIcon, BookOpen, X } from "lucide-react-native";
 import axios from "axios";
+const BASE_URL = window.location.hostname === "192.168.1.81" 
+  ? "http://192.168.1.81:3000" 
+  : "http://192.168.1.74:3000";
 
-const BASE_URL = "http://192.168.1.74:3000"; // Change this to your actual backend URL
 
 const Diary = () => {
   const [modalVisible, setModalVisible] = useState(false);
