@@ -136,24 +136,33 @@ const Timeline = () => {
   };
 
   const handleCreateTimeline = async () => {
-    if (!title.trim() || !eventDate.trim() || !photo) {
-      Alert.alert("Error", "Fill all fields");
-      return;
-    }
-
-    try {
-      await axios.post(`${BASE_URL}/createTimeline`, { title, description, eventDate, photo });
-      Alert.alert("Success", "Timeline Created!");
-      setTitle("");
-      setDescription("");
-      setEventDate("");
-      setPhoto([]);
-      setAddModal(false);
-      fetchTimelines();
-    } catch (error) {
-      console.error("Error creating timeline:", error);
+    if (title && description && eventDate && photo.length > 0) {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("eventDate", eventDate);
+      formData.append("photo", {
+        uri: photo[0], // or handle it if it's multiple
+        type: "image/jpeg",
+        name: "photo.jpg",
+      });
+  
+      try {
+        await axios.post(`${BASE_URL}/createTimeline`, formData);
+        setTitle("");
+        setDescription("");
+        setEventDate("");
+        setPhoto([]);  // Ensure you only reset photo here if needed
+        setAddModal(false);
+        fetchTimelines();
+      } catch (error) {
+        console.error("Error creating timeline:", error);
+      }
+    } else {
+      Alert.alert("Validation", "Please fill all fields and select a photo.");
     }
   };
+  
 
   const handleUpdateTimeline = async () => {
     if (!selectedTimelineId) return;
@@ -186,19 +195,18 @@ const Timeline = () => {
       Alert.alert("Permission Required", "You need to allow access to photos.");
       return;
     }
-
+  
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
-
-    if (result.assets) {
-      setPhoto(result.assets.map(asset => asset.uri));
-    } else {
-      Alert.alert("No image selected", "Please select an image to upload.");
+  
+    if (!result.canceled) {
+      setPhoto(result.assets.map((asset) => asset.uri)); // State updated with selected image(s)
     }
   };
+  
 
   const goToPreviousPhoto = () => {
     setCurrentPhotoIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : photo.length - 1));
@@ -360,52 +368,52 @@ const Timeline = () => {
       {/* Add Modal */}
       <Modal visible={addModal} transparent={true} animationType="slide">
         <View style={tw`flex justify-center items-center`}>
-          <View style={tw`bg-white p-6 rounded-xl w-105 shadow-lg`}>
+          <View style={tw`bg-white p-6 rounded-xl w-90 shadow-lg`}>
             <View style={tw`flex-row justify-between items-center mb-4`}>
               <Text style={tw`text-xl font-semibold text-gray-800`}>
-                Add Timeline Event
+                Timeline Entry
               </Text>
               <TouchableOpacity onPress={() => setAddModal(false)}>
                 <X size={24} color="gray" />
               </TouchableOpacity>
             </View>
-
-            <PhotoGallery photos={photo} />
-
-            <TouchableOpacity
+            <TextInput
+              style={tw`border bg-white border-gray-300 p-1 rounded-md mb-3`}
+              placeholder="Title"
+              onChangeText={setTitle}
+            />
+            <TextInput
+              style={tw`border bg-white border-gray-300 p-1 rounded-md mb-3 h-20`}
+              placeholder="Description"
+              multiline
+              onChangeText={setDescription}
+            />
+            <TextInput
+              style={tw`border bg-white border-gray-300 p-1 rounded-md mb-3 h-20`}
+              placeholder="Date"
+              onChangeText={setEventDate}
+            />
+            {photo &&(
+              <Text style={tw`text-green-600`} >uploaded Successfully</Text>
+            ) }
+             <TouchableOpacity
+              style={tw`bg-gray-300 p-3 rounded-lg mb-3`}
               onPress={pickImage}
-              style={tw`bg-gray-100 py-4 rounded-xl items-center mb-4`}
             >
-              <Plus size={24} color="gray" />
-              <Text style={tw`text-gray-600 mt-2`}>Add Photos</Text>
+              <Text style={tw`text-center`}>Upload Image</Text>
             </TouchableOpacity>
 
-            <TextInput
-              label="Event Title"
-              value={title}
-              onChangeText={setTitle}
-              style={tw`mb-4`}
-            />
-            <TextInput
-              label="Event Description"
-              value={description}
-              onChangeText={setDescription}
-              multiline
-              style={tw`mb-4`}
-            />
-            <TextInput
-              label="Event Date"
-              value={eventDate}
-              onChangeText={setEventDate}
-              style={tw`mb-4`}
-            />
-
+           
             <TouchableOpacity
-              onPress={handleCreateTimeline}
-              style={tw`bg-blue-500 py-2 rounded-xl items-center`}
+              style={tw`bg-blue-600 p-3 rounded-md mb-3`}
+              onPress={() => {
+                handleCreateTimeline();
+                setAddModal(false);
+              }}
             >
-              <Text style={tw`text-white text-lg`}>Create</Text>
-
+              <Text style={tw`text-white text-center font-semibold`}>
+                Add New
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
