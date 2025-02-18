@@ -5,18 +5,12 @@ const photoSchema = new mongoose.Schema(
     Phototype: {
       type: String,
       enum: ["Personal", "Shared"],
+      default: "Shared"
     },
     Url: {
-      type: string,
-      // validate(value) {
-      //   if (!validator.isURL(value)) {
-      //     throw new Error("Invalid Photo Url:", value);
-      //   }
-      // },
-    },
-    caption: {
       type: String,
     },
+    
     type:{
       type: String,
       enum:['photo','video']

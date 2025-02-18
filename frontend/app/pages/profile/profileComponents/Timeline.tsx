@@ -167,9 +167,11 @@ const Timeline = () => {
   const handleUpdateTimeline = async () => {
     if (!selectedTimelineId) return;
     try {
-      await axios.patch(`${BASE_URL}/updateReminder/${selectedTimelineId}`, { title, eventDate });
-      Alert.alert("Success", "Reminder Updated!");
-      setTitle("");
+      await axios.patch(`${BASE_URL}/updateReminder/${selectedTimelineId}`, { title,description, eventDate });
+      Alert.alert("Success", "Timeline Updated!");
+      setTitle(" ");
+      setDescription(" ");
+      setEventDate("");
       setSelectedTimelineId(null);
       setUpdateModal(false);
       fetchTimelines();
@@ -189,18 +191,29 @@ const Timeline = () => {
     }
   };
 
+  const handleAddMorePhoto = async(setSelectedTimelineId)=>{
   const pickImage = async () => {
     let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
       Alert.alert("Permission Required", "You need to allow access to photos.");
       return;
     }
-  
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+
+    if (result.assets) {
+      const selectedPhoto = result.assets[0].uri;
+      try {
+        await axios.patch(`${BASE_URL}/addPhotoToTimeline/${setSelectedTimelineId}`, { photo: selectedPhoto });
+        Alert.alert("Success", "Photo added to timeline!");
+        fetchTimelines();
+      } catch (error) {
+        console.error("Error adding photo to timeline:", error);
+      }
+    } else {
+      Alert.alert("No image selected", "Please select an image to upload.");
+    }
+
+  }
+
   
     if (!result.canceled) {
       setPhoto(result.assets.map((asset) => asset.uri)); // State updated with selected image(s)
@@ -367,7 +380,7 @@ const Timeline = () => {
 
       {/* Add Modal */}
       <Modal visible={addModal} transparent={true} animationType="slide">
-        <View style={tw`flex justify-center items-center`}>
+        <View style={tw`flex   justify-center items-center`}>
           <View style={tw`bg-white p-6 rounded-xl w-90 shadow-lg`}>
             <View style={tw`flex-row justify-between items-center mb-4`}>
               <Text style={tw`text-xl font-semibold text-gray-800`}>
