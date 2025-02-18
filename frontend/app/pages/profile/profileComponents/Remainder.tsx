@@ -30,7 +30,10 @@ const formatDate = (dateString) => {
   });
 };
 
-const BASE_URL='http://192.168.1.81:3000';
+const BASE_URL = window.location.hostname === "192.168.1.81" 
+  ? "http://192.168.1.81:3000" 
+  : "http://192.168.1.74:3000";
+
 
 const Reminders = () => {
   const [addModelVisible, setAddModelVisible] = useState(false);
@@ -153,7 +156,7 @@ const Reminders = () => {
         <PlusIcon size={24} color="white" />
       </TouchableOpacity>
 
-      <Modal visible={addModelVisible} transparent animationType="slide" >
+      <Modal visible={addModelVisible} transparent={true} animationType="slide" >
         <View style={tw` flex justify-center items-center bg-transparent`}>
           <View style={tw `bg-white p-6 rounded-xl w-80 shadow-lg`}>
             <View style={tw `flex-row justify-between items-center mb-4`}>

@@ -6,10 +6,10 @@ const timelineSchema = new mongoose.Schema(
       type: Date,
       required: true
     },
-    photo: {
+    photo: [{
       type: String,
 
-    },
+    }],
     description: {
       type: String,
     },
@@ -24,5 +24,5 @@ const timelineSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-const Timeline = mongoose.model("Photo", timelineSchema);
+const Timeline = mongoose.model("Timeline", timelineSchema);
 module.exports = Timeline;
