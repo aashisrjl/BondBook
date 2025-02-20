@@ -7,11 +7,13 @@ import {
   TextInput,
   Modal,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import tw from "twrnc";
 import { PlusIcon, BookOpen, X } from "lucide-react-native";
 import axios from "axios";
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const BASE_URL = window.location.hostname === "192.168.1.81" 
   ? "http://192.168.1.81:3000" 
   : "http://192.168.1.74:3000";
