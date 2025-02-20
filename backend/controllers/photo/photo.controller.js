@@ -2,32 +2,36 @@ const Photo = require("../../database/models/photo.model");
 
 exports.createPost = async (req, res) => {
     try {
-        let image = req.file ? req.file.filename : "";
+        const {Phototype} = req.body
         const userId = req.userId;
-        
-        let media_type = "photo";
-        if (req.file && req.file.mimetype.startsWith("video/")) {
-            media_type = "video";
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ message: "No files uploaded" });
         }
 
-        const post = await Photo.create({
-            Phototype: "Personal", // Default type, change as needed
-            Url: image,
-            type: media_type,
-            userId
-        });
+        let posts = [];
 
-        if (!post) {
-            return res.status(400).json({ message: "Failed to create post" });
+        for (let file of req.files) {
+            let media_type = file.mimetype.startsWith("video/") ? "video" : "photo";
+
+            const post = await Photo.create({
+                Phototype, // Default type, change as needed
+                Url: file.filename,
+                type: media_type,
+                userId
+            });
+
+            posts.push(post);
         }
 
-        res.status(201).json({ message: "Post created successfully", post });
+        res.status(201).json({ message: "Posts created successfully", posts });
     } catch (error) {
         res.status(500).json({ message: "Server error", error });
     }
 };
 
+
 exports.getPhotos = async (req, res) => {
+    const userId = req.userId
     try {
         const photos = await Photo.find({ type: "photo" });
         if (photos.length === 0) {
@@ -40,6 +44,7 @@ exports.getPhotos = async (req, res) => {
 };
 
 exports.getVideos = async (req, res) => {
+    const userId = req.userId
     try {
         const videos = await Photo.find({ type: "video" });
         if (videos.length === 0) {
@@ -56,7 +61,7 @@ exports.deleteGalleryItem = async (req, res) => {
         const { id } = req.params;
         const userId = req.userId;
         
-        const galleryItem = await Photo.findOneAndDelete({ _id: id, userId });
+        const galleryItem = await Photo.findOneAndDelete({ _id: id });
         
         if (!galleryItem) {
             return res.status(404).json({ message: "Gallery item not found" });
