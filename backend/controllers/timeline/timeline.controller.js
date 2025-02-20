@@ -4,6 +4,7 @@ exports.postTimeline = async (req, res) => {
     try {
         const { title, description, eventDate } = req.body;
         const userId = req.userId;
+        console.log("User id is:",userId)
 
         // Check for required fields
         if (!title || !description || !eventDate) {
@@ -41,6 +42,8 @@ exports.postTimeline = async (req, res) => {
 exports.updateTimeline = async (req, res) => {
     try {
         const timelineId = req.params.id;
+        console.log("Timeline id is:",timelineId)
+
         const userId = req.userId;
         const { title, description, eventDate } = req.body;
 
@@ -48,10 +51,17 @@ exports.updateTimeline = async (req, res) => {
             return res.status(400).json({ message: "Timeline ID is required!" });
         }
 
+
+
+        console.log("User is:",userId)
+
+
         const existingTimeline = await Timeline.findOne({
             _id: timelineId,
             userId: userId
         });
+
+        console.log("Existing Timeline is:",existingTimeline)
 
         if (!existingTimeline) {
             return res.status(404).json({ message: "Timeline not found" });
@@ -63,7 +73,7 @@ exports.updateTimeline = async (req, res) => {
         existingTimeline.eventDate = eventDate || existingTimeline.eventDate;
 
         await existingTimeline.save();
-
+   console.log("Helllp")
         res.status(200).json({
             message: "Timeline updated successfully",
             timeline: existingTimeline
