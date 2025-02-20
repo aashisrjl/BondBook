@@ -1,11 +1,4 @@
-const photos = [
-  { id: 1, url: "https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3Vuc2V0fGVufDB8fDB8fHww", caption: "Sunset View", type: "Shared" },
-  { id: 2, url: "https://via.placeholder.com/150", caption: "Mountain Trek", type: "Personal" },
-  { id: 3, url: "https://via.placeholder.com/150", caption: "Beach Vibes", type: "Shared" },
-  { id: 4, url: "https://via.placeholder.com/150", caption: "City Lights", type: "Personal" },
-  { id: 5, url: "https://via.placeholder.com/150", caption: "Forest Trail", type: "Shared" },
-  { id: 6, url: "https://via.placeholder.com/150", caption: "Snowy Peaks", type: "Personal" },
-];
+
 import React, { useEffect, useState } from "react";
 import { 
   View, Text, ScrollView, TouchableOpacity, Image, Modal, Alert 
@@ -16,7 +9,9 @@ import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 
-const BASE_URL = "http://192.168.1.81:3000"; // Change this based on your network
+const BASE_URL = window.location.hostname === "192.168.1.81" 
+  ? "http://192.168.1.81:3000" 
+  : "http://192.168.1.74:3000";
 
 const Photo = () => {
   const [phototype, setPhotoType] = useState("Shared");
@@ -109,7 +104,9 @@ const Photo = () => {
                 style={tw`w-38 px-1 mb-2`}
               >
                 <View style={tw`bg-white rounded-xl shadow-sm border border-gray-100 p-2`}>
-                  <Image source={{ uri: photo.Url }} style={tw`w-full h-40 rounded-lg`} />
+                  <Image 
+                  source={{ uri: BASE_URL + "/" + photo.Url }}
+                  style={tw`w-full h-40 rounded-lg`} />
                 </View>
               </TouchableOpacity>
             ))
@@ -132,10 +129,10 @@ const Photo = () => {
         <Modal transparent={true} animationType="slide">
           <View style={tw`flex-1 bg-black bg-opacity-80 justify-center items-center p-4`}>
             <View style={tw`bg-white rounded-lg p-4 w-full max-w-md relative`}> 
-              <TouchableOpacity onPress={() => setSelectedPhoto(null)} style={tw`absolute top-2 right-2`}>
+              <TouchableOpacity onPress={() => setSelectedPhoto(null)} style={tw` absolute top-1 right-1`}>
                 <XCircle size={24} color="black" />
               </TouchableOpacity>
-              <Image source={{ uri:BASE_URL + "/"+ selectedPhoto.Url }} style={tw`w-full h-60 rounded-lg`} />
+              <Image source={{uri: BASE_URL + "/"+ selectedPhoto.Url }} style={tw`w-full h-80 rounded-lg`} />
               <View style={tw`flex-row justify-between items-center p-2`}>
                 <Text style={tw`text-gray-500 text-sm`}>{selectedPhoto.Phototype}</Text>
                 <TouchableOpacity onPress={() => deletePhoto(selectedPhoto._id)}>

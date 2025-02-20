@@ -2,6 +2,7 @@ const Photo = require("../../database/models/photo.model");
 
 exports.createPost = async (req, res) => {
     try {
+        const {Phototype} = req.body
         const userId = req.userId;
         if (!req.files || req.files.length === 0) {
             return res.status(400).json({ message: "No files uploaded" });
@@ -13,7 +14,7 @@ exports.createPost = async (req, res) => {
             let media_type = file.mimetype.startsWith("video/") ? "video" : "photo";
 
             const post = await Photo.create({
-                Phototype: "Personal", // Default type, change as needed
+                Phototype, // Default type, change as needed
                 Url: file.filename,
                 type: media_type,
                 userId

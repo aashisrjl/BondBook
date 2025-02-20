@@ -191,7 +191,7 @@ const Timeline = () => {
     }
   };
 
-  const handleAddMorePhoto = async(setSelectedTimelineId)=>{
+  const handleAddMorePhoto = async(selectedTimelineId)=>{
   const pickImage = async () => {
     let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
@@ -228,6 +228,7 @@ const Timeline = () => {
   const goToNextPhoto = () => {
     setCurrentPhotoIndex((prevIndex) => (prevIndex < photo.length - 1 ? prevIndex + 1 : 0));
   };
+
 
   return (
     <View style={tw`flex-1 bg-gray-50 w-[28rem]`}>
@@ -366,13 +367,13 @@ const Timeline = () => {
               onPress={handleUpdateTimeline}
               style={tw`bg-blue-500 py-2 rounded-xl items-center mb-2`}
             >
-              <Text style={tw`text-white text-lg`}>Update</Text>
+              <Text style={tw`text-white text-lg`}>Update </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => handleDeleteTimeline(selectedTimelineId)}
               style={tw`bg-red-500 py-2 rounded-xl items-center`}
             >
-              <Text style={tw`text-white text-lg`}>Delete</Text>
+              <Text style={tw`text-white text-lg`}>Delete </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -411,7 +412,7 @@ const Timeline = () => {
             ) }
              <TouchableOpacity
               style={tw`bg-gray-300 p-3 rounded-lg mb-3`}
-              onPress={pickImage}
+              onPress={()=>{handleAddMorePhoto(selectedTimelineId)}}
             >
               <Text style={tw`text-center`}>Upload Image</Text>
             </TouchableOpacity>
