@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Address from "./profileComponents/Address";
 import {
   View,
   Text,
@@ -11,15 +10,16 @@ import { MaterialIcons } from "@expo/vector-icons";
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Diary from "./profileComponents/Diary";
-import Reminders from "./profileComponents/Remainder";
-import Timeline from "./profileComponents/Timeline";
 import Footer from "../../component/Footer";
-import Photo from "./profileComponents/Photo";
-import VideoGallery from "./profileComponents/Video";
-// import checkToken from "../../functions/checkToken";
+// import Footer from "../../component/Footer";
+// import Diary from "./profileComponents/Diary";
+// import Reminders from "./profileComponents/Remainder";
+// import Timeline from "./profileComponents/Timeline";
+// import Photo from "./profileComponents/Photo";
+// import VideoGallery from "./profileComponents/Video";
+// import Address from "./profileComponents/Address";
 
-const ProfilePageScreen= ()=>  {
+const AboutPage= ()=>  {
   const navigation = useNavigation();
   
 
@@ -60,7 +60,7 @@ const ProfilePageScreen= ()=>  {
   return (
     <View style={tw`flex-1 bg-gray-100`}>
       {/* Profile Header */}
-      {/* <View style={tw`bg-white p-4 flex-row items-center`}>
+       <View style={tw`bg-white p-4 flex-row items-center`}>
         <Image
           source={require("../../assets/logo.png")}
           style={tw`w-16 h-16 rounded-full mr-4`}
@@ -70,11 +70,11 @@ const ProfilePageScreen= ()=>  {
           <Text style={tw`text-gray-600`}>{userData.email}</Text>
           <Text style={tw`text-green-500 italic foot-bold`}>Mood: {userData.mood}</Text>
         </View>
-      </View> */}
+      </View>
 
       {/* Sidebar Navigation */}
 
-      <View style={tw`flex-row justify-around bg-gray-200 py-2`}>
+      {/* <View style={tw`flex-row justify-around bg-gray-200 py-2`}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {sections.map((section) => (
           <TouchableOpacity
@@ -88,10 +88,10 @@ const ProfilePageScreen= ()=>  {
           </TouchableOpacity>
         ))}
         </ScrollView>
-      </View>
+      </View> */}
 
 
-      {/* Content Section */}
+      {/* Content Section
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={tw`p-2`}>
         {selectedSection === "diary" && <> < Diary/> </>}
         {selectedSection === "remind" && <> <Reminders /> </>}
@@ -100,10 +100,10 @@ const ProfilePageScreen= ()=>  {
         {selectedSection === "videos" && <> <VideoGallery /> </>}
         {selectedSection === "address" && <><Address/></>}
 
-      </ScrollView>
+      </ScrollView> */}
       <Footer />
     </View>
   );
 };
 
-export default ProfilePageScreen
+export default AboutPage
