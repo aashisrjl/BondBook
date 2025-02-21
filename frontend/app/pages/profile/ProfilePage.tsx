@@ -11,99 +11,75 @@ import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Footer from "../../component/Footer";
-// import Footer from "../../component/Footer";
-// import Diary from "./profileComponents/Diary";
-// import Reminders from "./profileComponents/Remainder";
-// import Timeline from "./profileComponents/Timeline";
-// import Photo from "./profileComponents/Photo";
-// import VideoGallery from "./profileComponents/Video";
-// import Address from "./profileComponents/Address";
 
-const AboutPage= ()=>  {
+const AboutPage = () => {
   const navigation = useNavigation();
-  
 
   useEffect(() => {
     const checkToken = async () => {
       const token = await AsyncStorage.getItem("token");
-  
+
       if (!token) {
         navigation.replace("Login");
       }
-      console.log("Token:", token);
-      
     };
     checkToken();
-  },[navigation]);
-  
+  }, [navigation]);
 
-  const [selectedSection, setSelectedSection] = useState("diary");
-
-  const userData = {
+  const [userData, setUserData] = useState({
     name: "Aashish Rijal",
     email: "aashisrijal252@example.com",
     photoUrl: "https://via.placeholder.com/150",
     bio: "Adventure seeker. Coffee lover.",
     mood: "Happy",
-  };
-
-  const sections = [
-    { id: "diary", title: "Diary ", icon: "book" },
-    { id: "remind", title: "Remind  ", icon: "watch" },
-    { id: "timeline", title: "Timeline ", icon: "timeline" },
-    { id: "photos", title: "Photos ", icon: "photo-library" },
-    { id: "videos", title: "Videos ", icon: "video-library" },
-    { id: "address", title: "Address ", icon: "map" },
-
-  ];
+    gender: "Male",
+    age: 25,
+    address: "Kathmandu, Nepal",
+  });
 
   return (
     <View style={tw`flex-1 bg-gray-100`}>
-      {/* Profile Header */}
-       <View style={tw`bg-white p-4 flex-row items-center`}>
-        <Image
-          source={require("../../assets/logo.png")}
-          style={tw`w-16 h-16 rounded-full mr-4`}
-        />
-        <View>
-          <Text style={tw`text-xl font-bold`}>{userData.name}</Text>
-          <Text style={tw`text-gray-600`}>{userData.email}</Text>
-          <Text style={tw`text-green-500 italic foot-bold`}>Mood: {userData.mood}</Text>
+      <ScrollView>
+        {/* Profile Header */}
+        <View style={tw`bg-white p-4 flex-row items-center border-b border-gray-300`}>
+          <Image source={{ uri: userData.photoUrl }} style={tw`w-20 h-20 rounded-full mr-4`} />
+          <View>
+            <Text style={tw`text-xl font-bold`}>{userData.name}</Text>
+            <Text style={tw`text-gray-600`}>{userData.email}</Text>
+            <Text style={tw`text-green-500 italic`}>Mood: {userData.mood}</Text>
+          </View>
         </View>
-      </View>
 
-      {/* Sidebar Navigation */}
+        {/* User Details */}
+        <View style={tw`p-4`}>
+          <Text style={tw`text-lg font-bold text-gray-700`}>User Details</Text>
+          <Text style={tw`text-gray-600 mt-2`}><Text style={tw`font-bold`}>Age:</Text> {userData.age}</Text>
+          <Text style={tw`text-gray-600`}><Text style={tw`font-bold`}>Gender:</Text> {userData.gender}</Text>
+          <Text style={tw`text-gray-600`}><Text style={tw`font-bold`}>Address:</Text> {userData.address}</Text>
+          <Text style={tw`text-gray-600`}><Text style={tw`font-bold`}>Bio:</Text> {userData.bio}</Text>
 
-      {/* <View style={tw`flex-row justify-around bg-gray-200 py-2`}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {sections.map((section) => (
+          {/* Partner Information Button */}
           <TouchableOpacity
-            key={section.id }
-            style={[tw`p-3`,selectedSection === section.id && tw`border-b-2 border-blue-500`,]}
-            onPress={() => setSelectedSection(section.id)}>
-            <MaterialIcons name={section.icon } size={30} color="gray" />
-            <Text style={tw`text-center text-gray-700`}>
-              {section.title }
-            </Text>
+            style={tw`mt-4 p-3 bg-blue-500 rounded-lg flex-row items-center justify-center`}
+            onPress={() => navigation.navigate("PartnerInfo")}
+          >
+            <MaterialIcons name="group" size={24} color="white" />
+            <Text style={tw`text-white font-bold ml-2`}>View Partner Information</Text>
           </TouchableOpacity>
-        ))}
-        </ScrollView>
-      </View> */}
 
-
-      {/* Content Section
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={tw`p-2`}>
-        {selectedSection === "diary" && <> < Diary/> </>}
-        {selectedSection === "remind" && <> <Reminders /> </>}
-        {selectedSection === "timeline" && <> <Timeline /> </>}
-        {selectedSection === "photos" && <> <Photo/> </>}
-        {selectedSection === "videos" && <> <VideoGallery /> </>}
-        {selectedSection === "address" && <><Address/></>}
-
-      </ScrollView> */}
+          {/* Edit Profile Button */}
+          <TouchableOpacity
+            style={tw`mt-4 p-3 bg-gray-500 rounded-lg flex-row items-center justify-center`}
+            onPress={() => navigation.navigate("EditProfile")}
+          >
+            <MaterialIcons name="edit" size={24} color="white" />
+            <Text style={tw`text-white font-bold ml-2`}>Edit Profile</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
       <Footer />
     </View>
   );
 };
 
-export default AboutPage
+export default AboutPage;
