@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import tw from "twrnc";
@@ -14,13 +15,13 @@ import Footer from "../../component/Footer";
 
 const AboutPage = () => {
   const navigation = useNavigation();
-
   useEffect(() => {
     const checkToken = async () => {
       const token = await AsyncStorage.getItem("token");
 
       if (!token) {
         navigation.replace("Login");
+
       }
     };
     checkToken();
@@ -83,3 +84,4 @@ const AboutPage = () => {
 };
 
 export default AboutPage;
+
