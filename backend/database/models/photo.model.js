@@ -10,7 +10,6 @@ const photoSchema = new mongoose.Schema(
     Url: {
       type: String,
     },
-    
     type:{
       type: String,
       enum:['photo','video']
