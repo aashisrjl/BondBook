@@ -11,15 +11,16 @@ import { MaterialIcons } from "@expo/vector-icons";
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Address from "./profileComponents/Address";
-import Diary from "./profileComponents/Diary";
-import Reminders from "./profileComponents/Remainder";
-import Timeline from "./profileComponents/Timeline";
-import Photo from "./profileComponents/Photo";
-import VideoGallery from "./profileComponents/Video";
 import Footer from "../../component/Footer";
+// import Footer from "../../component/Footer";
+// import Diary from "./profileComponents/Diary";
+// import Reminders from "./profileComponents/Remainder";
+// import Timeline from "./profileComponents/Timeline";
+// import Photo from "./profileComponents/Photo";
+// import VideoGallery from "./profileComponents/Video";
+// import Address from "./profileComponents/Address";
 
-const ProfilePageScreen = () => {
+const AboutPage= ()=>  {
   const navigation = useNavigation();
   const [selectedSection, setSelectedSection] = useState("diary");
 
@@ -121,7 +122,7 @@ const ProfilePageScreen = () => {
             </TouchableOpacity>
           ))}
         </ScrollView>
-      </View>
+      </View> */}
 
       {/* Content */}
       <ScrollView
