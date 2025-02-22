@@ -5,43 +5,20 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-<<<<<<< HEAD
-  SafeAreaView,
-=======
   Linking,
   Platform,
->>>>>>> f638d11d (add partner profile and components section)
 } from "react-native";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
-import { Modal, TextInput } from "react-native-paper";
-import { router } from "expo-router";
 
-<<<<<<< HEAD
-const AboutPage = () => {
-  const navigation = useNavigation();
-  useEffect(() => {
-    const checkToken = async () => {
-      const token = await AsyncStorage.getItem("token");
-
-      if (!token) {
-        navigation.replace("Login");
-
-      }
-    };
-    checkToken();
-  }, [navigation]);
-=======
 const PROFILE_IMAGE = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
 const COVER_IMAGE = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80";
 
-export default function ProfilePage() {
+export default function PartnerPage() {
   const navigation= useNavigation();
->>>>>>> f638d11d (add partner profile and components section)
 
-  const [editProfileModal,setEditProfileModal] = useState(false);
   const [userData, setUserData] = useState({
     name: "Aashish Rijal",
     email: "aashisrijal252@example.com",
@@ -64,7 +41,6 @@ export default function ProfilePage() {
       linkedin: "https://linkedin.com"
     }
   });
-  const [editData, setEditData] = useState({ name: "", bio: "", mood: "" });
 
   useEffect(() => {
     checkAuth();
@@ -109,15 +85,6 @@ export default function ProfilePage() {
       </View>
     </View>
   );
-  const openEditModal = () => {
-    setEditData({ name: userData.name, bio: userData.bio, mood: userData.mood });
-    setEditProfileModal(true);
-  };
-
-  const handleSaveProfile = () => {
-    setUserData({ ...userData, ...editData });
-    setEditProfileModal(false);
-  };
 
   return (
     <View style={tw`flex-1 bg-gray-100`}>
@@ -143,9 +110,9 @@ export default function ProfilePage() {
 
           {/* Stats Section */}
           <View style={tw`flex-row justify-around mt-6 py-5 border-t border-b border-gray-200`}>
-            <StatBox label="photos" value={userData.stats.photos} />
+            <StatBox label="Photos" value={userData.stats.photos} />
             <StatBox label="Timelines" value={userData.stats.timelines} />
-            <StatBox label="Diaries " value={userData.stats.diaries} />
+            <StatBox label="Diaries" value={userData.stats.diaries} />
           </View>
 
           {/* Social Links */}
@@ -175,83 +142,16 @@ export default function ProfilePage() {
                 `flex-row items-center justify-center p-4 bg-blue-600 rounded-xl`,
                 Platform.select({ web: { cursor: 'pointer' } })
               )}
-              onPress={() => navigation.navigate("Partner")}
+              onPress={() => navigation.navigate("PartnerInfo")}
             >
               <MaterialIcons name="group" size={24} color="white" />
-              <Text style={tw`text-white font-bold ml-2`}>Inspect Partner</Text>
+              <Text style={tw`text-white font-bold ml-2`}>View Partner Information</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={tw.style(
-                `flex-row items-center justify-center p-4 bg-gray-700 rounded-xl`,
-                Platform.select({ web: { cursor: 'pointer' } })
-              )}
-              onPress={() => openEditModal()}
-            >
-              <MaterialIcons name="edit" size={24} color="white" />
-              <Text style={tw`text-white font-bold ml-2`}>Edit Profile</Text>
-            </TouchableOpacity>
+         
           </View>
         </View>
       </ScrollView>
-      <Modal visible={editProfileModal} transparent={true} onDismiss={() => setEditProfileModal(false)}>
-        <View style={tw`flex justify-center items-center `}>
-          <View style={tw`bg-white p-5 w-11/12 rounded-lg shadow-lg`}>
-            <Text style={tw`text-lg font-bold text-gray-800 mb-4`}>Edit Profile</Text>
-
-            {/* Name Input */}
-            <Text style={tw`text-gray-600`}>Name</Text>
-            <TextInput
-              value={editData.name}
-              onChangeText={(text) => setEditData({ ...editData, name: text })}
-              style={tw`border p-2 rounded-lg mt-1`}
-              placeholder="Enter name"
-            />
-
-            {/* Bio Input */}
-            <Text style={tw`text-gray-600 mt-4`}>Bio</Text>
-            <TextInput
-              value={editData.bio}
-              onChangeText={(text) => setEditData({ ...editData, bio: text })}
-              style={tw`border p-2 rounded-lg mt-1`}
-              placeholder="Enter bio"
-              multiline
-            />
-
-            {/* Mood Input */}
-            <Text style={tw`text-gray-600 mt-4`}>Mood</Text>
-            <TextInput
-              value={editData.mood}
-              onChangeText={(text) => setEditData({ ...editData, mood: text })}
-              style={tw`border p-2 rounded-lg mt-1`}
-              placeholder="Enter mood"
-            />
-
-            {/* Buttons */}
-            <View style={tw`flex-row justify-end mt-4`}>
-              <TouchableOpacity
-                style={tw`px-4 py-2 bg-gray-400 rounded-lg mr-2`}
-                onPress={() => setEditProfileModal(false)}
-              >
-                <Text style={tw`text-white`}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={tw`px-4 py-2 bg-blue-600 rounded-lg`}
-                onPress={handleSaveProfile}
-              >
-                <Text style={tw`text-white`}>Save </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
-<<<<<<< HEAD
-};
-
-export default AboutPage;
-
-=======
 }
->>>>>>> f638d11d (add partner profile and components section)
