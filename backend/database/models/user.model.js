@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -13,11 +14,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       lowercase: true,
       trim: true,
-      unique: true, // Optional: to ensure no duplicate email IDs
+      unique: true,
       required: true,
       validate(value) {
         if (!validator.isEmail(value)) {
-          throw new Error("Invalid email address", value);
+          throw new Error("Invalid email address");
         }
       },
     },
@@ -26,8 +27,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       validate(value) {
-        if (!validator.isStrongPassword) {
-          throw new Error("Is not a strong password", value);
+        if (!validator.isStrongPassword(value)) {
+          throw new Error("Is not a strong password");
         }
       },
     },
@@ -38,10 +39,7 @@ const userSchema = new mongoose.Schema(
 
     gender: {
       type: String,
-      enum: {
-        values: ["Male", "Female", "Others"],
-        message: `{VALUE} is not a valid gender type`,
-      },
+      enum: ["Male", "Female", "Others"],
     },
 
     address: {
@@ -50,7 +48,6 @@ const userSchema = new mongoose.Schema(
 
     photoUrl: {
       type: String,
-      required:false,
     },
 
     bio: {
@@ -58,24 +55,21 @@ const userSchema = new mongoose.Schema(
       default: "WELCOME!",
     },
 
-    otp: {
-      type: Number,
-    },
-
-    otpExpiry: {
-      type: Date,
-    },
-
-    token: {
-      type: String,
-    },
-
     mood: {
       type: String,
-      enum: {
-        values: ["Happy", "Sad", "Angry", "Calm", "Excited", "Bored"],
-        message: `{values} don't accepted`,
-      },
+      enum: ["Happy", "Sad", "Angry", "Calm", "Excited", "Bored"],
+    },
+
+    socialMedia: {
+      type: Object,
+      default: {},
+    },
+    stats:{
+      type: Object,
+      default:{}
+    },
+    userId: {
+      type: String,
     },
 
     googleId: {
@@ -86,9 +80,8 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
+
 const User = mongoose.model("User", userSchema);
 module.exports = User;
