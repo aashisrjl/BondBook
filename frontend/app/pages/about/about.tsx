@@ -58,21 +58,6 @@ const AboutPage= ()=>  {
 
   return (
     <View style={tw`flex-1 bg-gray-100`}>
-      {/* Profile Header */}
-       {/* <View style={tw`bg-white p-4 flex-row items-center`}>
-        <Image
-          source={require("../../assets/logo.png")}
-          style={tw`w-16 h-16 rounded-full mr-4`}
-        />
-        <View>
-          <Text style={tw`text-xl font-bold`}>{userData.name}</Text>
-          <Text style={tw`text-gray-600`}>{userData.email}</Text>
-          <Text style={tw`text-green-500 italic foot-bold`}>Mood: {userData.mood}</Text>
-        </View>
-      </View> */}
-
-      {/* Sidebar Navigation */}
-
       <View style={tw`flex-row justify-around bg-gray-200 py-2`}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {sections.map((section) => (

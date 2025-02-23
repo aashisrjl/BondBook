@@ -65,6 +65,7 @@ const userSchema = new mongoose.Schema(
       twitter:{type: String},
       instagram:{type:String},
       linkedin:{type: String},
+      tiktok:{type: String},
     },
     stats:{
       photos:{type: Number},

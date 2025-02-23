@@ -1,6 +1,6 @@
 const User = require("../../database/models/user.model");
-const sendMail = require("../../services/emailService/emailService");
-const bcrypt = require('bcryptjs')
+const sendEMail = require("../../services/emailService/emailService");
+const bcrypt = require("bcryptjs");
 
 // Add Partner
 exports.addPartner = async (req, res) => {
@@ -31,7 +31,7 @@ exports.addPartner = async (req, res) => {
     const randomNumber = Math.floor(Math.random() * 9000) + 1000;
 
     // Send mail to partner
-    sendMail({
+    sendEMail({
       email: email,
       subject: `${user0.username} invited you to be a partner on BondBook`,
       text: `Use code ${randomNumber} to connect with your partner.`,
@@ -95,13 +95,7 @@ exports.verifyPartnerToken = async (req, res) => {
 };
 
 exports.getLoggedInUserData = async (req, res) => {
-  const userId = req.userid;
-  if (!user) {
-    return res.status(400).json({
-      message: "user not found with that userId",
-    });
-  }
-
+  const userId = req.userId;
   const user = await User.findOne({ _id: userId });
   if (!user) {
     return res.status(400).json({
@@ -180,7 +174,7 @@ exports.changePassword = async (req, res) => {
     return;
   }
 
-  user.password = newPassword;
+  user.password = await bcrypt.hash(newPassword, 10);
   await user.save();
 
   res.status(200).json({
@@ -188,89 +182,181 @@ exports.changePassword = async (req, res) => {
   });
 };
 
-exports.forgotPassword = async(req,res)=>{
-    const {email} = req.body;
-    if(!email){
-        return res.status(400).json({
-            message: "email can't be null"
-        })
-    }
-    const user = await User.findOne({email});
-    if(!user){
-        return res.status(400).json({
-            message: "user not found with this email"
-        })
-    }
-     // Generate 4-digit token
-     const randomNumber = Math.floor(Math.random() * 9000) + 1000;
+exports.forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({
+      message: "email can't be null",
+    });
+  }
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(400).json({
+      message: "user not found with this email",
+    });
+  }
+  // Generate 4-digit token
+  const randomNumber = Math.floor(Math.random() * 9000) + 1000;
 
-     // Send mail to partner
-     sendMail({
-       email: email,
-       subject: `BondBook reset password code `,
-       text: `Use code ${randomNumber} to reset your password.`,
-     });
+  // Send mail to partner
+  sendEMail({
+    email: email,
+    subject: `BondBook reset password code `,
+    text: `Use code ${randomNumber} to reset your password.`,
+  });
 
-     user.token = randomNumber
-     user.tokenExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
-     await user.save();
+  user.token = randomNumber;
+  user.tokenExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
+  await user.save();
 
+  res.status(200).json({
+    message: "code send to email",
+    email,
+  });
+};
 
-     res.status(200).json({
-        message: "code send to email",
-        email
-     })
-}
+exports.verifyForgotPassword = async (req, res) => {
+  const { email } = req.body;
+  const { token } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(400).json({
+      message: "user not found with query email",
+    });
+  }
+  if (!token == user.token) {
+    return res.status(400).json({
+      message: "invalid token",
+    });
+  }
 
-exports.verifyForgotPassword = async(req,res)=>{
-    const {email} = req.query;
-    const {token} = req.body;
-    const user = await User.findOne({email});
-    if(!user){
-        return res.status(400).json({
-            message: "user not found with query email"
-        })
-    }
-    if(!token == user.token){
-        return res.status(400).json({
-                message:"invalid token"
-        })
-    }
+  if (!user.tokenExpiresAt || new Date() > user.tokenExpiresAt) {
+    return res.status(200).json({
+      message: "token expires",
+    });
+  }
 
-    if(!user.tokenExpiresAt || new Date > user.tokenExpiresAt){
-        return res.status(200).json({
-            message: "token expires"
-        })
-    }
+  res.status(200).json({
+    message: "token valid successfully",
+    email,
+  });
+};
+exports.changeForgotPassword = async (req, res) => {
+  const { newPassword, confirmPassword } = req.body;
+  const { email } = req.body;
 
-    res.status(200).json({
-        message: "token valid successfully",
-        email
-    })
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(400).json({
+      message: "user not found",
+    });
+  }
 
-}
-exports.changeForgotPassword = async(req,res)=>{
-    const {newPassword,confirmPassword}=  req.body;
-    const {email}= req.query
+  if (!newPassword || !confirmPassword) {
+    return res.status(400).json({
+      message: "fill all fields",
+    });
+  }
+  if (!newPassword === confirmPassword) {
+    return res.status(400).json({
+      message: "password and confirm password doesn't match",
+    });
+  }
 
-    const user = await User.findOne({email});
+  user.password = await bcrypt.hash(newPassword, 10);
+  await user.save();
 
-    if(!newPassword || !confirmPassword){
-        return res.status(400).json({
-            message: "fill all fields"
-        })
-    }
-    if(!newPassword == confirmPassword){
-        return res.status(400).json({
-            message : "password and confirm password doesn't match"
-        })
-    }
+  res.status(200).json({
+    message: "password reset successfully",
+  });
+};
 
-    user.password = bcrypt.hashSync(newPassword,8);
-    await user.save();
+//update profile picture
+exports.editProfilePic = async (req, res) => {
+  const userId = req.userId;
+  const filename = req?.file?.filename;
+  if (!filename) {
+    return res.status(400).json({
+      message: "please upload a file",
+    });
+  }
+  const user = await User.findOne({ _id: userId });
+  if (!user) {
+    return res.status(400).json({
+      message: "user not found",
+    });
+  }
+  user.photoUrl = filename;
+  await user.save();
 
-    res.status(200).json({
-        message: "password reset successfully"
-    })
-    
-}
+  res.status(200).json({
+    message: "photo updated successfully",
+  });
+};
+
+//update profiles
+exports.updateProfile = async (req, res) => {
+  const userId = req.userId;
+  const { name, age, address, bio } = req.body;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  if (name) user.name = name;
+  if (age) user.age = age;
+  if (address) user.address = address;
+  if (bio) user.bio = bio;
+
+  await user.save();
+  res.status(200).json({ message: "Profile updated successfully", user });
+};
+
+//add/update social links
+exports.updateSocialMediaLinks = async (req, res) => {
+  const userId = req.userId;
+  const { facebook, instagram, tiktok, linkedin, twitter } = req.body;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  user.socialMedia = {
+    ...user.socialMedia,
+    ...(facebook && { facebook }),
+    ...(instagram && { instagram }),
+    ...(tiktok && { tiktok }),
+    ...(linkedin && { linkedin }),
+    ...(twitter && { twitter }),
+  };
+
+  await user.save();
+  res
+    .status(200)
+    .json({
+      message: "Social media links updated",
+      socialMedia: user.socialMedia,
+    });
+};
+
+//update Mood
+exports.updateMood = async (req, res) => {
+  const userId = req.userId;
+  const { mood } = req.body;
+
+  if (!["Happy", "Sad", "Angry", "Calm", "Excited", "Bored"].includes(mood)) {
+    return res.status(400).json({ message: "Invalid mood selected" });
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  user.mood = mood;
+  await user.save();
+
+  res.status(200).json({ message: "Mood updated successfully", mood });
+};

@@ -2,6 +2,7 @@ const express = require('express');
 const { isAuthenticated } = require('../../middleware/isAuthenticated');
 const { createPost, getPhotos, getVideos, deleteGalleryItem, getPartnerPhoto, getPartnerVideo } = require('../../controllers/photo/photo.controller');
 const { upload } = require('../../middleware/multerConfig');
+const { errorHandler } = require('../../utils/catchError/catchAsyncError');
 const router = express.Router()
 
 router.route("/createGallery").post(isAuthenticated,upload.array("Url"),createPost)

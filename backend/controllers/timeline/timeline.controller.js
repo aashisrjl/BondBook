@@ -181,8 +181,8 @@ exports.getPartnerTimeline = async (req, res) => {
       return res.status(400).json({ message: "Add a partner first" });
     }
   
-    const timelineData = await Photo.findOne({ userId: partnerId });
-    if (!timelineData) {
+    const timelineData = await Timeline.find({ userId: partnerId });
+    if (timelineData.length <= 0) {
       return res
         .status(400)
         .json({ message: "Your partner hasn't added a Timeline" });
@@ -192,6 +192,6 @@ exports.getPartnerTimeline = async (req, res) => {
       .status(200)
       .json({
         message: "Timeline fetched successfully",
-        remainder: timelineData,
+        timelines: timelineData,
       });
   };
