@@ -87,12 +87,12 @@ exports.getPartnerPhoto = async (req, res) => {
         return res.status(400).json({ message: "Add a partner first" });
     }
 
-    const photoData = await Photo.findOne({ userId: partnerId , type:'photo'});
-    if (!photoData) {
+    const photoData = await Photo.find({ userId: partnerId , type:'photo'});
+    if (photoData.length <= 0) {
         return res.status(400).json({ message: "Your partner hasn't added an Photo" });
     }
 
-    res.status(200).json({ message: "photo fetched successfully", photo: photoData });
+    res.status(200).json({ message: "photo fetched successfully", photos: photoData });
 
 
 }
@@ -110,12 +110,12 @@ exports.getPartnerVideo = async (req, res) => {
         return res.status(400).json({ message: "Add a partner first" });
     }
 
-    const videoData = await Photo.findOne({ userId: partnerId, type: 'video' });
-    if (!videoData) {
+    const videoData = await Photo.find({ userId: partnerId, type: 'video' });
+    if (videoData.length <= 0) {
         return res.status(400).json({ message: "Your partner hasn't added an video" });
     }
 
-    res.status(200).json({ message: "video fetched successfully", video: videoData });
+    res.status(200).json({ message: "video fetched successfully", videos: videoData });
 
 
 }

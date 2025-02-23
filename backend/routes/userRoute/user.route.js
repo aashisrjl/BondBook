@@ -10,9 +10,9 @@ router.route("/user/addPartner").post(isAuthenticated,errorHandler(addPartner));
 router.route("/user/verifyPartnerToken").post(isAuthenticated,errorHandler(verifyPartnerToken))
 router.route("/user/deletePartner").delete(isAuthenticated,errorHandler(removePartner))
 router.route("/user/changePassword").post(isAuthenticated,errorHandler(changePassword));
-router.route("/user/forgotPassword").post(isAuthenticated,errorHandler(forgotPassword));
-router.route("/user/verifyForgotPassword").post(isAuthenticated,errorHandler(verifyForgotPassword));
-router.route("/user/changeForgotPassword").post(isAuthenticated,errorHandler(changeForgotPassword));
+router.route("/user/forgotPassword").post(errorHandler(forgotPassword));
+router.route("/user/verifyForgotPassword").post(errorHandler(verifyForgotPassword));
+router.route("/user/changeForgotPassword").post(errorHandler(changeForgotPassword));
 
 
 module.exports = router
