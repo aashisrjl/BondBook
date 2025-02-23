@@ -1,4 +1,5 @@
 const Photo = require("../../database/models/photo.model");
+const User = require("../../database/models/user.model");
 
 exports.createPost = async (req, res) => {
     try {
@@ -72,3 +73,49 @@ exports.deleteGalleryItem = async (req, res) => {
         res.status(500).json({ message: "Server error", error });
     }
 };
+
+exports.getPartnerPhoto = async (req, res) => {
+    const userId = req.userId;
+    const user = await User.findOne({ _id: userId });
+
+    if (!user) {
+        return res.status(400).json({ message: "User not found" });
+    }
+
+    const partnerId = user.partnerId;
+    if (!partnerId) {
+        return res.status(400).json({ message: "Add a partner first" });
+    }
+
+    const photoData = await Photo.findOne({ userId: partnerId , type:'photo'});
+    if (!photoData) {
+        return res.status(400).json({ message: "Your partner hasn't added an Photo" });
+    }
+
+    res.status(200).json({ message: "photo fetched successfully", photo: photoData });
+
+
+}
+
+exports.getPartnerVideo = async (req, res) => {
+    const userId = req.userId;
+    const user = await User.findOne({ _id: userId });
+
+    if (!user) {
+        return res.status(400).json({ message: "User not found" });
+    }
+
+    const partnerId = user.partnerId;
+    if (!partnerId) {
+        return res.status(400).json({ message: "Add a partner first" });
+    }
+
+    const videoData = await Photo.findOne({ userId: partnerId, type: 'video' });
+    if (!videoData) {
+        return res.status(400).json({ message: "Your partner hasn't added an video" });
+    }
+
+    res.status(200).json({ message: "video fetched successfully", video: videoData });
+
+
+}
