@@ -61,17 +61,25 @@ const userSchema = new mongoose.Schema(
     },
 
     socialMedia: {
-      type: Object,
-      default: {},
+      facebook:{type: String},
+      twitter:{type: String},
+      instagram:{type:String},
+      linkedin:{type: String},
     },
     stats:{
-      type: Object,
-      default:{}
+      photos:{type: Number},
+      timeline:{type: Number},
+      diaries:{type: Number},
     },
-    userId: {
+    token: {
       type: String,
     },
-
+    tokenExpiresAt:{
+      type: Date
+    },
+    partnerId:{
+      type: String
+    },
     googleId: {
       type: String,
     },

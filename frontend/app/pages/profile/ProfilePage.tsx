@@ -5,12 +5,10 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-<<<<<<< HEAD
   SafeAreaView,
-=======
   Linking,
   Platform,
->>>>>>> f638d11d (add partner profile and components section)
+
 } from "react-native";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -19,28 +17,12 @@ import { useNavigation } from "@react-navigation/native";
 import { Modal, TextInput } from "react-native-paper";
 import { router } from "expo-router";
 
-<<<<<<< HEAD
-const AboutPage = () => {
-  const navigation = useNavigation();
-  useEffect(() => {
-    const checkToken = async () => {
-      const token = await AsyncStorage.getItem("token");
 
-      if (!token) {
-        navigation.replace("Login");
-
-      }
-    };
-    checkToken();
-  }, [navigation]);
-=======
 const PROFILE_IMAGE = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
 const COVER_IMAGE = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80";
 
-export default function ProfilePage() {
+function ProfilePage() {
   const navigation= useNavigation();
->>>>>>> f638d11d (add partner profile and components section)
-
   const [editProfileModal,setEditProfileModal] = useState(false);
   const [userData, setUserData] = useState({
     name: "Aashish Rijal",
@@ -73,7 +55,7 @@ export default function ProfilePage() {
   const checkAuth = async () => {
     const token = await AsyncStorage.getItem("token");
     if (!token) {
-      router.replace("/auth/login");
+      router.replace("Login");
     }
   };
 
@@ -247,11 +229,6 @@ export default function ProfilePage() {
       </Modal>
     </View>
   );
-<<<<<<< HEAD
 };
 
-export default AboutPage;
-
-=======
-}
->>>>>>> f638d11d (add partner profile and components section)
+export default ProfilePage;
