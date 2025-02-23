@@ -1,4 +1,5 @@
 const Remainder = require("../../database/models/remainder.model");
+const User = require("../../database/models/user.model");
 
 exports.createRemainder = async(req,res)=>{
     const {title,date} = req.body;
@@ -107,4 +108,27 @@ exports.deleteRemainder = async(req,res)=>{
         return res.status(404).json({message:"Remainder not found"})
     }
     res.status(200).json({message:"Remainder deleted successfully",deletedRemainder})
+}
+
+exports.getPartnerRemainder = async (req, res) => {
+    const userId = req.userId;
+    const user = await User.findOne({ _id: userId });
+
+    if (!user) {
+        return res.status(400).json({ message: "User not found" });
+    }
+
+    const partnerId = user.partnerId;
+    if (!partnerId) {
+        return res.status(400).json({ message: "Add a partner first" });
+    }
+
+    const remainderData = await Photo.findOne({ userId: partnerId });
+    if (!remainderData) {
+        return res.status(400).json({ message: "Your partner hasn't added an video" });
+    }
+
+    res.status(200).json({ message: "Remainder fetched successfully", remainder: remainderData });
+
+
 }
