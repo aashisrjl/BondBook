@@ -13,7 +13,7 @@ const ForgotPassword = () => {
   const [step, setStep] = useState(1); // 1: Email, 2: Token, 3: Password Reset
   const [loading, setLoading] = useState(false);
 
-  const API_URL = "https://yourapi.com"; // Replace with your API URL
+  const API_URL = "http://192.168.1.81"; // Replace with your API URL
 
   // 🔹 Step 1: Request Forgot Password
   const handleForgotPassword = async () => {

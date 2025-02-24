@@ -29,6 +29,19 @@ const Diary = () => {
   const [DiaryType, setDiaryType] = useState("");
   const [selectedDiary, setSelectedDiary] = useState(null); // Added state for selected diary
 
+  const fetchDiaries = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/fetchAllDiary`);
+      const data = await response.data.existingDiary;
+      console.log("Fetched data:", data);
+      setDiaryEntries(data);
+    } catch (error) {
+      console.error("Error fetching diary entries:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCreateDiary = () => {
     axios
       .post(`${BASE_URL}/createDiary`, {
@@ -38,6 +51,7 @@ const Diary = () => {
       })
       .then((response) => {
         console.log("created");
+        fetchDiaries();
       })
       .catch((error) => {
         console.error("Error creating diary entry:", error);
@@ -79,19 +93,6 @@ const Diary = () => {
 
   // Fetch diary entries from backend
   useEffect(() => {
-    const fetchDiaries = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/fetchAllDiary`);
-        const data = await response.data.existingDiary;
-        console.log("Fetched data:", data);
-        setDiaryEntries(data);
-      } catch (error) {
-        console.error("Error fetching diary entries:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchDiaries();
   }, []);
 
