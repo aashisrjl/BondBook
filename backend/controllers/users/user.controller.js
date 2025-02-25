@@ -1,6 +1,8 @@
 const User = require("../../database/models/user.model");
 const sendEMail = require("../../services/emailService/emailService");
 const bcrypt = require("bcryptjs");
+const fs = require("fs");
+const path = require("path");
 
 // Add Partner
 exports.addPartner = async (req, res) => {
@@ -224,7 +226,7 @@ exports.verifyForgotPassword = async (req, res) => {
       message: "user not found with query email",
     });
   }
-  if (!token == user.token) {
+  if (token !== user.token) {
     return res.status(400).json({
       message: "invalid token",
     });
@@ -257,7 +259,7 @@ exports.changeForgotPassword = async (req, res) => {
       message: "fill all fields",
     });
   }
-  if (!newPassword === confirmPassword) {
+  if (newPassword !== confirmPassword) {
     return res.status(400).json({
       message: "password and confirm password doesn't match",
     });
@@ -272,27 +274,43 @@ exports.changeForgotPassword = async (req, res) => {
 };
 
 //update profile picture
+
 exports.editProfilePic = async (req, res) => {
   const userId = req.userId;
   const filename = req?.file?.filename;
+
   if (!filename) {
     return res.status(400).json({
-      message: "please upload a file",
+      message: "Please upload a file",
     });
   }
+
   const user = await User.findOne({ _id: userId });
   if (!user) {
-    return res.status(400).json({
-      message: "user not found",
+    return res.status(404).json({
+      message: "User not found",
     });
   }
+
+  // Remove the previous profile picture if it exists
+  if (user.photoUrl) {
+    const oldFilePath = path.join(__dirname, "../uploads", user.photoUrl);
+    fs.unlink(oldFilePath, (err) => {
+      if (err) {
+        console.error("Error deleting old file:", err);
+      }
+    });
+  }
+
+  // Update the user's profile picture
   user.photoUrl = filename;
   await user.save();
 
   res.status(200).json({
-    message: "photo updated successfully",
+    message: "Photo updated successfully",
   });
 };
+
 
 //update profiles
 exports.updateProfile = async (req, res) => {
