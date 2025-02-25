@@ -19,12 +19,13 @@ import axios from "axios";
 
 const DEFAULT_PROFILE_IMAGE = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
 const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80";
-const BASE_URL = 'http://192.168.1.81:3000'
+const BASE_URL = 'http://192.168.1.81:3000';
 
 function ProfilePage() {
   const navigation = useNavigation();
   const [editProfileModal, setEditProfileModal] = useState(false);
   const [moodModalVisible, setMoodModalVisible] = useState(false);
+  const [socialMediaModalVisible, setSocialMediaModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState({
     name: " ",
@@ -43,7 +44,7 @@ function ProfilePage() {
     },
     socialLinks: {
       facebook: " ",
-      twitter: " ",
+      tiktok: " ",
       instagram: " ",
       linkedin: " "
     }
@@ -53,6 +54,12 @@ function ProfilePage() {
     bio: "", 
     age: "",
     address: ""
+  });
+  const [socialMediaData, setSocialMediaData] = useState({
+    facebook: "",
+    tiktok: "",
+    instagram: "",
+    linkedin: ""
   });
   const moodOptions = ["Happy ", "Sad ", "Angry ", "Calm ", "Excited ", "Bored ", "Romantic"];
 
@@ -69,7 +76,7 @@ function ProfilePage() {
         return;
       }
 
-      const response = await axios.get(BASE_URL+ "/user/profile", {
+      const response = await axios.get(`${BASE_URL}/user/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -83,22 +90,21 @@ function ProfilePage() {
         coverUrl: DEFAULT_COVER_IMAGE,
         bio: user.bio || "",
         mood: user.mood || "",
-        gender: user.gender || "male", // Not provided in API response
+        gender: user.gender || "male",
         age: user.age || 0,
         address: user.address || "",
-        stats: { // These aren't in the API response, so we'll keep them as 0
+        stats: {
           photos: 0,
           timelines: 0,
           diaries: 0
         },
         socialLinks: {
           facebook: user.socialMedia.facebook || "",
-          twitter:  "", // Not in API response
+          tiktok: user.socialMedia.tiktok || "",
           instagram: user.socialMedia.instagram || "",
           linkedin: user.socialMedia.linkedin || ""
         }
       });
-
     } catch (error) {
       console.error("Error fetching profile:", error);
       alert("Failed to load profile data");
@@ -108,11 +114,43 @@ function ProfilePage() {
   };
 
   const handleSocialLink = (url: string) => {
-    Linking.openURL(url);
+    if (url && url.trim() !== " ") {
+      Linking.openURL(url);
+    }
   };
 
   const handleChangeProfilePic = () => {
     console.log("Opening image picker to change profile picture");
+  };
+
+  const openSocialMediaModal = () => {
+    setSocialMediaData({ ...userData.socialLinks });
+    setSocialMediaModalVisible(true);
+  };
+
+  const handleUpdateSocialMedia = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const response = await axios.patch(
+        `${BASE_URL}/user/updateSocialMediaLinks`,
+        socialMediaData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+        }
+      );
+
+      setUserData(prev => ({
+        ...prev,
+        socialLinks: { ...socialMediaData }
+      }));
+      setSocialMediaModalVisible(false);
+    } catch (error) {
+      console.error("Error updating social media links:", error);
+      alert("Failed to update social media links");
+    }
   };
 
   const StatBox = ({ label, value }: { label: string; value: number }) => (
@@ -126,10 +164,11 @@ function ProfilePage() {
     <TouchableOpacity
       style={tw.style(`w-11 h-11 rounded-full justify-center items-center`, 
         { backgroundColor: color },
-        Platform.select({ web: { cursor: 'pointer' } })
+        Platform.select({ web: { cursor: url && url.trim() !== " " ? 'pointer' : 'default' } }),
+        (!url || url.trim() === " ") && 'opacity-50'
       )}
       onPress={() => handleSocialLink(url)}
-      disabled={!url}
+      disabled={!url || url.trim() === " "}
     >
       <FontAwesome name={icon} size={20} color="white" />
     </TouchableOpacity>
@@ -166,7 +205,7 @@ function ProfilePage() {
       };
 
       const response = await axios.patch(
-        BASE_URL+"/user/updateProfile",
+        `${BASE_URL}/user/updateProfile`,
         updateData,
         {
           headers: {
@@ -184,7 +223,6 @@ function ProfilePage() {
         address: updatedUser.address || editData.address,
         bio: updatedUser.bio || editData.bio
       }));
-
       setEditProfileModal(false);
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -196,7 +234,7 @@ function ProfilePage() {
     try {
       const token = await AsyncStorage.getItem("token");
       const response = await axios.patch(
-        BASE_URL+"/user/updateMood",
+        `${BASE_URL}/user/updateMood`,
         { mood: newMood },
         {
           headers: {
@@ -241,15 +279,15 @@ function ProfilePage() {
           </View>
           
           <View style={tw`items-center mt-3`}>
-            <Text style={tw`text-2xl font-bold text-gray-800`}>{userData.name }</Text>
-            <Text style={tw`text-gray-600 mt-1`}>{userData.email }</Text>
+            <Text style={tw`text-2xl font-bold text-gray-800`}>{userData.name}</Text>
+            <Text style={tw`text-gray-600 mt-1`}>{userData.email}</Text>
             {userData.mood && (
               <TouchableOpacity
                 style={tw`flex-row items-center mt-2`}
                 onPress={() => setMoodModalVisible(true)}
               >
                 <MaterialIcons name="mood" size={20} color="#10B981" />
-                <Text style={tw`text-green-600 ml-1`}>{userData.mood + " " }</Text>
+                <Text style={tw`text-green-600 ml-1`}>{userData.mood.trim()}</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -262,10 +300,18 @@ function ProfilePage() {
 
           <View style={tw`flex-row justify-around mt-6`}>
             <SocialButton icon="facebook" color="#1877F2" url={userData.socialLinks.facebook} />
-            <SocialButton icon="twitter" color="#1DA1F2" url={userData.socialLinks.twitter} />
+            <SocialButton icon="twitter" color="#000000" url={userData.socialLinks.tiktok} />
             <SocialButton icon="instagram" color="#E4405F" url={userData.socialLinks.instagram} />
             <SocialButton icon="linkedin" color="#0A66C2" url={userData.socialLinks.linkedin} />
           </View>
+
+          <TouchableOpacity
+            style={tw`mt-4 flex-row items-center justify-center p-3 bg-purple-600 rounded-xl`}
+            onPress={openSocialMediaModal}
+          >
+            <MaterialIcons name="link" size={24} color="white" />
+            <Text style={tw`text-white font-bold ml-2`}>Edit Social Links</Text>
+          </TouchableOpacity>
 
           {userData.bio && (
             <View style={tw`mt-6 p-4 bg-gray-50 rounded-xl`}>
@@ -310,11 +356,13 @@ function ProfilePage() {
           </View>
         </View>
       </ScrollView>
+
+      {/* Edit Profile Modal */}
       <Modal visible={editProfileModal} transparent={true} onDismiss={() => setEditProfileModal(false)}>
         <View style={tw`flex justify-center items-center`}>
           <View style={tw`bg-white p-5 w-11/12 rounded-lg shadow-lg`}>
             <Text style={tw`text-lg font-bold text-gray-800 mb-4`}>Edit Profile</Text>
-
+            {/* ... Existing edit profile modal content ... */}
             <Text style={tw`text-gray-600`}>Name</Text>
             <TextInput
               value={editData.name}
@@ -322,7 +370,6 @@ function ProfilePage() {
               style={tw`border p-2 rounded-lg mt-1`}
               placeholder="Enter name"
             />
-
             <Text style={tw`text-gray-600 mt-4`}>Bio</Text>
             <TextInput
               value={editData.bio}
@@ -331,7 +378,6 @@ function ProfilePage() {
               placeholder="Enter bio"
               multiline
             />
-
             <Text style={tw`text-gray-600 mt-4`}>Age</Text>
             <TextInput
               value={editData.age}
@@ -340,7 +386,6 @@ function ProfilePage() {
               placeholder="Enter age"
               keyboardType="numeric"
             />
-
             <Text style={tw`text-gray-600 mt-4`}>Address</Text>
             <TextInput
               value={editData.address}
@@ -348,8 +393,6 @@ function ProfilePage() {
               style={tw`border p-2 rounded-lg mt-1`}
               placeholder="Enter address"
             />
-
-
             <View style={tw`flex-row justify-end mt-4`}>
               <TouchableOpacity
                 style={tw`px-4 py-2 bg-gray-400 rounded-lg mr-2`}
@@ -361,7 +404,7 @@ function ProfilePage() {
                 style={tw`px-4 py-2 bg-blue-600 rounded-lg`}
                 onPress={handleSaveProfile}
               >
-                <Text style={tw`text-white`}>Save </Text>
+                <Text style={tw`text-white`}>Save</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -397,8 +440,68 @@ function ProfilePage() {
           </View>
         </View>
       </Modal>
+
+      {/* Social Media Links Modal */}
+      <Modal 
+        visible={socialMediaModalVisible} 
+        transparent={true} 
+        onDismiss={() => setSocialMediaModalVisible(false)}
+      >
+        <View style={tw`flex justify-center items-center`}>
+          <View style={tw`bg-white p-5 w-11/12 rounded-lg shadow-lg`}>
+            <Text style={tw`text-lg font-bold text-gray-800 mb-4`}>Edit Social Media Links</Text>
+
+            <Text style={tw`text-gray-600`}>Facebook</Text>
+            <TextInput
+              value={socialMediaData.facebook}
+              onChangeText={(text) => setSocialMediaData({ ...socialMediaData, facebook: text })}
+              style={tw`border p-2 rounded-lg mt-1`}
+              placeholder="Enter Facebook URL"
+            />
+
+            <Text style={tw`text-gray-600 mt-4`}>TikTok</Text>
+            <TextInput
+              value={socialMediaData.tiktok}
+              onChangeText={(text) => setSocialMediaData({ ...socialMediaData, tiktok: text })}
+              style={tw`border p-2 rounded-lg mt-1`}
+              placeholder="Enter TikTok URL"
+            />
+
+            <Text style={tw`text-gray-600 mt-4`}>Instagram</Text>
+            <TextInput
+              value={socialMediaData.instagram}
+              onChangeText={(text) => setSocialMediaData({ ...socialMediaData, instagram: text })}
+              style={tw`border p-2 rounded-lg mt-1`}
+              placeholder="Enter Instagram URL"
+            />
+
+            <Text style={tw`text-gray-600 mt-4`}>LinkedIn</Text>
+            <TextInput
+              value={socialMediaData.linkedin}
+              onChangeText={(text) => setSocialMediaData({ ...socialMediaData, linkedin: text })}
+              style={tw`border p-2 rounded-lg mt-1`}
+              placeholder="Enter LinkedIn URL"
+            />
+
+            <View style={tw`flex-row justify-end mt-4`}>
+              <TouchableOpacity
+                style={tw`px-4 py-2 bg-gray-400 rounded-lg mr-2`}
+                onPress={() => setSocialMediaModalVisible(false)}
+              >
+                <Text style={tw`text-white`}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={tw`px-4 py-2 bg-blue-600 rounded-lg`}
+                onPress={handleUpdateSocialMedia}
+              >
+                <Text style={tw`text-white`}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
-};
+}
 
 export default ProfilePage;
