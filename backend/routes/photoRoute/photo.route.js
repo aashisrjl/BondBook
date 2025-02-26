@@ -5,9 +5,9 @@ const { upload } = require('../../middleware/multerConfig');
 const { errorHandler } = require('../../utils/catchError/catchAsyncError');
 const router = express.Router()
 
-router.route("/createGallery").post(isAuthenticated,upload.array("Url"),createPost)
-router.route("/getphoto").get(isAuthenticated,getPhotos)
-router.route("/getvideo").get(isAuthenticated,getVideos)
+router.route("/createGallery").post(isAuthenticated,upload.array("Url"),errorHandler(createPost))
+router.route("/getphoto").get(isAuthenticated,errorHandler(getPhotos))
+router.route("/getvideo").get(isAuthenticated,errorHandler(getVideos))
 router.route("/deletegallery/:id").delete(isAuthenticated,deleteGalleryItem)
 router.route("/getPartnerPhoto").get(isAuthenticated,errorHandler(getPartnerPhoto))
 router.route("/getPartnerVideo").get(isAuthenticated,errorHandler(getPartnerVideo))

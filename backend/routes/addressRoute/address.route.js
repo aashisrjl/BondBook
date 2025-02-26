@@ -8,5 +8,5 @@ const { errorHandler } = require('../../utils/catchError/catchAsyncError');
 
 addressRouter.route("/saveAddress").post(isAuthenticated,upload.single('photoUrl'),errorHandler(saveAddress))
 
-addressRouter.route("/getPartnerAddress").get(isAuthenticated,getPartnerAddress)
+addressRouter.route("/getPartnerAddress").get(isAuthenticated,errorHandler(getPartnerAddress))
 module.exports= addressRouter;
