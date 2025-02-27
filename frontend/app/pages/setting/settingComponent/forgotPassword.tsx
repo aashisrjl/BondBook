@@ -3,6 +3,7 @@ import { View, Text, Alert } from "react-native";
 import { TextInput, Button, Modal } from "react-native-paper";
 import tw from "../../../../tw"; // Tailwind Styles
 import axios from "axios"; // API calls
+import { BASE_URL } from "@env";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -13,14 +14,13 @@ const ForgotPassword = () => {
   const [step, setStep] = useState(1); // 1: Email, 2: Token, 3: Password Reset
   const [loading, setLoading] = useState(false);
 
-  const API_URL = "http://192.168.1.81"; // Replace with your API URL
 
   // 🔹 Step 1: Request Forgot Password
   const handleForgotPassword = async () => {
     if (!email) return Alert.alert("Error", "Email is required");
     setLoading(true);
     try {
-      const res = await axios.post(`${API_URL}/forgot-password`, { email });
+      const res = await axios.post(`${BASE_URL}/user/forgotPassword`, { email });
       Alert.alert("Success", res.data.message);
       setStep(2);
     } catch (error) {
@@ -35,7 +35,7 @@ const ForgotPassword = () => {
     if (!token) return Alert.alert("Error", "Token is required");
     setLoading(true);
     try {
-      const res = await axios.post(`${API_URL}/verify-forgot-password`, { email, token });
+      const res = await axios.post(`${BASE_URL}/user/verifyForgotPassword`, { email, token });
       Alert.alert("Success", res.data.message);
       setStep(3);
     } catch (error) {
@@ -55,7 +55,7 @@ const ForgotPassword = () => {
     }
     setLoading(true);
     try {
-      const res = await axios.post(`${API_URL}/change-forgot-password`, { email, newPassword, confirmPassword });
+      const res = await axios.post(`${BASE_URL}/user/changeForgotPassword`, { email, newPassword, confirmPassword });
       Alert.alert("Success", res.data.message);
       setStep(1); // Reset to step 1 after success
     } catch (error) {
