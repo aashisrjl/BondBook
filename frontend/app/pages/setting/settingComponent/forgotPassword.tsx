@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Alert } from "react-native";
-import { TextInput, Button } from "react-native-paper";
-import tw from "../../../../tw"; 
-import axios from "axios"; 
-import Constants from 'expo-constants'; // For using constants in Expo
+import { TextInput, Button, Modal } from "react-native-paper";
+import tw from "../../../../tw"; // Tailwind Styles
+import axios from "axios"; // API calls
+import { BASE_URL } from "@env";
 
 const ForgotPassword = () => {
   console.log("Page rendered")
@@ -14,17 +14,12 @@ const ForgotPassword = () => {
   const [step, setStep] = useState(1); // 1: Email, 2: Token, 3: Password Reset
   const [loading, setLoading] = useState(false);
 
-  // Define BASE_URL based on the environment
-  const BASE_URL = Constants.expoConfig?.hostUri 
-    ? "http://192.168.1.81:3000" 
-    : "http://192.168.1.74:3000";
-
   // Step 1: Request Forgot Password
   const handleForgotPassword = async () => {
     if (!email) return Alert.alert("Error", "Email is required");
     setLoading(true);
     try {
-      const res = await axios.post(`${BASE_URL}/forgot-password`, { email });
+      const res = await axios.post(`${BASE_URL}/user/forgotPassword`, { email });
       Alert.alert("Success", res.data.message);
       setStep(2);
     } catch (error) {
@@ -39,7 +34,7 @@ const ForgotPassword = () => {
     if (!token) return Alert.alert("Error", "Token is required");
     setLoading(true);
     try {
-      const res = await axios.post(`${BASE_URL}/verify-forgot-password`, { email, token });
+      const res = await axios.post(`${BASE_URL}/user/verifyForgotPassword`, { email, token });
       Alert.alert("Success", res.data.message);
       setStep(3);
     } catch (error) {
@@ -59,7 +54,7 @@ const ForgotPassword = () => {
     }
     setLoading(true);
     try {
-      const res = await axios.post(`${BASE_URL}/change-forgot-password`, { email, newPassword });
+      const res = await axios.post(`${BASE_URL}/user/changeForgotPassword`, { email, newPassword, confirmPassword });
       Alert.alert("Success", res.data.message);
       setStep(1); // Reset to step 1 after success
     } catch (error) {

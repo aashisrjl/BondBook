@@ -5,9 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import tw from 'twrnc'; // Import tw from twrnc
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-
-
-const BASE_URL = "http://192.168.1.74:3000"; // Replace with your actual backend URL
+// import { router } from "expo-router";
+import { BASE_URL } from "@env";
 
 
 export default function LoginScreen() {
@@ -71,10 +70,18 @@ export default function LoginScreen() {
           <Text style={tw`text-white text-center font-bold`}>Login</Text>
         </TouchableOpacity>
 
+        {/* forgot Password button Button */}
+        <TouchableOpacity
+          style={tw`text-black`}
+          onPress={()=>{navigation.navigate('ForgotPassword')}}
+        >
+          <Text style={tw`text-black text-center font-bold`}>Forgot Password ?</Text>
+        </TouchableOpacity>
+
         {/* Divider */}
         <View style={tw`flex-row items-center justify-center my-10`}>
           <View style={tw`flex-1 h-0.5 bg-gray-300`}></View>
-          <Text style={tw`mx-3 text-gray-500`}>OR</Text>
+          <Text style={tw`mx-3 text-gray-500`}>OR </Text>
           <View style={tw`flex-1 h-0.5 bg-gray-300`}></View>
         </View>
 
