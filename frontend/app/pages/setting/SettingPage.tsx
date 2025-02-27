@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
+import Constants from 'expo-constants'; // For using constants in Expo
+
 // import Footer from '../../component/Footer';
 import { Link, router } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
@@ -9,7 +11,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { Modal } from 'react-native-paper';
 import { BASE_URL } from '@env';
-
 
 export function SettingsPage() {
     const navigation = useNavigation();

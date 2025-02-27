@@ -9,9 +9,6 @@ import { useNavigation } from "@react-navigation/native";
 import { BASE_URL } from "@env";
 
 
-// const BASE_URL = "http://192.168.254.146:3000"; // Replace with your actual backend URL
-
-
 export default function LoginScreen() {
   const navigation = useNavigation()
   const [email, setEmail] = useState("");

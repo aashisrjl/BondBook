@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import * as ImagePicker from "expo-image-picker";
+
 import {
   View,
   Text,
@@ -20,7 +22,10 @@ import * as ImagePicker from 'expo-image-picker';
 
 const DEFAULT_PROFILE_IMAGE = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
 const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80";
-const BASE_URL = 'http://192.168.1.81:3000';
+const BASE_URL = window.location.hostname === "192.168.1.81" 
+  ? "http://192.168.1.81:3000" 
+  : "http://192.168.1.74:3000";
+
 
 function ProfilePage() {
   const navigation = useNavigation();
@@ -100,10 +105,10 @@ function ProfilePage() {
           diaries: 0
         },
         socialLinks: {
-          facebook: user.socialMedia.facebook || "",
-          tiktok: user.socialMedia.tiktok || "",
-          instagram: user.socialMedia.instagram || "",
-          linkedin: user.socialMedia.linkedin || ""
+          facebook: user.socialMedia?.facebook || "",
+          tiktok: user.socialMedia?.tiktok || "",
+          instagram: user.socialMedia?.instagram || "",
+          linkedin: user.socialMedia?.linkedin || ""
         }
       });
     } catch (error) {
@@ -120,68 +125,51 @@ function ProfilePage() {
     }
   };
 
+
   const handleChangeProfilePic = async () => {
-    try {
-      // Request permission to access media library
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
-        return;
-      }
+    // Request camera permissions
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== "granted") {
+      alert("Sorry, we need camera permissions to make this work!");
+      return;
+    }
   
-      // Launch image picker
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1], // Square aspect ratio
-        quality: 1,
+    // Launch the camera
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+      base64: false,
+    });
+  
+    if (!result.canceled) {
+      // Update profile picture URL
+      setUserData((prev) => ({ ...prev, photoUrl: result.assets[0].uri }));
+  
+      // If you need to upload the image to your backend
+      const formData = new FormData();
+      formData.append("profilePicture", {
+        uri: result.assets[0].uri,
+        type: "image/jpeg",
+        name: "profile.jpg",
       });
   
-      if (!result.canceled && result.assets && result.assets.length > 0) {
+      try {
         const token = await AsyncStorage.getItem("token");
-        if (!token) {
-          router.replace("Login");
-          return;
-        }
-  
-        // Prepare form data for upload
-        const formData = new FormData();
-        const imageUri = result.assets[0].uri;
-        const fileName = imageUri.split('/').pop();
-        const fileType = imageUri.split('.').pop();
-  
-        formData.append('profilePic', {
-          uri: imageUri,
-          name: fileName || `profile-pic-${Date.now()}.${fileType}`,
-          type: `image/${fileType}`,
+        await axios.patch(`${BASE_URL}/user/editProfilePic`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
         });
-  
-        // Upload image to server
-        const response = await axios.patch(
-          `${BASE_URL}/user/editProfilePic`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              'Authorization': `Bearer ${token}`,
-            },
-          }
-        );
-  
-        // Update local state with new photo URL
-        const newPhotoUrl = response.data.user?.photoUrl || `profile-pic-${Date.now()}.${fileType}`;
-        setUserData(prev => ({
-          ...prev,
-          photoUrl: `${BASE_URL}/uploads/${newPhotoUrl}`
-        }));
-  
-        alert('Profile picture updated successfully!');
+        alert("Profile picture updated successfully!");
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        alert("Failed to update profile picture");
       }
-    } catch (error) {
-      console.error("Error updating profile picture:", error);
-      alert('Failed to update profile picture. Please try again.');
     }
   };
+  
 
   const openSocialMediaModal = () => {
     setSocialMediaData({ ...userData.socialLinks });
