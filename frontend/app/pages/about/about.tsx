@@ -38,13 +38,6 @@ const AboutPage= ()=>  {
 
   const [selectedSection, setSelectedSection] = useState("diary");
 
-  const userData = {
-    name: "Aashish Rijal",
-    email: "aashisrijal252@example.com",
-    photoUrl: "https://via.placeholder.com/150",
-    bio: "Adventure seeker. Coffee lover.",
-    mood: "Happy",
-  };
 
   const sections = [
     { id: "diary", title: "Diary ", icon: "book" },

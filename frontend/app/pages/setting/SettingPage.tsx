@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
 // import Footer from '../../component/Footer';
 import { Link, router } from 'expo-router';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useNavigationBuilder } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { Modal } from 'react-native-paper';
@@ -130,6 +130,7 @@ function ProfileSection() {
 }
 
 function PasswordSection() {
+    const navigation = useNavigation()
     const [password, setPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
 
@@ -160,7 +161,10 @@ function PasswordSection() {
                     <Text style={tw`text-white font-medium`}>Change Password</Text>
                 </TouchableOpacity>
                 
-                <TouchableOpacity style={tw`p-3 items-center`}>
+                <TouchableOpacity style={tw`p-3 items-center`}
+                onPress={()=>{
+                    navigation.navigate("ForgotPassword")
+                }}>
                     <Text style={tw`text-blue-500 font-medium`}>Forgot Password?</Text>
                 </TouchableOpacity>
             </View>

@@ -1,7 +1,7 @@
 const express = require('express');
 const { isAuthenticated } = require('../../middleware/isAuthenticated');
 const { errorHandler } = require('../../utils/catchError/catchAsyncError');
-const { addPartner, verifyPartnerToken, getLoggedInUserData, getPartnerData, removePartner, changePassword, forgotPassword, verifyForgotPassword, changeForgotPassword, editProfilePic, updateProfile, updateSocialMediaLinks, updateMood } = require('../../controllers/users/user.controller');
+const { addPartner, verifyPartnerToken, getLoggedInUserData, getPartnerData, removePartner, changePassword, forgotPassword, verifyForgotPassword, changeForgotPassword, editProfilePic, updateProfile, updateSocialMediaLinks, updateMood, updateStat } = require('../../controllers/users/user.controller');
 const { upload } = require('../../middleware/multerConfig');
 const router = express.Router()
 
@@ -25,4 +25,5 @@ router.route("/user/editProfilePic").patch(isAuthenticated,upload.single("photoU
 router.route("/user/updateProfile").patch(isAuthenticated,errorHandler(updateProfile))
 router.route("/user/updateSocialMediaLinks").patch(isAuthenticated,errorHandler(updateSocialMediaLinks))
 router.route("/user/updateMood").patch(isAuthenticated,errorHandler(updateMood))
+router.route("/user/updateStat").patch(isAuthenticated,errorHandler(updateStat))
 module.exports = router

@@ -58,6 +58,7 @@ const userSchema = new mongoose.Schema(
     mood: {
       type: String,
       enum: ["Happy", "Sad", "Angry", "Calm", "Excited", "Bored","Romantic"],
+      default: "Happy"
     },
 
     socialMedia: {

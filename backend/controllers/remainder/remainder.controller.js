@@ -116,11 +116,11 @@ exports.getPartnerRemainder = async (req, res) => {
     return res.status(400).json({ message: "Add a partner first" });
   }
 
-  const remainderData = await Photo.find({ userId: partnerId });
+  const remainderData = await Remainder.find({ userId: partnerId });
   if (remainderData.length <= 0) {
     return res
       .status(400)
-      .json({ message: "Your partner hasn't added an video" });
+      .json({ message: "Your partner hasn't added an reminder" });
   }
 
   res

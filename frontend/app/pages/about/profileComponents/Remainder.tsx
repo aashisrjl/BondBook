@@ -10,14 +10,7 @@ import tw from "twrnc";
 import { PlusIcon, Bell, X } from "lucide-react-native";
 import { Modal, TextInput, Button } from "react-native-paper";
 import axios from "axios";
-// import DateTimePicker from '@react-native-community/datetimepicker';
-
-// const reminders = [
-//   { id: 1, title: "Team Meeting", date: "2024-03-20T10:00:00", isNotified: false },
-//   { id: 2, title: "Doctor's Appointment", date: "2024-03-22T15:30:00", isNotified: true },
-//   { id: 3, title: "Birthday Party Planning", date: "2024-03-25T14:00:00", isNotified: false },
-//   { id: 4, title: "Project Deadline", date: "2024-03-28T18:00:00", isNotified: false },
-// ];
+import { BASE_URL } from "@env";
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -29,11 +22,6 @@ const formatDate = (dateString) => {
     minute: "2-digit",
   });
 };
-
-const BASE_URL = window.location.hostname === "192.168.1.81" 
-  ? "http://192.168.1.81:3000" 
-  : "http://192.168.1.74:3000";
-
 
 const Reminders = () => {
   const [addModelVisible, setAddModelVisible] = useState(false);
@@ -71,18 +59,6 @@ const Reminders = () => {
       console.error("Error creating reminder:", error);
     }
   };
-  // const updateReminder = async () => {
-  //   if (!selectedReminderId) return;
-  //   try {
-  //     await axios.patch(`${BASE_URL}/updateReminder/${selectedReminderId}`, { title, date });
-  //     Alert.alert("Success", "Reminder Updated!");
-  //     setTitle("");
-  //     setSelectedReminderId(null);
-  //     fetchReminders();
-  //   } catch (error) {
-  //     console.error("Error updating reminder:", error);
-  //   }
-  // };
 
   const deleteReminder = async (id) => {
     try {

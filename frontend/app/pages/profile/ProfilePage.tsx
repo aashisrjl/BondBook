@@ -17,10 +17,10 @@ import { Modal, TextInput } from "react-native-paper";
 import { router } from "expo-router";
 import axios from "axios";
 import * as ImagePicker from 'expo-image-picker';
+import { BASE_URL } from "@env";
 
 const DEFAULT_PROFILE_IMAGE = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
 const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80";
-const BASE_URL = 'http://192.168.1.81:3000';
 
 function ProfilePage() {
   const navigation = useNavigation();
@@ -64,8 +64,13 @@ function ProfilePage() {
   });
   const moodOptions = ["Happy ", "Sad ", "Angry ", "Calm ", "Excited ", "Bored ", "Romantic"];
 
+  const statApi = async()=>{
+      const res = await axios.patch(`${BASE_URL}/user/updateStat`);
+  
+    }
   useEffect(() => {
     fetchUserProfile();
+    statApi();
   }, []);
 
   const fetchUserProfile = async () => {
@@ -83,7 +88,7 @@ function ProfilePage() {
         },
       });
 
-      const user = response.data.user;
+      const user = response.data?.user;
       setUserData({
         name: user.name,
         email: user.email,
@@ -95,15 +100,15 @@ function ProfilePage() {
         age: user.age || 0,
         address: user.address || "",
         stats: {
-          photos: 0,
-          timelines: 0,
-          diaries: 0
+          photos: user.stats?.photos,
+          timelines: user.stats?.timeline,
+          diaries: user.stats?.diaries
         },
         socialLinks: {
-          facebook: user.socialMedia.facebook || "",
-          tiktok: user.socialMedia.tiktok || "",
-          instagram: user.socialMedia.instagram || "",
-          linkedin: user.socialMedia.linkedin || ""
+          facebook: user.socialMedia?.facebook || "",
+          tiktok: user.socialMedia?.tiktok || "",
+          instagram: user.socialMedia?.instagram || "",
+          linkedin: user.socialMedia?.linkedin || ""
         }
       });
     } catch (error) {
@@ -150,7 +155,7 @@ function ProfilePage() {
         const fileName = imageUri.split('/').pop();
         const fileType = imageUri.split('.').pop();
   
-        formData.append('profilePic', {
+        formData.append('photoUrl', {
           uri: imageUri,
           name: fileName || `profile-pic-${Date.now()}.${fileType}`,
           type: `image/${fileType}`,
@@ -172,7 +177,7 @@ function ProfilePage() {
         const newPhotoUrl = response.data.user?.photoUrl || `profile-pic-${Date.now()}.${fileType}`;
         setUserData(prev => ({
           ...prev,
-          photoUrl: `${BASE_URL}/uploads/${newPhotoUrl}`
+          photoUrl: `${newPhotoUrl}`
         }));
   
         alert('Profile picture updated successfully!');
@@ -215,8 +220,8 @@ function ProfilePage() {
 
   const StatBox = ({ label, value }: { label: string; value: number }) => (
     <View style={tw`items-center`}>
-      <Text style={tw`text-xl font-bold text-gray-800`}>{value}</Text>
-      <Text style={tw`text-sm text-gray-600 mt-1`}>{label}</Text>
+      <Text style={tw`text-xl font-bold text-gray-800`}>{value } </Text>
+      <Text style={tw`text-sm text-gray-600 mt-1`}>{label + " "}</Text>
     </View>
   );
 
@@ -347,7 +352,7 @@ function ProfilePage() {
                 onPress={() => setMoodModalVisible(true)}
               >
                 <MaterialIcons name="mood" size={20} color="#10B981" />
-                <Text style={tw`text-green-600 ml-1`}>{userData.mood.trim()}</Text>
+                <Text style={tw`text-green-600 ml-1`}>{userData.mood + " "}</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -480,14 +485,14 @@ function ProfilePage() {
         <View style={tw`flex justify-center items-center`}>
           <View style={tw`bg-white p-5 w-3/4 rounded-lg shadow-lg`}>
             <Text style={tw`text-lg font-bold text-gray-800 mb-4`}>Select Mood</Text>
-            {moodOptions.map((mood) => (
+            {moodOptions.map((moood) => (
               <TouchableOpacity
-                key={mood}
-                style={tw`py-2 px-4 mb-2 rounded-lg bg-gray-100 ${userData.mood === mood ? 'bg-blue-100' : ''}`}
-                onPress={() => handleUpdateMood(mood)}
+                key={moood}
+                style={tw`py-2 px-4 mb-2 rounded-lg bg-gray-100 ${userData.mood === moood ? 'bg-blue-100' : ''}`}
+                onPress={() => handleUpdateMood(moood)}
               >
-                <Text style={tw`text-gray-800 ${userData.mood === mood ? 'font-bold text-blue-600' : ''}`}>
-                  {mood}
+                <Text style={tw`text-gray-800 ${userData.mood === moood ? 'font-bold text-blue-600' : ''}`}>
+                  {moood}
                 </Text>
               </TouchableOpacity>
             ))}

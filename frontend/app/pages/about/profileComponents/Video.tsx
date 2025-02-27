@@ -6,11 +6,7 @@ import axios from "axios";
 import tw from "twrnc";
 import { PlusIcon, XCircle, Play, Pause, VideoIcon, Trash2, X } from "lucide-react-native";
 import { Picker } from "@react-native-picker/picker";
-
-const BASE_URL = window.location.hostname === "192.168.1.81" 
-  ? "http://192.168.1.81:3000" 
-  : "http://192.168.1.74:3000";
-  
+import { BASE_URL } from "@env";
 
 const VideoGallery = () => {
   const [videos, setVideos] = useState([]);
