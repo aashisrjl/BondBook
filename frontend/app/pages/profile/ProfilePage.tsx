@@ -12,13 +12,12 @@ import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Footer from "../../component/Footer";
-// import Footer from "../../component/Footer";
-// import Diary from "./profileComponents/Diary";
-// import Reminders from "./profileComponents/Remainder";
-// import Timeline from "./profileComponents/Timeline";
-// import Photo from "./profileComponents/Photo";
-// import VideoGallery from "./profileComponents/Video";
-// import Address from "./profileComponents/Address";
+import Diary from "../about/profileComponents/Diary";
+import Reminders from "../about/profileComponents/Remainder";
+import Timeline from "../about/profileComponents/Timeline";
+import Photo from "../about/profileComponents/Photo";
+import VideoGallery from "../about/profileComponents/Video";
+import Address from "../about/profileComponents/Address";
 
 const AboutPage= ()=>  {
   const navigation = useNavigation();
@@ -147,4 +146,4 @@ const AboutPage= ()=>  {
   );
 };
 
-export default ProfilePageScreen;
+export default AboutPage;
