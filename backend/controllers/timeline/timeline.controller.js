@@ -1,4 +1,5 @@
-const Timeline = require("../../database/models/timeline.model")
+const Timeline = require("../../database/models/timeline.model");
+const User = require("../../database/models/user.model");
 
 exports.postTimeline = async (req, res) => {
     try {
@@ -145,24 +146,6 @@ exports.getTimeline = async(req,res)=>{
     })
 }
 
-exports.getPartnerTimeline = async(req,res)=>{
-    const userId = req.userId
-    const token = req.user.token
-    const timeline = await Timeline.find({
-        where:{
-            userId: token
-        }
-    })
-    if(timeline.length === 0){
-        return res.status(404).json({
-            message: "No timeline found"
-        })
-    }
-    res.status(200).json({
-        message: "All timelines",
-        timeline
-    })
-}
 
 exports.deleteTimeline = async(req,res)=>{
     const userId = req.userId
@@ -183,3 +166,32 @@ exports.deleteTimeline = async(req,res)=>{
         message: "Timeline deleted successfully"
     })
 }
+
+exports.getPartnerTimeline = async (req, res) => {
+    const userId = req.userId;
+    const partnerId = req.partnerId;
+    const user = await User.findOne({ _id: userId });
+  
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+  
+    // const partnerId = user.partnerId;
+    if (!partnerId) {
+      return res.status(400).json({ message: "Add a partner first" });
+    }
+  
+    const timelineData = await Timeline.find({ userId: partnerId });
+    if (timelineData.length <= 0) {
+      return res
+        .status(400)
+        .json({ message: "Your partner hasn't added a Timeline" });
+    }
+  
+    res
+      .status(200)
+      .json({
+        message: "Timeline fetched successfully",
+        timelines: timelineData,
+      });
+  };

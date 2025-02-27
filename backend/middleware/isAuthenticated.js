@@ -30,8 +30,12 @@ exports.isAuthenticated = async(req,res,next)=>{
             message:"You are not logged in" 
         });
     }
+    if(!user.partnerId){
+        console.log("Don't have partner")
+    }
     req.user = user;
     req.userId = user._id;
+    req.partnerId = user?.partnerId;
     next();
         
     } catch (error) {

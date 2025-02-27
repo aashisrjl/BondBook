@@ -6,4 +6,7 @@ export type RootStackParamList = {
     Setting: undefined;
     Profile: undefined;
     Chat: undefined;
+    Partner: undefined;
+    PartnerInfo: undefined;
+    ForgotPassword:undefined;
   };

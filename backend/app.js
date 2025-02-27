@@ -46,6 +46,7 @@ const addressRouter = require("./routes/addressRoute/address.route")
 const remainderRoute = require("./routes/remainderRoute/remainder.route")
 const timelineRoute = require("./routes/timelineRoute/timeline.route")
 const photoRoute = require('./routes/photoRoute/photo.route')
+const userRoute = require('./routes/userRoute/user.route')
 
 app.use("/",authRoute);
 app.use("/",diaryRoute);
@@ -53,6 +54,7 @@ app.use("/",addressRouter);
 app.use("/",remainderRoute);
 app.use("/",timelineRoute);
 app.use("/",photoRoute);
+app.use("/",userRoute);
 
 
 connectToDatabase()

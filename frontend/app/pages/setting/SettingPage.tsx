@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import tw from 'twrnc';
+import Constants from 'expo-constants'; // For using constants in Expo
+
 // import Footer from '../../component/Footer';
 import { Link } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-
+import { Modal } from 'react-native-paper';
+const BASE_URL = Constants.expoConfig?.hostUri 
+? "http://192.168.1.81:3000" 
+: "http://192.168.1.74:3000";
 export function SettingsPage() {
     const navigation = useNavigation();
     const [activeSection, setActiveSection] = useState('profile');
@@ -164,24 +169,28 @@ function PasswordSection() {
         </View>
     );
 }
-
 function PartnerSection() {
-    const [partnerName, setPartnerName] = useState('');
+    const [email, setEmail] = useState('');
+    const [addPartnerModel, setAddPartnerModel] = useState(false);
+    const [token, setToken] = useState('');
 
     return (
         <View style={tw`p-4`}>
             <Text style={tw`text-2xl font-bold mb-4`}>Partner Settings</Text>
             
             <View style={tw`mb-4`}>
-                <Text style={tw`text-base font-medium mb-1 text-gray-700`}>Partner Name</Text>
+                <Text style={tw`text-base font-medium mb-1 text-gray-700`}>Partner Email</Text>
                 <TextInput
                     style={tw`border border-gray-300 rounded-lg p-3 mb-4 bg-white`}
-                    placeholder="Enter partner name"
-                    value={partnerName}
-                    onChangeText={setPartnerName}
+                    placeholder="Enter partner email"
+                    value={email}
+                    onChangeText={setEmail}
                 />
                 
-                <TouchableOpacity style={tw`bg-blue-500 p-3 rounded-lg items-center mb-2`}>
+                <TouchableOpacity 
+                    style={tw`bg-blue-500 p-3 rounded-lg items-center mb-2`}
+                    onPress={() => setAddPartnerModel(true)}
+                >
                     <Text style={tw`text-white font-medium`}>Add Partner</Text>
                 </TouchableOpacity>
                 
@@ -189,6 +198,38 @@ function PartnerSection() {
                     <Text style={tw`text-white font-medium`}>Remove Partner</Text>
                 </TouchableOpacity>
             </View>
+
+            {/* Modal for Token Entry */}
+            <Modal visible={addPartnerModel} transparent={true} animationType="fade">
+                <View style={tw`flex justify-center items-center h-full w-full bg-opacity-50`}>
+                    <View style={tw`bg-white w-80 p-6 rounded-lg`}>
+                        <Text style={tw`text-lg font-semibold mb-4 text-center`}>
+                            Enter Token Sent to Your Partner
+                        </Text>
+                        
+                        <TextInput
+                            style={tw`border border-gray-300 rounded-lg p-3 mb-4`}
+                            placeholder='Enter Token'
+                            value={token}
+                            onChangeText={setToken}
+                        />
+
+                        <TouchableOpacity 
+                            style={tw`bg-blue-500 p-3 rounded-lg items-center mb-2`}
+                            onPress={() => setAddPartnerModel(false)}
+                        >
+                            <Text style={tw`text-white font-medium`}>Verify</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity 
+                            style={tw`p-2 rounded-lg items-center`}
+                            onPress={() => setAddPartnerModel(false)}
+                        >
+                            <Text style={tw`text-red-500 font-medium`}>Cancel</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 }
@@ -201,7 +242,7 @@ function LogoutSection() {
         await AsyncStorage.removeItem('token');
         navigation.navigate('Login');
         //hit logout api
-        axios.post("http://192.168.1.81:3000/logout",{
+        axios.post(BASE_URL+ "logout",{
             withCredentials: true,
         })
         .then((res) => {

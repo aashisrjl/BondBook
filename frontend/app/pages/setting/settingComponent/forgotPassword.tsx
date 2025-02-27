@@ -1,0 +1,120 @@
+import React, { useState, useEffect } from "react";
+import { View, Text, Alert } from "react-native";
+import { TextInput, Button } from "react-native-paper";
+import tw from "../../../../tw"; 
+import axios from "axios"; 
+import Constants from 'expo-constants'; // For using constants in Expo
+
+const ForgotPassword = () => {
+  console.log("Page rendered")
+  const [email, setEmail] = useState("");
+  const [token, setToken] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [step, setStep] = useState(1); // 1: Email, 2: Token, 3: Password Reset
+  const [loading, setLoading] = useState(false);
+
+  // Define BASE_URL based on the environment
+  const BASE_URL = Constants.expoConfig?.hostUri 
+    ? "http://192.168.1.81:3000" 
+    : "http://192.168.1.74:3000";
+
+  // Step 1: Request Forgot Password
+  const handleForgotPassword = async () => {
+    if (!email) return Alert.alert("Error", "Email is required");
+    setLoading(true);
+    try {
+      const res = await axios.post(`${BASE_URL}/forgot-password`, { email });
+      Alert.alert("Success", res.data.message);
+      setStep(2);
+    } catch (error) {
+      Alert.alert("Error", error.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Step 2: Verify Token
+  const handleVerifyToken = async () => {
+    if (!token) return Alert.alert("Error", "Token is required");
+    setLoading(true);
+    try {
+      const res = await axios.post(`${BASE_URL}/verify-forgot-password`, { email, token });
+      Alert.alert("Success", res.data.message);
+      setStep(3);
+    } catch (error) {
+      Alert.alert("Error", error.response?.data?.message || "Invalid token");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Step 3: Change Password
+  const handleChangePassword = async () => {
+    if (!newPassword || !confirmPassword) {
+      return Alert.alert("Error", "Fill all fields");
+    }
+    if (newPassword !== confirmPassword) {
+      return Alert.alert("Error", "Passwords do not match");
+    }
+    setLoading(true);
+    try {
+      const res = await axios.post(`${BASE_URL}/change-forgot-password`, { email, newPassword });
+      Alert.alert("Success", res.data.message);
+      setStep(1); // Reset to step 1 after success
+    } catch (error) {
+      Alert.alert("Error", error.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <View style={tw`flex-1 p-5 justify-center`}>
+      {step === 1 && (
+        <>
+          <Text style={tw`text-lg font-bold mb-3`}>Forgot Password</Text>
+          <TextInput
+            label="Enter Email"
+            mode="outlined"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+          />
+          <Button mode="contained" onPress={handleForgotPassword} loading={loading} style={tw`mt-3`}>
+            Send Reset Code
+          </Button>
+        </>
+      )}
+
+      {step === 2 && (
+        <>
+          <Text style={tw`text-lg font-bold mb-3`}>Enter Token</Text>
+          <TextInput label="Token" mode="outlined" value={token} onChangeText={setToken} keyboardType="numeric" />
+          <Button mode="contained" onPress={handleVerifyToken} loading={loading} style={tw`mt-3`}>
+            Verify Code
+          </Button>
+        </>
+      )}
+
+      {step === 3 && (
+        <>
+          <Text style={tw`text-lg font-bold mb-3`}>Reset Password</Text>
+          <TextInput label="New Password" mode="outlined" value={newPassword} onChangeText={setNewPassword} secureTextEntry />
+          <TextInput
+            label="Confirm Password"
+            mode="outlined"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry
+          />
+          <Button mode="contained" onPress={handleChangePassword} loading={loading} style={tw`mt-3`}>
+            Change Password
+          </Button>
+        </>
+      )}
+    </View>
+  );
+};
+
+export default ForgotPassword;
