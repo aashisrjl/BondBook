@@ -8,7 +8,8 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { Modal } from 'react-native-paper';
-const BASE_URL = 'http://192.168.254.146:3000';
+import { BASE_URL } from '@env';
+
 
 export function SettingsPage() {
     const navigation = useNavigation();
@@ -214,12 +215,12 @@ const sendEmailToPartner = async () => {
         try {
             const tokenn = await AsyncStorage.getItem("token");
             if (!tokenn) {
-              router.replace("Login");
+              router.replace("Login");                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
               return;
             }
             setLoading(true);
             setError(null);
-            const res = await axios.post(`${BASE_URL}/user/verifyPartnerToken`,token,{
+            const res = await axios.post(`${BASE_URL}/user/verifyPartnerToken`,{token},{
                 headers: {
                   "Content-Type": "application/json",
                   "Authorization": `Bearer ${tokenn}`,
@@ -320,7 +321,7 @@ const sendEmailToPartner = async () => {
 
             {/* Modal for Token Entry */}
             <Modal visible={addPartnerModel} transparent={true} animationType="fade">
-                <View style={tw`flex-1 justify-center items-center bg-black bg-opacity-50`}>
+                <View style={tw`justify-center items-center bg-black bg-opacity-50`}>
                     <View style={tw`bg-white w-80 p-6 rounded-lg`}>
                         <Text style={tw`text-lg font-semibold mb-4 text-center`}>
                             Enter Token Sent to Your Partner
