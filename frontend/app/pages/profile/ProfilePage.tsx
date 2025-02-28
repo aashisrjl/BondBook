@@ -18,13 +18,12 @@ import { useNavigation } from "@react-navigation/native";
 import { Modal, TextInput } from "react-native-paper";
 import { router } from "expo-router";
 import axios from "axios";
-import * as ImagePicker from 'expo-image-picker';
 import { BASE_URL } from "@env";
 
 const DEFAULT_PROFILE_IMAGE = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
 const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80";
 
-function ProfilePage() {
+function ProfilePage(){
   const navigation = useNavigation();
   const [editProfileModal, setEditProfileModal] = useState(false);
   const [moodModalVisible, setMoodModalVisible] = useState(false);
@@ -184,7 +183,6 @@ function ProfilePage() {
         alert('Profile picture updated successfully!');
       }
     }
-  };
   
 
   const openSocialMediaModal = () => {
@@ -344,7 +342,7 @@ function ProfilePage() {
           
           <View style={tw`items-center mt-3`}>
             <Text style={tw`text-2xl font-bold text-gray-800`}>{userData.name}</Text>
-            <Text style={tw`text-gray-600 mt-1`}>{userData.email}</Text>
+            <Text style={tw`text-gray-600 mt-1`}>{userData.email + " "}</Text>
             {userData.mood && (
               <TouchableOpacity
                 style={tw`flex-row items-center mt-2`}
@@ -567,5 +565,6 @@ function ProfilePage() {
     </View>
   );
 }
+
 
 export default ProfilePage;

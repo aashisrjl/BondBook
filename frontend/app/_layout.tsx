@@ -5,6 +5,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // Import your screens
 import IndexScreen from './index';
 import AboutScreen from './pages/about/about';
+import AboutUs from './pages/about/AboutUs';
+import Policies from './pages/about/Policies';
+import ContactSupport from './pages/about/ContactSupport';
+import Help from './pages/about/Help';
 import LoginScreen from './auth/Login';
 import RegisterScreen from './auth/Register';
 import SettingPage from './pages/setting/SettingPage';
@@ -30,6 +34,10 @@ export default function RootLayout() {
       >
         <Stack.Screen name="Index" component={IndexScreen} options={{ title: 'BondBook' }} />
         <Stack.Screen name="About" component={AboutScreen} options={{ title: 'About' }} />
+        <Stack.Screen name="AboutUs" component={AboutUs} options={{ title: 'AboutUs' }} />
+        <Stack.Screen name="Policies" component={Policies} options={{ title: 'Policies' }} />
+        <Stack.Screen name="ContactSupport" component={ContactSupport} options={{ title: 'ContactSupport' }} />
+        <Stack.Screen name="Help" component={Help} options={{ title: 'Help' }} />
         <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
         <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
         <Stack.Screen name="Setting" component={SettingPage} options={{ title: 'Setting' }} />
