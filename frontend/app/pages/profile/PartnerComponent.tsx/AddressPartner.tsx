@@ -21,9 +21,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const BASE_URL = window.location.hostname === "192.168.1.81" 
-  ? "http://192.168.1.81:3000" 
-  : "http://192.168.1.74:3000";
 
 
 export default function AddressPartner() {
@@ -58,24 +55,6 @@ export default function AddressPartner() {
     }
   };
 
-  const getCurrentLocation = () => {
-    Geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setLocation((prev) => ({
-          ...prev,
-          latitude,
-          longitude,
-        }));
-        setIsMapReady(true);
-      },
-      (error) => {
-        Alert.alert("Error", "Failed to get location");
-        setIsMapReady(true); // Set map as ready even if location fails
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-    );
-  };
 
   const searchLocation = async (query) => {
     if (!query.trim()) return;
@@ -156,7 +135,6 @@ export default function AddressPartner() {
 
           <TouchableOpacity 
             style={styles.button} 
-            onPress={takePhoto}
             disabled={loading || isCameraActive}
           >
             <Text style={styles.buttonText}>Take Photo</Text>
@@ -174,7 +152,6 @@ export default function AddressPartner() {
 
           <TouchableOpacity 
             style={[styles.button, styles.shareButton]} 
-            onPress={saveAddress}
             disabled={loading || isCameraActive}
           >
             <Text style={styles.buttonText}>

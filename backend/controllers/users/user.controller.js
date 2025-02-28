@@ -1,8 +1,12 @@
 const User = require("../../database/models/user.model");
+const Photo = require("../../database/models/photo.model");
+
 const sendEMail = require("../../services/emailService/emailService");
 const bcrypt = require("bcryptjs");
 const fs = require("fs");
 const path = require("path");
+const Timeline = require("../../database/models/timeline.model");
+const Diary = require("../../database/models/diary.model");
 
 // Add Partner
 exports.addPartner = async (req, res) => {
@@ -377,4 +381,51 @@ exports.updateMood = async (req, res) => {
   await user.save();
 
   res.status(200).json({ message: "Mood updated successfully", mood });
+};
+
+exports.updateStat = async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    // Verify user exists first
+    const user = await User.findOne({ _id: userId });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Use Promise.all for parallel queries
+    const [photos, timelines, diary] = await Promise.all([
+      Photo.find({ userId }),
+      Timeline.find({ userId }),
+      Diary.find({ userId })
+    ]);
+
+    // Note: length is a property, not a method (removed parentheses)
+    const photoCount = photos.length;
+    const timelineCount = timelines.length;
+    const diaryCount = diary.length;
+
+    // Update stats
+    user.stats = {
+      ...user.stats,
+      diaries: diaryCount,
+      timeline: timelineCount,  // Consider if this should be 'timelines' to match plurality
+      photos: photoCount
+    };
+
+    // Save and return response
+    await user.save();
+    
+    return res.status(200).json({
+      message: "Stats updated successfully",
+      stats: user.stats
+    });
+
+  } catch (error) {
+    console.error("Error updating stats:", error);
+    return res.status(500).json({ 
+      message: "Internal server error",
+      error: error.message 
+    });
+  }
 };

@@ -7,14 +7,17 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Link } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import tw from 'twrnc';
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Footer from "./component/Footer"; // Add the Footer component if needed
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "./component/types";
+import { BASE_URL } from "@env";
+import axios from "axios";
 
 export default function Index() {
+  
   const navigation = useNavigation<NavigationProp<RootStackParamList>>(); // Use react-navigation for navigation
 
   const [darkMode, setDarkMode] = useState(false);

@@ -11,12 +11,12 @@ import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Footer from "../../component/Footer";
-import Diary from "../about/profileComponents/Diary";
-import Reminders from "../about/profileComponents/Remainder";
-import Timeline from "../about/profileComponents/Timeline";
-import Photo from "../about/profileComponents/Photo";
-import VideoGallery from "../about/profileComponents/Video";
-import Address from "../about/profileComponents/Address";
+import DiaryPartner from "./PartnerComponent.tsx/DiaryPartner";
+import RemindersPartner from "./PartnerComponent.tsx/RemainderPartner";
+import TimelinePartner from "./PartnerComponent.tsx/TimelinePartner";
+import PhotoPartner from "./PartnerComponent.tsx/PhotoPartner";
+import VideoGalleryPartner from "./PartnerComponent.tsx/VideoPartner";
+import AddressPartner from "./PartnerComponent.tsx/AddressPartner";
 const PartnerInfo= ()=>  {
   const navigation = useNavigation();
   
@@ -35,14 +35,6 @@ const PartnerInfo= ()=>  {
   
 
   const [selectedSection, setSelectedSection] = useState("diary");
-
-  const userData = {
-    name: "Aashish Rijal",
-    email: "aashisrijal252@example.com",
-    photoUrl: "https://via.placeholder.com/150",
-    bio: "Adventure seeker. Coffee lover.",
-    mood: "Happy",
-  };
 
   const sections = [
     { id: "diary", title: "Diary ", icon: "book" },
@@ -75,12 +67,12 @@ const PartnerInfo= ()=>  {
 
       {/* Content Section */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={tw`p-2`}>
-        {selectedSection === "diary" && <> < Diary/> </>}
-        {selectedSection === "remind" && <> <Reminders /> </>}
-        {selectedSection === "timeline" && <> <Timeline /> </>}
-        {selectedSection === "photos" && <> <Photo/> </>}
-        {selectedSection === "videos" && <> <VideoGallery /> </>}
-        {selectedSection === "address" && <><Address/></>}
+        {selectedSection === "diary" && <> < DiaryPartner/> </>}
+        {selectedSection === "remind" && <> <RemindersPartner /> </>}
+        {selectedSection === "timeline" && <> <TimelinePartner /> </>}
+        {selectedSection === "photos" && <> <PhotoPartner/> </>}
+        {selectedSection === "videos" && <> <VideoGalleryPartner /> </>}
+        {selectedSection === "address" && <><AddressPartner/></>}
 
       </ScrollView>
       <Footer />

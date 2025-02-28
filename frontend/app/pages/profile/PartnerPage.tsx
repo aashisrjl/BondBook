@@ -13,10 +13,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
+import { BASE_URL } from "@env";
 
 const DEFAULT_PROFILE_IMAGE = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
 const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80";
-const BASE_URL = 'http://192.168.1.81:3000'
 
 export default function PartnerPage() {
   const navigation = useNavigation();
@@ -33,12 +33,12 @@ export default function PartnerPage() {
     address: "",
     stats: {
       photos: 0,
-      timelines: 0,
+      timeline: 0,
       diaries: 0
     },
     socialLinks: {
       facebook: "",
-      twitter: "",
+      tiktok: "",
       instagram: "",
       linkedin: ""
     }
@@ -81,13 +81,13 @@ export default function PartnerPage() {
         age: partner.age || 0,
         address: partner.address || "",
         stats: { // Not in API response, keeping as default
-          photos: 0,
-          timelines: 0,
-          diaries: 0
+          photos: partner.stats.photos,
+          timeline:partner.stats.timeline,
+          diaries: partner.stats.diaries
         },
         socialLinks: {
           facebook: partner.socialMedia?.facebook || "",
-          twitter: "", // Not in response based on previous example
+          tiktok: partner.socialMedia?.tiktok || "", // Not in response based on previous example
           instagram: partner.socialMedia?.instagram || "",
           linkedin: partner.socialMedia?.linkedin || ""
         }
@@ -165,20 +165,20 @@ export default function PartnerPage() {
             {partnerData.mood && (
               <View style={tw`flex-row items-center mt-2`}>
                 <MaterialIcons name="mood" size={20} color="#10B981" />
-                <Text style={tw`text-green-600 ml-1`}>{partnerData.mood}</Text>
+                <Text style={tw`text-green-600 ml-1`}>{partnerData.mood + " "}</Text>
               </View>
             )}
           </View>
 
           <View style={tw`flex-row justify-around mt-6 py-5 border-t border-b border-gray-200`}>
             <StatBox label="Photos" value={partnerData.stats.photos} />
-            <StatBox label="Timelines" value={partnerData.stats.timelines} />
-            <StatBox label="Diaries" value={partnerData.stats.diaries} />
+            <StatBox label="Timelines " value={partnerData.stats.timeline} />
+            <StatBox label="Diaries " value={partnerData.stats.diaries} />
           </View>
 
           <View style={tw`flex-row justify-around mt-6`}>
             <SocialButton icon="facebook" color="#1877F2" url={partnerData.socialLinks.facebook} />
-            <SocialButton icon="twitter" color="#1DA1F2" url={partnerData.socialLinks.twitter} />
+            <SocialButton icon="twitter" color="#1DA1F2" url={partnerData.socialLinks.tiktok} />
             <SocialButton icon="instagram" color="#E4405F" url={partnerData.socialLinks.instagram} />
             <SocialButton icon="linkedin" color="#0A66C2" url={partnerData.socialLinks.linkedin} />
           </View>
@@ -194,7 +194,7 @@ export default function PartnerPage() {
               <DetailRow icon="cake" label="Age" value={`${partnerData.age} years`} />
             )}
             {partnerData.gender && (
-              <DetailRow icon="person" label="Gender" value={partnerData.gender} />
+              <DetailRow icon="person" label="Gender" value={partnerData.gender } />
             )}
             {partnerData.address && (
               <DetailRow icon="location-on" label="Location" value={partnerData.address} />
@@ -202,6 +202,15 @@ export default function PartnerPage() {
           </View>
 
           <View style={tw`mt-6 gap-3`}>
+          <TouchableOpacity
+              style={tw.style(
+                `flex-row items-center justify-center p-4 bg-purple-600 rounded-xl`,
+                Platform.select({ web: { cursor: 'pointer' } })
+              )}
+              onPress={() => navigation.navigate("PartnerInfo")}
+            >
+              <Text style={tw`text-white font-bold ml-2`}>Partner Informations</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               style={tw.style(
                 `flex-row items-center justify-center p-4 bg-blue-600 rounded-xl`,

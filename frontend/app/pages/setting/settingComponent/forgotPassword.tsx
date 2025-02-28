@@ -4,6 +4,7 @@ import { TextInput, Button, Modal } from "react-native-paper";
 import tw from "../../../../tw"; // Tailwind Styles
 import axios from "axios"; // API calls
 import { BASE_URL } from "@env";
+import Footer from "../../../component/Footer";
 
 const ForgotPassword = () => {
   console.log("Page rendered")
@@ -65,6 +66,7 @@ const ForgotPassword = () => {
   };
 
   return (
+    <>
     <View style={tw`flex-1 p-5 justify-center`}>
       {step === 1 && (
         <>
@@ -109,6 +111,8 @@ const ForgotPassword = () => {
         </>
       )}
     </View>
+      <Footer/>
+      </>
   );
 };
 

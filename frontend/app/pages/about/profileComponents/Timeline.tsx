@@ -5,10 +5,7 @@ import { PlusIcon, Clock, X } from "lucide-react-native";
 import axios from "axios";
 import { Modal, TextInput } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
-
-const BASE_URL = window.location.hostname === "192.168.1.81" 
-  ? "http://192.168.1.81:3000" 
-  : "http://192.168.1.74:3000";
+import { BASE_URL } from "@env";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = width - 48;
