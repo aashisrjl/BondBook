@@ -88,6 +88,14 @@ const userSchema = new mongoose.Schema(
     facebookId: {
       type: String,
     },
+    notificationsEnabled: { 
+      type: Boolean, 
+      default: false
+     },
+    notificationFrequency: {
+       type: String, 
+       default: 'daily', 
+       enum: ['daily', 'weekly', 'never'] },
   },
   { timestamps: true }
 );
