@@ -13,11 +13,7 @@ import { Picker } from "@react-native-picker/picker";
 import tw from "twrnc";
 import { PlusIcon, BookOpen, X } from "lucide-react-native";
 import axios from "axios";
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const BASE_URL = window.location.hostname === "192.168.1.81" 
-  ? "http://192.168.1.81:3000" 
-  : "http://192.168.1.74:3000";
-
+import { BASE_URL } from "@env";
 
 const DiaryPartner = () => {
   const [diaryEntries, setDiaryEntries] = useState([]);
@@ -27,7 +23,7 @@ const DiaryPartner = () => {
   const fetchDiaries = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/getPartnerDiary`);
-      const data = await response.data.existingDiary;
+      const data = await response.data.diaries;
       console.log("Fetched data:", data);
       setDiaryEntries(data);
     } catch (error) {
@@ -44,7 +40,7 @@ const DiaryPartner = () => {
   }, []);
 
   return (
-    <View style={tw`flex-1 bg-gray-50 w-[28rem]`}>
+    <View style={tw`flex-1 bg-gray-50`}>
       {/* Header */}
       <View style={tw`bg-white px-4 py-6 shadow-sm`}>
         <View style={tw`flex-row items-center mb-2`}>

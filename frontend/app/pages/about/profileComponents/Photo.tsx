@@ -8,10 +8,8 @@ import { PlusIcon, Image as ImageIcon, XCircle, X, Trash2 } from "lucide-react-n
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
+import { BASE_URL } from "@env";
 
-const BASE_URL = window.location.hostname === "192.168.1.81" 
-  ? "http://192.168.1.81:3000" 
-  : "http://192.168.1.74:3000";
 
 const Photo = () => {
   const [phototype, setPhotoType] = useState("Shared");
