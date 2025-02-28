@@ -13,7 +13,7 @@ import ChatSection from './pages/chat/chat';
 import { RootStackParamList } from './component/types';
 import PartnerPage from './pages/profile/PartnerPage';
 import PartnerInfo from './pages/profile/PartnerInfo';
-import forgotPassword from './pages/setting/settingComponent/forgotPassword';
+import ForgotPassword from './pages/setting/settingComponent/forgotPassword';
 
 const Stack = createNativeStackNavigator<RootStackParamList>(); // Use the RootStackParamList for type safety
 
@@ -36,7 +36,7 @@ export default function RootLayout() {
         <Stack.Screen name="Profile" component={ProfilePage} options={{ title: 'Profile' }} />
         <Stack.Screen name="Partner" component={PartnerPage} options={{ title: 'Partner' }} />
         <Stack.Screen name="PartnerInfo" component={PartnerInfo} options={{ title: 'Partner Info' }} />
-        <Stack.Screen name="ForgotPassword" component={forgotPassword} options={{ title: 'Forgot Password' }} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ title: 'Forgot Password' }} />
 
         <Stack.Screen name="Chat" component={ChatSection} options={{ title: 'Chat' }} />
       </Stack.Navigator>

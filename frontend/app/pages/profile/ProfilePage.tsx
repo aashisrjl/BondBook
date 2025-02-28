@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import * as ImagePicker from "expo-image-picker";
+
 import {
   View,
   Text,
@@ -125,36 +127,35 @@ function ProfilePage() {
     }
   };
 
+
   const handleChangeProfilePic = async () => {
-    try {
-      // Request permission to access media library
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
-        return;
-      }
+    // Request camera permissions
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== "granted") {
+      alert("Sorry, we need camera permissions to make this work!");
+      return;
+    }
   
-      // Launch image picker
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1], // Square aspect ratio
-        quality: 1,
+    // Launch the camera
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+      base64: false,
+    });
+  
+    if (!result.canceled) {
+      // Update profile picture URL
+      setUserData((prev) => ({ ...prev, photoUrl: result.assets[0].uri }));
+  
+      // If you need to upload the image to your backend
+      const formData = new FormData();
+      formData.append("profilePicture", {
+        uri: result.assets[0].uri,
+        type: "image/jpeg",
+        name: "profile.jpg",
       });
-  
-      if (!result.canceled && result.assets && result.assets.length > 0) {
-        const token = await AsyncStorage.getItem("token");
-        if (!token) {
-          router.replace("Login");
-          return;
-        }
-  
-        // Prepare form data for upload
-        const formData = new FormData();
-        const imageUri = result.assets[0].uri;
-        const fileName = imageUri.split('/').pop();
-        const fileType = imageUri.split('.').pop();
-  
+
         formData.append('photoUrl', {
           uri: imageUri,
           name: fileName || `profile-pic-${Date.now()}.${fileType}`,
@@ -182,11 +183,9 @@ function ProfilePage() {
   
         alert('Profile picture updated successfully!');
       }
-    } catch (error) {
-      console.error("Error updating profile picture:", error);
-      alert('Failed to update profile picture. Please try again.');
     }
   };
+  
 
   const openSocialMediaModal = () => {
     setSocialMediaData({ ...userData.socialLinks });

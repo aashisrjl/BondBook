@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Alert } from "react-native";
 import { TextInput, Button, Modal } from "react-native-paper";
 import tw from "../../../../tw"; // Tailwind Styles
@@ -7,16 +7,15 @@ import { BASE_URL } from "@env";
 import Footer from "../../../component/Footer";
 
 const ForgotPassword = () => {
+  console.log("Page rendered")
   const [email, setEmail] = useState("");
   const [token, setToken] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
   const [step, setStep] = useState(1); // 1: Email, 2: Token, 3: Password Reset
   const [loading, setLoading] = useState(false);
 
-
-  // 🔹 Step 1: Request Forgot Password
+  // Step 1: Request Forgot Password
   const handleForgotPassword = async () => {
     if (!email) return Alert.alert("Error", "Email is required");
     setLoading(true);
@@ -31,7 +30,7 @@ const ForgotPassword = () => {
     }
   };
 
-  // 🔹 Step 2: Verify Token
+  // Step 2: Verify Token
   const handleVerifyToken = async () => {
     if (!token) return Alert.alert("Error", "Token is required");
     setLoading(true);
@@ -46,7 +45,7 @@ const ForgotPassword = () => {
     }
   };
 
-  // 🔹 Step 3: Change Password
+  // Step 3: Change Password
   const handleChangePassword = async () => {
     if (!newPassword || !confirmPassword) {
       return Alert.alert("Error", "Fill all fields");
