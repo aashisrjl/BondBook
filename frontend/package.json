@@ -46,6 +46,7 @@
     "react-dom": "18.3.1",
     "react-native": "^0.76.7",
     "react-native-dotenv": "^3.4.11",
+    "react-native-email-link": "^1.16.1",
     "react-native-fbsdk-next": "^13.4.1",
     "react-native-geolocation-service": "^5.3.1",
     "react-native-gesture-handler": "~2.20.2",

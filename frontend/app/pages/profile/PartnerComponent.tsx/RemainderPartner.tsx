@@ -35,7 +35,7 @@ const RemindersPartner = () => {
 
   const fetchReminders = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/getPartnerRemainders`);
+      const res = await axios.get(`${BASE_URL}/getPartnerRemainder`);
       setReminders(res.data.remainders);
       console.log('remaider',reminders)
     } catch (error) {
@@ -45,7 +45,7 @@ const RemindersPartner = () => {
 
 
   return (
-    <View style={tw`flex-1 bg-gray-50 `}>
+    <View style={tw`flex-1 bg-gray-50 w-124 `}>
       {/* Header */}
       <View style={tw`bg-white px-4 py-6 shadow-sm`}>
         <View style={tw`flex-row items-center mb-2`}>

@@ -10,7 +10,7 @@ import { BASE_URL } from "@env";
 
 const PhotoPartner = () => {
   const [photos, setPhotos] = useState([]); // Store fetched photos
-
+  const [selectedPhoto,setSelectedPhoto]=useState(false);
   useEffect(() => {
     fetchPhotos();
   }, []);
@@ -27,7 +27,7 @@ const PhotoPartner = () => {
 
 
   return (
-    <View style={tw`flex-1 bg-gray-50  mx-auto rounded-lg overflow-hidden`}> 
+    <View style={tw`flex-1 bg-gray-50  mx-auto rounded-lg overflow-hidden w-124`}> 
       {/* Header */}
       <View style={tw`bg-white px-4 py-6 shadow-sm flex-row items-center`}> 
         <ImageIcon size={24} color="#4B5563" />
@@ -56,6 +56,23 @@ const PhotoPartner = () => {
           )}
         </View>
       </ScrollView>
+
+       {/* Modal for Viewing a Photo */}
+       {selectedPhoto && (
+        <Modal transparent={true} animationType="slide">
+          <View style={tw`flex-1 bg-black bg-opacity-80 justify-center items-center p-4`}>
+            <View style={tw`bg-white rounded-lg p-4 w-full max-w-md relative`}> 
+              <TouchableOpacity onPress={() => setSelectedPhoto(false)} style={tw` absolute top-1 right-1`}>
+                <XCircle size={24} color="black" />
+              </TouchableOpacity>
+              <Image source={{uri: BASE_URL + "/"+ selectedPhoto.Url }} style={tw`w-full h-80 rounded-lg`} />
+              <View style={tw`flex-row justify-between items-center p-2`}>
+                <Text style={tw`text-gray-500 text-sm`}>{selectedPhoto.Phototype}</Text>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      )}
 
          
     </View>

@@ -160,7 +160,7 @@ export default function PartnerPage() {
           <View style={tw`items-center mt-3`}>
             <Text style={tw`text-2xl font-bold text-gray-800`}>{partnerData.name || "Unnamed Partner"}</Text>
             {partnerData.email && (
-              <Text style={tw`text-gray-600 mt-1`}>{partnerData.email}</Text>
+              <Text style={tw`text-gray-600 mt-1`}>{partnerData.email + " "}</Text>
             )}
             {partnerData.mood && (
               <View style={tw`flex-row items-center mt-2`}>

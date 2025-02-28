@@ -429,3 +429,29 @@ exports.updateStat = async (req, res) => {
     });
   }
 };
+
+exports.updateNotifications = async(req,res)=>{
+  const userId = req.userId;
+    const { enabled, frequency } = req.body;
+
+    // Validate input
+    if (typeof enabled !== 'boolean') {
+      return res.status(400).json({ message: 'Enabled must be a boolean' });
+    }
+    if (!['daily', 'weekly', 'never'].includes(frequency)) {
+      return res.status(400).json({ message: 'Invalid frequency value' });
+    }
+
+    // Find and update user
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.notificationsEnabled = enabled;
+    user.notificationFrequency = frequency;
+    await user.save();
+    res.status(200).json({
+      message: "Notification Updated Successfully"
+    })
+}

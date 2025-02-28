@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import tw from '../../../tw';
 import Footer from '../../component/Footer';
 
-export function AboutPage() {
+export function AboutUs() {
   const features = [
     {
       icon: 'heart',
@@ -98,4 +98,4 @@ export function AboutPage() {
     </>
   );
 }
-export default AboutPage;
+export default AboutUs;

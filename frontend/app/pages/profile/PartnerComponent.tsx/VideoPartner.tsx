@@ -35,7 +35,7 @@ const VideoGalleryPartner = () => {
   }, []);
 
   return (
-    <View style={tw`flex-1 bg-gray-50  mx-auto rounded-lg overflow-hidden`}>
+    <View style={tw`flex-1 bg-gray-50  mx-auto rounded-lg overflow-hidden w-124`}>
       {/* Header */}
       <View style={tw`bg-white px-4 py-6 shadow-sm flex-row items-center`}>
         <VideoIcon size={24} color="#4B5563" />
@@ -109,11 +109,6 @@ const VideoGalleryPartner = () => {
               </View>
               <View style={tw`flex-row justify-between`}>
                 <Text style={tw`text-gray-500 text-sm`}>{selectedVideo.Phototype}</Text>
-                <TouchableOpacity onPress={() => handleDelete(selectedVideo._id)}>
-                  <View style={tw`bg-red-600 p-2 rounded-lg`}>
-                    <Trash2 size={20} color="white" />
-                  </View>
-                </TouchableOpacity>
               </View>
             </View>
           </View>
