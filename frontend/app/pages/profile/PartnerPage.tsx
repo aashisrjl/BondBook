@@ -50,6 +50,7 @@ export default function PartnerPage() {
 
   const fetchPartnerProfile = async () => {
     try {
+      console.log(BASE_URL+ "/profile/partner")
       setIsLoading(true);
       const token = await AsyncStorage.getItem("token");
       if (!token) {

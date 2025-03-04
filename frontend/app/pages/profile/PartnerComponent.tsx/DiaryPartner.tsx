@@ -22,6 +22,7 @@ const DiaryPartner = () => {
 
   const fetchDiaries = async () => {
     try {
+      console.log(BASE_URL+"/fetchdiary")
       const response = await axios.get(`${BASE_URL}/getPartnerDiary`);
       const data = await response.data.diaries;
       console.log("Fetched data:", data);

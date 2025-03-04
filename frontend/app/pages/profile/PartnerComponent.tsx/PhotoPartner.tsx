@@ -18,6 +18,7 @@ const PhotoPartner = () => {
   // Fetch all photos from the backend
   const fetchPhotos = async () => {
     try {
+      console.log(BASE_URL+"/fetchphoto")
       const res = await axios.get(`${BASE_URL}/getPartnerPhoto`);
       setPhotos(res.data.photos);
     } catch (error) {

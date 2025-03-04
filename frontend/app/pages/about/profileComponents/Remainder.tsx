@@ -37,6 +37,7 @@ const Reminders = () => {
 
   const fetchReminders = async () => {
     try {
+      console.log(BASE_URL+"/remainder")
       const res = await axios.get(`${BASE_URL}/getRemainders`);
       setReminders(res.data.remainders);
       console.log('remaider',reminders)
@@ -71,7 +72,7 @@ const Reminders = () => {
   };
 
   return (
-    <View style={tw`flex-1 bg-gray-50 w-[28rem]`}>
+    <View style={tw`flex-1 bg-gray-50 w-[31rem]`}>
       {/* Header */}
       <View style={tw`bg-white px-4 py-6 shadow-sm`}>
         <View style={tw`flex-row items-center mb-2`}>

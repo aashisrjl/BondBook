@@ -22,7 +22,7 @@ const VideoGallery = () => {
 
   // Fetch videos from API
   const fetchVideos = async () => {
-    console.log("Fetching videos from:", `${BASE_URL}/getvideo`);
+    console.log(BASE_URL+"/diary")
     try {
       const res = await axios.get(`${BASE_URL}/getvideo`);
       console.log("Fetched videos:", res.data.videos);
@@ -122,7 +122,7 @@ const VideoGallery = () => {
   };
 
   return (
-    <View style={tw`flex-1 bg-gray-50 w-[28rem] mx-auto rounded-lg overflow-hidden`}>
+    <View style={tw`flex-1 bg-gray-50 w-[31rem] mx-auto rounded-lg overflow-hidden`}>
       {/* Header */}
       <View style={tw`bg-white px-4 py-6 shadow-sm flex-row items-center`}>
         <VideoIcon size={24} color="#4B5563" />

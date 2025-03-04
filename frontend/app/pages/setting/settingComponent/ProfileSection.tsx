@@ -19,6 +19,7 @@ const ProfileSection = () => {
   }, []);
 
   const fetchProfileData = async () => {
+    console.log(BASE_URL+"/fetchProfile")
     try {
       setLoading(true);
       setError(null);
@@ -101,14 +102,14 @@ const ProfileSection = () => {
         }}> 
         <View style={tw`flex-row items-center mb-4`}>
           <Image
-            source={{ uri: `${BASE_URL}/${user.photoUrl}` }}
+            source={{ uri: `${BASE_URL}/${user?.photoUrl}` }}
             style={tw`w-16 h-16 rounded-full mr-4`}
             onError={() => setError('Failed to load user photo')}
           />
           <View>
-            <Text style={tw`text-lg font-semibold text-gray-800`}>{user.email}</Text>
-            <Text style={tw`text-gray-600 text-sm`}>{user.bio}</Text>
-            <Text style={tw`text-gray-600 text-sm`}>Mood: {user.mood}</Text>
+            <Text style={tw`text-lg font-semibold text-gray-800`}>{user?.email}</Text>
+            <Text style={tw`text-gray-600 text-sm`}>{user?.bio}</Text>
+            <Text style={tw`text-gray-600 text-sm`}>Mood: {user?.mood}</Text>
           </View>
         </View>
         </TouchableOpacity>
@@ -123,7 +124,7 @@ const ProfileSection = () => {
           }}> 
           <View style={tw`flex-row items-center mb-4 bg-blue-50 p-3 rounded-xl shadow-md`}>
             <Image
-              source={{ uri: `${BASE_URL}/${partner.photoUrl}` }}
+              source={{ uri: `${BASE_URL}/${partner?.photoUrl}` }}
               style={tw`w-16 h-16 rounded-full mr-4`}
               onError={() => setError('Failed to load partner photo')}
             />

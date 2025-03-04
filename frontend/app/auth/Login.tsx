@@ -16,6 +16,7 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     try {
+      console.log(BASE_URL+ "/login")
       const res = await axios.post(BASE_URL + "/login", {
         email,
         password,

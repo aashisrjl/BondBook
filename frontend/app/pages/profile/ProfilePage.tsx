@@ -76,6 +76,7 @@ function ProfilePage(){
 
   const fetchUserProfile = async () => {
     try {
+      console.log(BASE_URL+ "/profile")
       setIsLoading(true);
       const token = await AsyncStorage.getItem("token");
       if (!token) {

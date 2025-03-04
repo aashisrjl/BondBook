@@ -17,6 +17,7 @@ import Timeline from "./profileComponents/Timeline";
 import Photo from "./profileComponents/Photo";
 import VideoGallery from "./profileComponents/Video";
 import Address from "./profileComponents/Address";
+import MusicPage from "./profileComponents/Music";
 
 const AboutPage= ()=>  {
   const navigation = useNavigation();
@@ -45,6 +46,7 @@ const AboutPage= ()=>  {
     { id: "timeline", title: "Timeline ", icon: "timeline" },
     { id: "photos", title: "Photos ", icon: "photo-library" },
     { id: "videos", title: "Videos ", icon: "video-library" },
+    { id: "musics", title: "musics ", icon: "music-note" },
     { id: "address", title: "Address ", icon: "map" },
 
   ];
@@ -75,6 +77,7 @@ const AboutPage= ()=>  {
         {selectedSection === "timeline" && <> <Timeline /> </>}
         {selectedSection === "photos" && <> <Photo/> </>}
         {selectedSection === "videos" && <> <VideoGallery /> </>}
+        {selectedSection === "musics" && <> <MusicPage /> </>}
         {selectedSection === "address" && <><Address/></>}
 
       </ScrollView>
