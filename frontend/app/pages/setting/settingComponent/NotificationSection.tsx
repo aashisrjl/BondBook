@@ -14,6 +14,7 @@ const NotificationSection = () => {
 
   const handleSaveNotifications = async () => {
     try {
+      console.log(BASE_URL+"/notification")
       setLoading(true);
       setError(null);
 

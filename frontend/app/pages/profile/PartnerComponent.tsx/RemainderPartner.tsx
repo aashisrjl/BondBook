@@ -35,6 +35,7 @@ const RemindersPartner = () => {
 
   const fetchReminders = async () => {
     try {
+            console.log(BASE_URL+"/remainder")
       const res = await axios.get(`${BASE_URL}/getPartnerRemainder`);
       setReminders(res.data.remainders);
       console.log('remaider',reminders)

@@ -18,7 +18,7 @@ const VideoGalleryPartner = () => {
 
   // Fetch videos from API
   const fetchVideos = async () => {
-    console.log("Fetching videos from:", `${BASE_URL}/getvideo`);
+    console.log("Fetching videos from:", `${BASE_URL}/getvideo `);
     try {
       const res = await axios.get(`${BASE_URL}/getPartnerVideo`);
       console.log("Fetched videos:", res.data.videos);

@@ -118,6 +118,7 @@ const TimelinePartner = () => {
 
   const fetchTimelines = async () => {
     try {
+      console.log(BASE_URL+"/timelinePartner ")
       const res = await axios.get(`${BASE_URL}/getPartnerTimeline`);
       setTimelines(res.data.timelines);
     } catch (error) {

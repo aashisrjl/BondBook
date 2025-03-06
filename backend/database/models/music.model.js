@@ -12,15 +12,10 @@ const musicSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim:true,
-      validate(value)
-      {
-        if(!validator.isURL(value))
-        {
-           throw new Error("Invalid Photo URL:",value)
-        }
-      }
     },
-
+    artist:{
+      type: String,
+    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

@@ -42,6 +42,7 @@ const PartnerInfo= ()=>  {
     { id: "timeline", title: "Timeline ", icon: "timeline" },
     { id: "photos", title: "Photos ", icon: "photo-library" },
     { id: "videos", title: "Videos ", icon: "video-library" },
+    { id: "music", title: "Music ", icon: "music-note" },
     { id: "address", title: "Address ", icon: "map" },
 
   ];

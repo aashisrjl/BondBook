@@ -55,6 +55,7 @@ const ForgotPassword = () => {
     }
     setLoading(true);
     try {
+      console.log(BASE_URL+"/forgotpass")
       const res = await axios.post(`${BASE_URL}/user/changeForgotPassword`, { email, newPassword, confirmPassword });
       Alert.alert("Success", res.data.message);
       setStep(1); // Reset to step 1 after success
