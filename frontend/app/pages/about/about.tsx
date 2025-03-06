@@ -58,7 +58,13 @@ const AboutPage = () => {
         showsVerticalScrollIndicator={false}
         style={tw`flex bg-gray-800 p-6`}
       >
+        <View style={tw`flex-row justify-between`}>
         <Text style={tw`text-white font-bold text-2xl p-2`}> Home Services </Text>
+        <TouchableOpacity style={tw`font-bold text-2xl p-2 items-right b-2-black rounded-2xl bg-gray-200`}
+        onPress={()=>{navigation.navigate('PartnerInfo')}}>
+          <MaterialIcons name='man' size={32} color='black'/>
+        </TouchableOpacity>
+        </View>
 
         <View style={tw`flex-row justify-between p-1`}>
         <TouchableOpacity
