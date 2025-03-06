@@ -6,10 +6,9 @@ import {
   TouchableOpacity,
   Alert,
   Image,
-  TouchableWithoutFeedback,
-  Keyboard,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
@@ -17,43 +16,38 @@ import tw from 'twrnc';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-
-const BASE_URL = "http://192.168.1.81:3000"; // Replace with your actual backend URL
+import {BASE_URL} from '@env';
 
 export default function RegisterScreen() {
+  const navigation = useNavigation();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [image, setImage] = useState(null);
+  const [gender, setGender] = useState(""); // Added gender state
 
   // Function to pick an image
   const pickImage = async () => {
-    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
       Alert.alert("Permission Required", "You need to allow access to photos.");
       return;
     }
 
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
+      aspect: [1, 1], // Square aspect ratio for profile pic
+      quality: 0.8,
     });
 
     if (!result.canceled && result.assets && result.assets.length > 0) {
       setImage(result.assets[0].uri);
-    } else {
-      Alert.alert("No image selected", "Please select an image to upload.");
     }
   };
 
-  const navigation = useNavigation();
-
   const handleRegister = async () => {
-    
-    const navigation = useNavigation();
-    if (!image) {
-      Alert.alert("Error", "Please select an image.");
+    if (!name || !email || !password || !image || !gender) {
+      Alert.alert("Error", "Please fill all fields and select an image.");
       return;
     }
 
@@ -61,15 +55,14 @@ export default function RegisterScreen() {
     formData.append("name", name);
     formData.append("email", email);
     formData.append("password", password);
+    formData.append("gender", gender);
     formData.append("photoUrl", {
       uri: image,
       type: "image/jpeg",
       name: "profile.jpg",
     });
-    console.log("FormData is",formData)
 
     try {
-      console.log("hello")
       const res = await axios.post(`${BASE_URL}/register`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -79,101 +72,165 @@ export default function RegisterScreen() {
       Alert.alert("Registration Successful");
       navigation.navigate("Login");
     } catch (error) {
-      Alert.alert("Error", "Error while Registration");
+      const errorMessage = error?.response?.data?.message || "Registration Failed!";
+      Alert.alert("Error", errorMessage);
+      console.error(error);
     }
   };
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      style={tw`flex-1`}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={tw`flex-1 bg-gray-50`}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={tw`flex-1 justify-center items-center bg-gray-100 p-6`}>
-          <View style={tw`w-[90%]  bg-white p-6 rounded-2xl shadow-lg`}>
-          <Image
-          source={require('../assets/logo.png')}
-          style={tw`w-35 h-30 mx-auto mb-6`}
-        />
-            <Text style={tw`text-2xl font-bold text-center mb-4`}>Register</Text>
+      <ScrollView 
+        contentContainerStyle={tw`flex-grow justify-center`}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={tw`flex-1 justify-center items-center p-6 min-h-screen`}>
+          <View style={tw`w-full max-w-md bg-white p-8 rounded-2xl shadow-xl`}>
+            {/* Logo Section */}
+            <View style={tw`items-center mb-8`}>
+              <Image
+                source={require('../assets/logo.png')}
+                style={tw`w-32 h-32`}
+                resizeMode="contain"
+              />
+            </View>
+
+            {/* Welcome Text */}
+            <Text style={tw`text-2xl font-bold text-center mb-8 text-gray-800`}>
+              Create Account
+            </Text>
 
             {/* Name Input */}
-            <TextInput
-              style={tw`w-full bg-gray-200 p-3 rounded-lg mb-3`}
-              placeholder="Enter your name"
-              value={name}
-              onChangeText={setName}
-            />
+            <View style={tw`mb-4`}>
+              <TextInput
+                style={tw`w-full bg-gray-100 p-4 rounded-xl text-base border border-gray-200 focus:border-blue-500`}
+                placeholder="Full Name"
+                value={name}
+                onChangeText={setName}
+                autoCapitalize="words"
+              />
+            </View>
 
             {/* Email Input */}
-            <TextInput
-              style={tw`w-full bg-gray-200 p-3 rounded-lg mb-3`}
-              placeholder="Enter your email"
-              keyboardType="email-address"
-              value={email}
-              onChangeText={setEmail}
-            />
+            <View style={tw`mb-4`}>
+              <TextInput
+                style={tw`w-full bg-gray-100 p-4 rounded-xl text-base border border-gray-200 focus:border-blue-500`}
+                placeholder="Email"
+                keyboardType="email-address"
+                value={email}
+                onChangeText={setEmail}
+                autoCapitalize="none"
+              />
+            </View>
 
             {/* Password Input */}
-            <TextInput
-              style={tw`w-full bg-gray-200 p-3 rounded-lg mb-4`}
-              placeholder="Enter your password"
-              secureTextEntry
-              value={password}
-              onChangeText={setPassword}
-            />
+            <View style={tw`mb-4`}>
+              <TextInput
+                style={tw`w-full bg-gray-100 p-4 rounded-xl text-base border border-gray-200 focus:border-blue-500`}
+                placeholder="Password"
+                secureTextEntry
+                value={password}
+                onChangeText={setPassword}
+                autoCapitalize="none"
+              />
+            </View>
+
+            {/* Gender Selection */}
+            <View style={tw`mb-6`}>
+              <Text style={tw`text-gray-700 mb-2 font-medium`}>Gender</Text>
+              <View style={tw`flex-row justify-between`}>
+                {["Male", "Female", "Other"].map((option) => (
+                  <TouchableOpacity
+                    key={option}
+                    style={tw`flex-1 mx-1 p-3 rounded-xl border ${
+                      gender === option ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+                    }`}
+                    onPress={() => setGender(option)}
+                  >
+                    <Text style={tw`text-center ${
+                      gender === option ? 'text-blue-600' : 'text-gray-600'
+                    }`}>{option}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+
+            {/* Image Picker */}
+            <TouchableOpacity
+              style={tw`bg-gray-100 p-4 rounded-xl mb-6 border border-gray-200`}
+              onPress={pickImage}
+            >
+              <Text style={tw`text-center text-gray-700 font-medium`}>
+                {image ? "Change Profile Picture" : "Select Profile Picture"}
+              </Text>
+            </TouchableOpacity>
 
             {/* Show Selected Image */}
             {image && (
-              <Image
-                source={{ uri: image }}
-                style={tw`w-32 h-32 rounded-full mx-auto mb-4`}
-              />
+              <View style={tw`items-center mb-6`}>
+                <Image
+                  source={{ uri: image }}
+                  style={tw`w-24 h-24 rounded-full border border-gray-200`}
+                />
+              </View>
             )}
-
-            {/* Image Picker Button */}
-            <TouchableOpacity
-              style={tw`bg-gray-300 p-3 rounded-lg mb-3`}
-              onPress={pickImage}
-            >
-              <Text style={tw`text-center`}>Pick an Image</Text>
-            </TouchableOpacity>
 
             {/* Register Button */}
             <TouchableOpacity
-              style={tw`bg-blue-500 p-3 rounded-lg mb-4`}
-              onPress={()=>{handleRegister()}}
+              style={tw`bg-blue-600 p-4 rounded-xl mb-4 shadow-md`}
+              onPress={handleRegister}
             >
-              <Text style={tw`text-white text-center font-bold`}>Register</Text>
+              <Text style={tw`text-white text-center font-semibold text-base`}>
+                Sign Up
+              </Text>
             </TouchableOpacity>
 
-            {/* Divider */}
-            <View style={tw`flex-row items-center justify-center mb-4`}>
-              <View style={tw`flex-1 h-0.5 bg-gray-300`} />
-              <Text style={tw`mx-2 text-gray-500`}>OR</Text>
-              <View style={tw`flex-1 h-0.5 bg-gray-300`} />
+            {/* Social Login Section */}
+            <View style={tw`mt-6`}>
+              <View style={tw`flex-row items-center justify-center mb-6`}>
+                <View style={tw`flex-1 h-px bg-gray-200`}></View>
+                <Text style={tw`mx-4 text-gray-400 text-sm`}>OR</Text>
+                <View style={tw`flex-1 h-px bg-gray-200`}></View>
+              </View>
+
+              <TouchableOpacity
+                style={tw`flex-row items-center bg-white border border-gray-200 p-4 rounded-xl mb-4 justify-center shadow-sm`}
+              >
+                <FontAwesome name="google" size={20} color="#DB4437" style={tw`mr-3`} />
+                <Text style={tw`text-gray-800 font-medium text-base`}>
+                  Continue with Google
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={tw`flex-row items-center bg-white border border-gray-200 p-4 rounded-xl justify-center shadow-sm`}
+              >
+                <FontAwesome name="facebook" size={20} color="#4267B2" style={tw`mr-3`} />
+                <Text style={tw`text-gray-800 font-medium text-base`}>
+                  Continue with Facebook
+                </Text>
+              </TouchableOpacity>
             </View>
 
-            {/* Google Login Button */}
-            <TouchableOpacity
-              style={tw`flex-row items-center bg-red-500 p-3 rounded-lg mb-3`}
-              onPress={() => Alert.alert("Google Login")}
-            >
-              <FontAwesome name="google" size={20} color="white" style={tw`mr-2`} />
-              <Text style={tw`text-white text-center font-bold`}>Sign in with Google</Text>
-            </TouchableOpacity>
-
-            {/* Facebook Login Button */}
-            <TouchableOpacity
-              style={tw`flex-row items-center bg-blue-700 p-3 rounded-lg`}
-              onPress={() => Alert.alert("Facebook Login")}
-            >
-              <FontAwesome name="facebook" size={20} color="white" style={tw`mr-2`} />
-              <Text style={tw`text-white text-center font-bold`}>Sign in with Facebook</Text>
-            </TouchableOpacity>
+            {/* Login Link */}
+            <View style={tw`mt-6 flex-row justify-center`}>
+              <Text style={tw`text-gray-600 text-sm`}>
+                Already have an account?{' '}
+              </Text>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Login')}
+              >
+                <Text style={tw`text-blue-600 font-medium text-sm`}>
+                  Sign In
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </TouchableWithoutFeedback>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }

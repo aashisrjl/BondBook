@@ -34,7 +34,7 @@ exports.createPost = async (req, res) => {
 exports.getPhotos = async (req, res) => {
     const userId = req.userId
     try {
-        const photos = await Photo.find({ type: "photo" });
+        const photos = await Photo.find({ userId,type: "photo" });
         if (photos.length === 0) {
             return res.status(404).json({ message: "No photos found" });
         }
@@ -47,7 +47,7 @@ exports.getPhotos = async (req, res) => {
 exports.getVideos = async (req, res) => {
     const userId = req.userId
     try {
-        const videos = await Photo.find({ type: "video" });
+        const videos = await Photo.find({userId, type: "video" });
         if (videos.length === 0) {
             return res.status(404).json({ message: "No videos found" });
         }

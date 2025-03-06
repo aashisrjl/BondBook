@@ -22,6 +22,7 @@ const PasswordSection = () => {
     }
 
     try {
+      console.log(BASE_URL+"/chnagepass")
       setLoading(true);
       setError(null);
 

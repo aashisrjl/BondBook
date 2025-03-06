@@ -11,6 +11,7 @@ const LogoutSection = () => {
 
   const handleLogout = async () => {
     try {
+      console.log(BASE_URL+"/logout")
       // Remove token from AsyncStorage
       await AsyncStorage.removeItem('token');
       

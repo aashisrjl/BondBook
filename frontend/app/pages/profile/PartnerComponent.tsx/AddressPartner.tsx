@@ -8,40 +8,36 @@ import {
   TouchableOpacity,
   Text,
   ScrollView,
-  StyleSheet,
   SafeAreaView,
   Dimensions,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { Searchbar } from "react-native-paper";
-import Geolocation from "react-native-geolocation-service";
-import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
+import { BASE_URL } from "@env";
+import tw from "../../../../tw";
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-
 
 export default function AddressPartner() {
   const router = useRouter();
   const mapRef = useRef(null);
   const [isMapReady, setIsMapReady] = useState(false);
-
   const [location, setLocation] = useState({
     latitude: 0,
     longitude: 0,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
-
   const [placeName, setPlaceName] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isCameraActive, setIsCameraActive] = useState(false);
 
   useEffect(() => {
     checkToken();
+    fetchPartnerAddress();
   }, []);
 
   const checkToken = async () => {
@@ -50,11 +46,46 @@ export default function AddressPartner() {
       if (!token) {
         router.replace("/login");
       }
+      return token;
     } catch (error) {
       console.error("Error checking token:", error);
     }
   };
 
+  const fetchPartnerAddress = async () => {
+    try {
+      setLoading(true);
+      const token = await checkToken();
+      const response = await axios.get(BASE_URL +'/getPartnerAddress', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const { address } = response.data;
+      if (address) {
+        const newLocation = {
+          latitude: address.location[0],
+          longitude: address.location[1],
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        };
+        setLocation(newLocation);
+        setPlaceName(address.placeName);
+        setPhotoUrl(address.photoUrl);
+        mapRef.current?.animateToRegion(newLocation);
+      }
+    } catch (error) {
+      console.error("Error fetching partner address:", error);
+      if (error.response) {
+        Alert.alert("Error", error.response.data.message);
+      } else {
+        Alert.alert("Error", "Failed to fetch partner address");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const searchLocation = async (query) => {
     if (!query.trim()) return;
@@ -62,9 +93,7 @@ export default function AddressPartner() {
     try {
       setLoading(true);
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          query
-        )}`,
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`,
         {
           headers: {
             "User-Agent": "MyApp/1.0",
@@ -74,7 +103,6 @@ export default function AddressPartner() {
       );
 
       const data = await response.json();
-
       if (data.length > 0) {
         const { lat, lon } = data[0];
         const newLocation = {
@@ -95,32 +123,30 @@ export default function AddressPartner() {
     }
   };
 
-
-
   const onMapReady = () => {
     setIsMapReady(true);
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={tw`flex-1 bg-gray-100`}>
       <ScrollView 
-        style={styles.scrollView}
+        style={tw`flex-1`}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={styles.container}>
+        <View style={tw`flex-1 p-4 w-[31rem]`}>
           <Searchbar
             placeholder="Search for an address"
             onChangeText={setPlaceName}
             value={placeName}
             onSubmitEditing={() => searchLocation(placeName)}
-            style={styles.searchBar}
-            inputStyle={styles.searchInput}
+            style={tw`mb-4 w-full self-center rounded-lg bg-white`}
+            inputStyle={tw`text-black`}
           />
 
-          <View style={styles.mapContainer}>
+          <View style={tw`w-full h-72 mb-4 rounded-lg overflow-hidden self-center`}>
             <MapView
               ref={mapRef}
-              style={styles.map}
+              style={tw`w-full h-full`}
               region={location}
               onRegionChangeComplete={setLocation}
               onMapReady={onMapReady}
@@ -128,34 +154,31 @@ export default function AddressPartner() {
               minZoomLevel={3}
             >
               {isMapReady && (
-                <Marker coordinate={location} title="Selected Location" />
+                <Marker 
+                  coordinate={location} 
+                  title={placeName || "Partner's Location"}
+                />
               )}
             </MapView>
           </View>
 
-          <TouchableOpacity 
-            style={styles.button} 
-            disabled={loading || isCameraActive}
-          >
-            <Text style={styles.buttonText}>Take Photo</Text>
-          </TouchableOpacity>
-
           {photoUrl ? (
-            <View style={styles.imageContainer}>
+            <View style={tw`w-full h-52 mb-4 rounded-lg overflow-hidden self-center bg-white`}>
               <Image 
-                source={{ uri: photoUrl }} 
-                style={styles.image}
+                source={{ uri: `${BASE_URL}/${photoUrl}` }}
+                style={tw`w-full h-full`}
                 resizeMode="cover"
               />
             </View>
           ) : null}
 
           <TouchableOpacity 
-            style={[styles.button, styles.shareButton]} 
-            disabled={loading || isCameraActive}
+            style={tw`w-full bg-blue-200 p-3 rounded-lg mb-4 self-center`}
+            onPress={fetchPartnerAddress}
+            disabled={loading}
           >
-            <Text style={styles.buttonText}>
-              {loading ? "Saving..." : "Share Location"}
+            <Text style={tw`text-gray-800 text-center text-base font-medium`}>
+              {loading ? "Loading..." : "Refresh Partner Location"}
             </Text>
           </TouchableOpacity>
         </View>
@@ -163,70 +186,3 @@ export default function AddressPartner() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#f0f0f0',
-  },
-  scrollView: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    padding: 16,
-    width: SCREEN_WIDTH,
-  },
-  searchBar: {
-    marginBottom: 16,
-    width: SCREEN_WIDTH - 32,
-    alignSelf: 'center',
-    borderRadius: 8,
-    backgroundColor: '#fff',
-  },
-  searchInput: {
-    color: '#000',
-  },
-  mapContainer: {
-    width: SCREEN_WIDTH - 32,
-    height: 300,
-    marginBottom: 16,
-    borderRadius: 8,
-    overflow: 'hidden',
-    alignSelf: 'center',
-  },
-  map: {
-    width: '100%',
-    height: '100%',
-  },
-  button: {
-    width: SCREEN_WIDTH - 32,
-    backgroundColor: '#A5BFCC',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 16,
-    alignSelf: 'center',
-  },
-  shareButton: {
-    backgroundColor: '#90CAF9',
-  },
-  buttonText: {
-    color: '#2c3e50',
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  imageContainer: {
-    width: SCREEN_WIDTH - 32,
-    height: 200,
-    marginBottom: 16,
-    borderRadius: 8,
-    overflow: 'hidden',
-    alignSelf: 'center',
-    backgroundColor: '#fff',
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-  },
-});

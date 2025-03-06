@@ -1,11 +1,13 @@
 {
-    "expo": {
-      "name": "BondBook",
-      "slug": "bondbook",
-      "android": {
-        "package": "com.aashisrjl.bondbook"
-      },
-      "newArchEnabled": true
+  "expo": {
+    "name": "BondBook",
+    "slug": "bondbook",
+    "android": {
+      "package": "com.aashisrjl.bondbook"
+    },
+    "newArchEnabled": true,
+    "ios": {
+      "bundleIdentifier": "com.aashisrjl.bondbook"
     }
   }
-  
+}

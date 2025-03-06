@@ -17,6 +17,7 @@ const PartnerSection = () => {
   // Send email to partner
   const sendEmailToPartner = async () => {
     try {
+      console.log(BASE_URL+"/addpartner")
       const tokenn = await AsyncStorage.getItem('token');
       if (!tokenn) {
         router.replace('Login');
@@ -52,6 +53,7 @@ const PartnerSection = () => {
   // Verify partner token
   const verifyPartnerEmail = async () => {
     try {
+      console.log(BASE_URL+"/verifyemail")
       const tokenn = await AsyncStorage.getItem('token');
       if (!tokenn) {
         router.replace('Login');
@@ -85,6 +87,7 @@ const PartnerSection = () => {
 
   // Remove partner with confirmation
   const removePartner = async () => {
+    console.log(BASE_URL+"/removePartner")
     const tokenn = await AsyncStorage.getItem('token');
     if (!tokenn) {
       router.replace('Login');

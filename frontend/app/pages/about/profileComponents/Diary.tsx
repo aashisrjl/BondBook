@@ -29,6 +29,7 @@ const Diary = () => {
 
   const fetchDiaries = async () => {
     try {
+      console.log(BASE_URL+"/diary")
       const response = await axios.get(`${BASE_URL}/fetchAllDiary`);
       const data = await response.data.existingDiary;
       console.log("Fetched data:", data);
@@ -95,7 +96,7 @@ const Diary = () => {
   }, []);
 
   return (
-    <View style={tw`flex-1 bg-gray-50 w-[28rem]`}>
+    <View style={tw`flex-1 bg-gray-50 w-[31rem]`}>
       {/* Header */}
       <View style={tw`bg-white px-4 py-6 shadow-sm`}>
         <View style={tw`flex-row items-center mb-2`}>
