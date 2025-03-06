@@ -32,6 +32,7 @@ import TimelinePartner from './pages/profile/PartnerComponent.tsx/TimelinePartne
 import PhotoPartner from './pages/profile/PartnerComponent.tsx/PhotoPartner';
 import VideoGalleryPartner from './pages/profile/PartnerComponent.tsx/VideoPartner';
 import AddressPartner from './pages/profile/PartnerComponent.tsx/AddressPartner';
+import LogoutSection from './pages/setting/settingComponent/LogoutSection';
 
 const Stack = createNativeStackNavigator<RootStackParamList>(); // Use the RootStackParamList for type safety
 
@@ -53,6 +54,8 @@ export default function RootLayout() {
         <Stack.Screen name="ContactSupport" component={ContactSupport} options={{ title: 'ContactSupport' }} />
         <Stack.Screen name="Help" component={Help} options={{ title: 'Help' }} />
         <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
+        <Stack.Screen name="Logout" component={LogoutSection} options={{ title: 'Logout' }} />
+
         <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
         <Stack.Screen name="Setting" component={SettingPage} options={{ title: 'Setting' }} />
         <Stack.Screen name="Profile" component={ProfilePage} options={{ title: 'Profile' }} />
@@ -76,6 +79,7 @@ export default function RootLayout() {
         <Stack.Screen name="partnermusic" component={MusicPage} options={{ title: 'Musics' }} />
         <Stack.Screen name="partneraddress" component={AddressPartner} options={{ title: 'Address' }} />
         <Stack.Screen name="partnersurprise" component={Surprise} options={{ title: 'Surprises' }} />
+
 
         <Stack.Screen name="Chat" component={ChatSection} options={{ title: 'Chat' }} />
       </Stack.Navigator>

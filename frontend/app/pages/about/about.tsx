@@ -62,7 +62,7 @@ const AboutPage = () => {
         <Text style={tw`text-white font-bold text-2xl p-2`}> Home Services </Text>
         <TouchableOpacity style={tw`font-bold text-2xl p-2 items-right b-2-black rounded-2xl bg-gray-200`}
         onPress={()=>{navigation.navigate('PartnerInfo')}}>
-          <MaterialIcons name='man' size={32} color='black'/>
+          <MaterialIcons name='person' size={32} color='black'/>
         </TouchableOpacity>
         </View>
 
