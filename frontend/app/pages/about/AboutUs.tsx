@@ -52,8 +52,8 @@ export function AboutUs() {
 
             <View style={tw`space-y-6`}>
               {features.map((feature, index) => (
-                <View key={index} style={tw`bg-white rounded-lg p-4 shadow-md`}>
-                  <View style={tw`flex-row items-center mb-3`}>
+                <View key={index} style={tw`bg-white rounded-lg p-4 shadow-md mb-3`}>
+                  <View style={tw`flex-row items-center gap-3`}>
                     <View style={tw`w-10 h-10 bg-slate-200 rounded-full items-center justify-center mr-3`}>
                       <Ionicons name={feature.icon} size={20} color="#64748B" />
                     </View>

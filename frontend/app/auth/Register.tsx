@@ -192,7 +192,7 @@ export default function RegisterScreen() {
             <View style={tw`mt-6`}>
               <View style={tw`flex-row items-center justify-center mb-6`}>
                 <View style={tw`flex-1 h-px bg-gray-200`}></View>
-                <Text style={tw`mx-4 text-gray-400 text-sm`}>OR</Text>
+                <Text style={tw`mx-4 text-gray-400 text-sm`}>OR </Text>
                 <View style={tw`flex-1 h-px bg-gray-200`}></View>
               </View>
 
