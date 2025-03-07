@@ -46,7 +46,7 @@ export default function RootLayout() {
     
       <Stack.Navigator
         screenOptions={{
-          headerStyle: { backgroundColor: '#2E004F' },
+          headerStyle: { backgroundColor: 'black' },
           headerTintColor: 'white',
           headerTitleStyle: { fontWeight: 'bold', fontSize: 25 },
           headerTitleAlign: 'left',

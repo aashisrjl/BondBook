@@ -39,6 +39,7 @@ export type RootStackParamList = {
     PartnerSec: undefined;
     PasswordSec: undefined;
     ProfileSec: undefined;
+    SecurityPrivacy: undefined;
 
 
   };

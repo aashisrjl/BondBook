@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, Alert } from 'react-native';
 import tw from 'twrnc';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { router } from 'expo-router';
+import * as Animatable from 'react-native-animatable';
+
 import { BASE_URL } from '@env';
+import Footer from '../../../component/Footer';
 
 const PartnerSection = () => {
   const [email, setEmail] = useState('');
@@ -130,7 +132,9 @@ const PartnerSection = () => {
   };
 
   return (
-    <View style={tw`p-4 bg-white rounded-xl shadow-md`}>
+    <>
+    <View style={tw`flex justify-center align-center bg-gray-900 h-full`}>
+      <Animatable.View animation="fadeInUp" duration={500} style={tw`w-11/12 max-w-md p-6 bg-white rounded-xl shadow-lg p-6 m-8 mt-60`}>
       <Text style={tw`text-2xl font-bold mb-6 text-gray-800`}>Partner Settings</Text>
       
       <View style={tw`mb-4`}>
@@ -208,7 +212,11 @@ const PartnerSection = () => {
       {error && (
         <Text style={tw`text-red-600 text-center mt-2`}>{error}</Text>
       )}
+
+      </Animatable.View>
+      <Footer/>
     </View>
+      </>
   );
 };
 
