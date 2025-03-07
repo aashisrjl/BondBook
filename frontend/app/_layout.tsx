@@ -33,6 +33,11 @@ import PhotoPartner from './pages/profile/PartnerComponent.tsx/PhotoPartner';
 import VideoGalleryPartner from './pages/profile/PartnerComponent.tsx/VideoPartner';
 import AddressPartner from './pages/profile/PartnerComponent.tsx/AddressPartner';
 import LogoutSection from './pages/setting/settingComponent/LogoutSection';
+import NotificationSection from './pages/setting/settingComponent/NotificationSection';
+import PartnerSection from './pages/setting/settingComponent/PartnerSection';
+import PasswordSection from './pages/setting/settingComponent/PasswordSection';
+import ProfileSection from './pages/setting/settingComponent/ProfileSection';
+import SecurityPrivacy from './pages/setting/settingComponent/SecurityPrivacy';
 
 const Stack = createNativeStackNavigator<RootStackParamList>(); // Use the RootStackParamList for type safety
 
@@ -54,7 +59,16 @@ export default function RootLayout() {
         <Stack.Screen name="ContactSupport" component={ContactSupport} options={{ title: 'ContactSupport' }} />
         <Stack.Screen name="Help" component={Help} options={{ title: 'Help' }} />
         <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
+        <Stack.Screen name="SecurityPrivacy" component={SecurityPrivacy} options={{ title: 'Securities' }} />
+
         <Stack.Screen name="Logout" component={LogoutSection} options={{ title: 'Logout' }} />
+        <Stack.Screen name="NotificationSec" component={NotificationSection} options={{ title: 'Notification Setting' }} />
+        <Stack.Screen name="PartnerSec" component={PartnerSection} options={{ title: 'Partner Setting' }} />
+        <Stack.Screen name="PasswordSec" component={PasswordSection} options={{ title: 'Password' }} />
+        <Stack.Screen name="ProfileSec" component={ProfileSection} options={{ title: 'Partners' }} />
+
+
+
 
         <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
         <Stack.Screen name="Setting" component={SettingPage} options={{ title: 'Setting' }} />
@@ -62,6 +76,7 @@ export default function RootLayout() {
         <Stack.Screen name="Partner" component={PartnerPage} options={{ title: 'Partner' }} />
         <Stack.Screen name="PartnerInfo" component={PartnerInfo} options={{ title: 'Partner Info' }} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ title: 'Forgot Password' }} />
+
         <Stack.Screen name="diary" component={Diary} options={{ title: 'Diary' }} />
         <Stack.Screen name="reminders" component={Reminders} options={{ title: 'Reminders' }} />
         <Stack.Screen name="timeline" component={Timeline} options={{ title: 'Timelines' }} />
