@@ -5,6 +5,8 @@ import tw from "../../../../tw"; // Tailwind Styles
 import axios from "axios"; // API calls
 import { BASE_URL } from "@env";
 import Footer from "../../../component/Footer";
+import * as Animatable from 'react-native-animatable';
+
 
 const ForgotPassword = () => {
   console.log("Page rendered")
@@ -68,10 +70,12 @@ const ForgotPassword = () => {
 
   return (
     <>
-    <View style={tw`flex-1 p-5 justify-center`}>
+    <View style={tw`flex-1 p-5 justify-center bg-gray-900`}>
       {step === 1 && (
         <>
-          <Text style={tw`text-lg font-bold mb-3`}>Forgot Password</Text>
+          <Animatable.View animation="fadeInUp" duration={500} style={tw`w-11/12 max-w-md p-4 bg-white rounded-xl shadow-lg`}>
+        <View style={tw`bg-white text-black p-7 rounded-xl`}>
+          <Text style={tw`text-lg font-bold mb-3 `}>Forgot Password</Text>
           <TextInput
             label="Enter Email"
             mode="outlined"
@@ -82,22 +86,31 @@ const ForgotPassword = () => {
           <Button mode="contained" onPress={handleForgotPassword} loading={loading} style={tw`mt-3`}>
             Send Reset Code
           </Button>
+          </View>
+          </Animatable.View>
         </>
       )}
 
       {step === 2 && (
         <>
-          <Text style={tw`text-lg font-bold mb-3`}>Enter Token</Text>
+              <Animatable.View animation="fadeInUp" duration={500} style={tw`w-11/12 max-w-md p-6 bg-white rounded-xl shadow-lg`}>
+
+        <View style={tw`bg-white text-black p-7 rounded-xl`}>
+          <Text style={tw`text-lg font-bold mb-3 text-white`}>Enter Token</Text>
           <TextInput label="Token" mode="outlined" value={token} onChangeText={setToken} keyboardType="numeric" />
           <Button mode="contained" onPress={handleVerifyToken} loading={loading} style={tw`mt-3`}>
             Verify Code
           </Button>
+          </View>
+          </Animatable.View>
         </>
       )}
 
       {step === 3 && (
         <>
-          <Text style={tw`text-lg font-bold mb-3`}>Reset Password</Text>
+              <Animatable.View animation="fadeInUp" duration={500} style={tw`w-11/12 max-w-md p-6 bg-white rounded-xl shadow-lg`}>
+            <View style={tw`bg-white text-black p-7 rounded-xl`}>
+          <Text style={tw`text-lg font-bold mb-3 text-white`}>Reset Password</Text>
           <TextInput label="New Password" mode="outlined" value={newPassword} onChangeText={setNewPassword} secureTextEntry />
           <TextInput
             label="Confirm Password"
@@ -109,6 +122,8 @@ const ForgotPassword = () => {
           <Button mode="contained" onPress={handleChangePassword} loading={loading} style={tw`mt-3`}>
             Change Password
           </Button>
+          </View>
+          </Animatable.View>
         </>
       )}
     </View>

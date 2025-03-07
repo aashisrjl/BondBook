@@ -1,115 +1,85 @@
 import React, { useState } from 'react';
-import { View, ScrollView, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
 import tw from 'twrnc';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import ProfileSection from './settingComponent/ProfileSection'; // Separate component
-import PasswordSection from './settingComponent/PasswordSection'; // Separate component
-import PartnerSection from './settingComponent/PartnerSection'; // Separate component
-import LogoutSection from './settingComponent/LogoutSection'; // Separate component
-import NotificationSection from './settingComponent/NotificationSection'; // Separate component
-import Footer from '../../component/Footer'
+import Footer from '../../component/Footer';
 
 export function SettingsPage() {
   const navigation = useNavigation();
-  const [activeSection, setActiveSection] = useState('profile');
+  const [selectedTheme, setSelectedTheme] = useState('Dark'); // Default theme
 
-  const renderContent = () => {
-    switch (activeSection) {
-      case 'profile':
-        return <ProfileSection />;
-      case 'password':
-        return <PasswordSection />;
-      case 'partner':
-        return <PartnerSection />;
-      case 'notifications':
-        return <NotificationSection />;
-      case 'logout':
-        return <LogoutSection />;
-      default:
-        return <ProfileSection />;
-    }
-  };
+  // Unified list of settings options, including About Us, Policies, and Help
+  const settingsOptions = [
+    { id: 'ProfileSec', title: 'Personal Details', icon: 'person' },
+    { id: 'PartnerSec', title: 'Add Partner', icon: 'receipt' },
+    { id: 'SecurityPrivacy', title: 'Security & Privacy', icon: 'lock' },
+    { id: 'AppSettings', title: 'App Settings', icon: 'settings' },
+    { id: 'NotificationSec', title: 'Notifications', icon: 'help' },
+    { id: 'Legal', title: 'Legal', icon: 'gavel' },
+    { id: 'AboutUs', title: 'About Us', icon: 'info' },
+    { id: 'Policies', title: 'Policies', icon: 'description' },
+    { id: 'Help', title: 'Help', icon: 'support-agent' },
+    { id: 'Faq', title: 'Faq', icon: 'faq' },
+    { id: 'Logout', title: 'Logout', icon: 'logout' },
+  ];
+
+  // Theme options for App Appearance
+  const themeOptions = [
+    { id: 'Light', title: 'Light', icon: 'brightness-5' },
+    { id: 'Dark', title: 'Dark', icon: 'brightness-3' },
+    { id: 'System', title: 'System', icon: 'settings-system-daydream' },
+  ];
 
   return (
-    <View style={tw`flex-1 bg-gray-50`}>
-      {/* Header */}
-      <View style={tw`bg-blue-600 p-4 rounded-b-3xl shadow-md`}>
-        <Text style={tw`text-2xl font-bold text-white text-center`}>Settings</Text>
+    <View style={tw`flex-1 bg-gray-900`}>
+      {/* Header with Profile Info */}
+      <View style={tw`p-4 flex-row items-center border-b border-gray-700`}>
+        <View style={tw`w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mr-4`}>
+          <MaterialIcons name="person" size={30} color="white" />
+        </View>
+        <View>
+          <Text style={tw`text-white text-xl font-bold`}>Aashish Rijal</Text>
+          <Text style={tw`text-gray-400 text-sm`}>984779997</Text>
+        </View>
       </View>
 
-      {/* Navigation Tabs */}
-      <View style={tw`flex-row justify-around p-4 bg-white border-b border-gray-200 shadow-sm`}>
-        <TouchableOpacity
-          style={tw`p-2 ${activeSection === 'profile' ? 'border-b-2 border-blue-600' : ''}`}
-          onPress={() => setActiveSection('profile')}
-        >
-          <Text style={tw`text-base font-semibold ${activeSection === 'profile' ? 'text-blue-600' : 'text-gray-600'}`}>
-            Profile
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={tw`p-2 ${activeSection === 'password' ? 'border-b-2 border-blue-600' : ''}`}
-          onPress={() => setActiveSection('password')}
-        >
-          <Text style={tw`text-base font-semibold ${activeSection === 'password' ? 'text-blue-600' : 'text-gray-600'}`}>
-            Password
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={tw`p-2 ${activeSection === 'partner' ? 'border-b-2 border-blue-600' : ''}`}
-          onPress={() => setActiveSection('partner')}
-        >
-          <Text style={tw`text-base font-semibold ${activeSection === 'partner' ? 'text-blue-600' : 'text-gray-600'}`}>
-            Partner
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={tw`p-2 ${activeSection === 'notifications' ? 'border-b-2 border-blue-600' : ''}`}
-          onPress={() => setActiveSection('notifications')}
-        >
-          <Text style={tw`text-base font-semibold ${activeSection === 'notifications' ? 'text-blue-600' : 'text-gray-600'}`}>
-            Notifications
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={tw`p-2 ${activeSection === 'logout' ? 'border-b-2 border-blue-600' : ''}`}
-          onPress={() => setActiveSection('logout')}
-        >
-          <Text style={tw`text-base font-semibold ${activeSection === 'logout' ? 'text-blue-600' : 'text-gray-600'}`}>
-            Logout
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {/* Settings Options */}
+      <ScrollView style={tw`flex-1`}>
+        {settingsOptions.map((option) => (
+          <TouchableOpacity
+            key={option.id}
+            style={tw`flex-row items-center p-6 border-b border-gray-700`}
+            onPress={() => navigation.navigate(option.id)}
+          >
+            <MaterialIcons name={option.icon} size={24} color="white" style={tw`mr-4`} />
+            <Text style={tw`text-white text-base flex-1`}>{option.title}</Text>
+            <MaterialIcons name="chevron-right" size={24} color="gray" />
+          </TouchableOpacity>
+        ))}
 
-      {/* Content Area */}
-      <ScrollView style={tw`flex-1 p-4 bg-gray-50`}>
-        {renderContent()}
+        {/* App Appearance Section */}
+        <View style={tw`p-4 border-b border-gray-700`}>
+          <Text style={tw`text-white text-lg font-semibold mb-2`}>App Appearance</Text>
+          <View style={tw`flex-row  justify-center gap-6`}>
+            {themeOptions.map((theme) => (
+              <TouchableOpacity
+                key={theme.id}
+                style={tw`items-center p-2 ${selectedTheme === theme.id ? 'bg-gray-700 rounded-lg' : ''}`}
+                onPress={() => setSelectedTheme(theme.id)}
+              >
+                <MaterialIcons name={theme.icon} size={30} color="white" />
+                <Text style={tw`text-white text-sm mt-1`}>{theme.title + " "}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
       </ScrollView>
 
-      <View style={tw`flex-row flex-wrap justify-center p-4 bg-gray-100 border-t border-gray-200 shadow-md`}>
-        <TouchableOpacity onPress = {()=>{navigation.navigate('AboutUs')}}
-          style={tw`px-4 py-2 m-1 bg-white rounded-lg shadow-sm`}
-        >
-          <Text style={tw`text-gray-700 text-base font-medium`}> About Us </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress = {()=>{navigation.navigate('Policies')}}
-          style={tw`px-4 py-2 m-1 bg-white rounded-lg shadow-sm`}
-        >
-          <Text style={tw`text-gray-700 text-base font-medium`}> Policies </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress = {()=>{navigation.navigate('Help')}}
-          style={tw`px-4 py-2 m-1 bg-white rounded-lg shadow-sm`}
-        >
-          <Text style={tw`text-gray-700 text-base font-medium`}> Helps </Text>
-        </TouchableOpacity>
-    </View>
-
-      <Footer/>
+      {/* Footer */}
+      <Footer />
     </View>
   );
-
 }
+
 export default SettingsPage;

@@ -30,30 +30,30 @@ export function AboutUs() {
   ];
   return (
     <>
-      <SafeAreaView style={tw`flex-1 bg-[#F8FAFC]`}>
+      <SafeAreaView style={tw`flex-1 bg-gray-900 text-white`}>
         <ScrollView style={tw`flex-1`}>
           {/* Hero Section */}
-          <View style={tw`bg-[#F8FAFC] px-6 py-12`}>
+          <View style={tw`bg-gray-900 px-6 py-12`}>
             <View style={tw`items-center mb-6`}>
               <Ionicons name="heart" size={48} color="#64748B" style={tw`mb-4`} />
-              <Text style={tw`text-3xl font-bold text-black text-center`}>
+              <Text style={tw`text-3xl font-bold text-white text-center`}>
                 Welcome to BondBook 
               </Text>
-              <Text style={tw`text-lg text-gray-600 text-center px-4`}>
+              <Text style={tw`text-lg text-gray-400 text-center px-4`}>
                 Strengthening relationships through meaningful digital connections.
               </Text>
             </View>
           </View>
           {/* Features Section */}
           <View style={tw`px-6 py-8`}>
-            <Text style={tw`text-2xl font-bold text-black mb-6 text-center`}>
+            <Text style={tw`text-2xl font-bold text-white mb-6 text-center`}>
               Why Choose BondBook?
             </Text>
 
             <View style={tw`space-y-6`}>
               {features.map((feature, index) => (
-                <View key={index} style={tw`bg-white rounded-lg p-4 shadow-md`}>
-                  <View style={tw`flex-row items-center mb-3`}>
+                <View key={index} style={tw`bg-blue-300 rounded-lg p-4 shadow-md mb-3`}>
+                  <View style={tw`flex-row items-center gap-3`}>
                     <View style={tw`w-10 h-10 bg-slate-200 rounded-full items-center justify-center mr-3`}>
                       <Ionicons name={feature.icon} size={20} color="#64748B" />
                     </View>
@@ -77,7 +77,7 @@ export function AboutUs() {
           </View>
           {/* Get Started Section */}
           <View style={tw`px-6 py-8`}>
-            <View style={tw`bg-white rounded-xl p-6 items-center shadow-md`}>
+            <View style={tw`bg-green-400 rounded-xl p-6 items-center shadow-md`}>
               <Text style={tw`text-xl font-bold text-black mb-3 text-center`}>
                 Ready to Strengthen Your Bond?
               </Text>
