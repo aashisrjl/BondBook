@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { BASE_URL } from '@env';
+import * as Animatable from 'react-native-animatable';
+import Footer from '../../../component/Footer';
 
 const PasswordSection = () => {
   const navigation = useNavigation();
@@ -64,7 +66,9 @@ const PasswordSection = () => {
   };
 
   return (
-    <View style={tw`p-4 bg-white rounded-xl shadow-md`}>
+    <>
+    <View style={tw`flex justify-center bg-gray-900 h-full `}>
+    <Animatable.View animation="fadeInUp" duration={500} style={tw`m-3 p-4 bg-white rounded-xl shadow-lg mt-60`}>
       <Text style={tw`text-2xl font-bold mb-6 text-gray-800`}>Password Settings</Text>
       
       <View style={tw`mb-4`}>
@@ -104,7 +108,10 @@ const PasswordSection = () => {
           <Text style={tw`text-red-600 text-center mt-2`}>{error}</Text>
         )}
       </View>
+      </Animatable.View>
+    <Footer/>
     </View>
+    </>
   );
 };
 

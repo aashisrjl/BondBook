@@ -5,7 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { BASE_URL } from '@env';
 import {useNavigation} from "@react-navigation/native";
+import * as Animatable from 'react-native-animatable';
 import PartnerSection from './PartnerSection'
+import Footer from '../../../component/Footer';
 
 const ProfileSection = () => {
     const navigation = useNavigation()
@@ -92,6 +94,7 @@ const ProfileSection = () => {
 //   }
 
   return (
+    <>
     <ScrollView style={tw`p-4 bg-white rounded-xl shadow-md`}>
       <Text style={tw`text-2xl font-bold mb-6 text-gray-800`}>Profile</Text>
 
@@ -109,7 +112,7 @@ const ProfileSection = () => {
           <View>
             <Text style={tw`text-lg font-semibold text-gray-800`}>{user?.email}</Text>
             <Text style={tw`text-gray-600 text-sm`}>{user?.bio}</Text>
-            <Text style={tw`text-gray-600 text-sm`}>Mood: {user?.mood}</Text>
+            <Text style={tw`text-gray-600 text-sm`}>{user?.mood}</Text>
           </View>
         </View>
         </TouchableOpacity>
@@ -141,10 +144,18 @@ const ProfileSection = () => {
       {!partner && (
         <View>
         <Text style={tw`text-gray-500 text-center mt-4`}>No partner connected yet.</Text>
-        <PartnerSection/>
+        <TouchableOpacity style={tw`bg-blue-200 p-4 rounded-xl mx-10 my-5 text-center shadow-lg`}
+        onPress={()=>{
+          navigation.navigate('PartnerSec');
+        }}
+        >
+          <Text style={tw`text-bold text-center text-md text-green-`}>Add a Partner</Text>
+        </TouchableOpacity>
         </View>
       )}
     </ScrollView>
+    <Footer/>
+    </>
   );
 };
 

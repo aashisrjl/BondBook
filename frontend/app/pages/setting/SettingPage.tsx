@@ -11,15 +11,16 @@ export function SettingsPage() {
 
   // Unified list of settings options, including About Us, Policies, and Help
   const settingsOptions = [
-    { id: 'PersonalDetails', title: 'Personal Details', icon: 'person' },
-    { id: 'Transactions', title: 'Transactions', icon: 'receipt' },
+    { id: 'ProfileSec', title: 'Personal Details', icon: 'person' },
+    { id: 'PartnerSec', title: 'Add Partner', icon: 'receipt' },
     { id: 'SecurityPrivacy', title: 'Security & Privacy', icon: 'lock' },
     { id: 'AppSettings', title: 'App Settings', icon: 'settings' },
-    { id: 'Support', title: 'Support', icon: 'help' },
+    { id: 'NotificationSec', title: 'Notifications', icon: 'help' },
     { id: 'Legal', title: 'Legal', icon: 'gavel' },
     { id: 'AboutUs', title: 'About Us', icon: 'info' },
     { id: 'Policies', title: 'Policies', icon: 'description' },
     { id: 'Help', title: 'Help', icon: 'support-agent' },
+    { id: 'Faq', title: 'Faq', icon: 'faq' },
     { id: 'Logout', title: 'Logout', icon: 'logout' },
   ];
 

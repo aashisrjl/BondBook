@@ -19,6 +19,7 @@ import { Modal, TextInput } from "react-native-paper";
 import { router } from "expo-router";
 import axios from "axios";
 import { BASE_URL } from "@env";
+import Footer from "../../component/Footer";
 
 const DEFAULT_PROFILE_IMAGE = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
 const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80";
@@ -324,6 +325,7 @@ function ProfilePage(){
   }
 
   return (
+    <>
     <View style={tw`flex-1 bg-gray-100`}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Image source={{ uri: userData.coverUrl }} style={tw`w-full h-48`} />
@@ -564,6 +566,8 @@ function ProfilePage(){
         </View>
       </Modal>
     </View>
+    <Footer/>
+    </>
   );
 }
 
