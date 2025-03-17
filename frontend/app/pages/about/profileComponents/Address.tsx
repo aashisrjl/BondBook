@@ -22,6 +22,7 @@ import { useRouter } from "expo-router";
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 import { BASE_URL } from "@env";
+import Footer from "../../../component/Footer";
 
 
 export default function Address() {
@@ -211,6 +212,7 @@ export default function Address() {
   };
 
   return (
+    <>
     <SafeAreaView style={styles.safeArea}>
       <ScrollView 
         style={styles.scrollView}
@@ -272,6 +274,8 @@ export default function Address() {
         </View>
       </ScrollView>
     </SafeAreaView>
+    <Footer />
+    </>
   );
 }
 
