@@ -8,7 +8,7 @@ const Footer = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>(); // Use react-navigation for navigation
 
   return (
-    <View style={tw`flex-row justify-around p-2 h-14 border-t border-gray-900 bg-black mt-auto`}>
+    <View style={tw`flex-row justify-around p-2 h-14  bg-black color-white mt-auto`}>
       <TouchableOpacity style={tw`items-center`} onPress={() => navigation.navigate('About')}>
         <Ionicons name="menu" size={30} color="white" />
       </TouchableOpacity>

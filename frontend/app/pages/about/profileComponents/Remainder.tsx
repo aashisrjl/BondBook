@@ -11,6 +11,7 @@ import { PlusIcon, Bell, X } from "lucide-react-native";
 import { Modal, TextInput, Button } from "react-native-paper";
 import axios from "axios";
 import { BASE_URL } from "@env";
+import Footer from "../../../component/Footer";
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -72,7 +73,8 @@ const Reminders = () => {
   };
 
   return (
-    <View style={tw`flex-1 bg-gray-50 w-[31rem]`}>
+    <>
+    <View style={tw`flex-1 bg-gray-50 w-[]`}>
       {/* Header */}
       <View style={tw`bg-white px-4 py-6 shadow-sm`}>
         <View style={tw`flex-row items-center mb-2`}>
@@ -172,6 +174,8 @@ const Reminders = () => {
 
       </Modal>
     </View>
+    <Footer/>
+    </>
   );
 };
 

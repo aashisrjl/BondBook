@@ -6,6 +6,7 @@ import axios from "axios";
 import { Modal, TextInput } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 import { BASE_URL } from "@env";
+import Footer from "../../../component/Footer";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = width - 48;
@@ -267,7 +268,8 @@ const Timeline = () => {
   };
 
   return (
-    <View style={tw`flex-1 bg-gray-50 w-[31rem]`}>
+    <>
+    <View style={tw`flex-1 bg-gray-50 w-[]`}>
       <View style={tw`bg-white px-4 py-6 shadow-sm`}>
         <View style={tw`flex-row items-center mb-2`}>
           <Clock size={24} color="#4B5563" />
@@ -462,6 +464,8 @@ const Timeline = () => {
         </View>
       </Modal>
     </View>
+    <Footer />
+    </>
   );
 };
 

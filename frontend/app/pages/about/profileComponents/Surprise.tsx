@@ -2,10 +2,12 @@ import { Bell, PlusIcon } from 'lucide-react-native';
 import React from 'react'
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import tw from '../../../../tw';
+import Footer from '../../../component/Footer';
 
 const Surprise = () => {
     return(
-    <View style={tw`flex-1 bg-gray-50 w-[31rem]`}>
+      <>
+    <View style={tw`flex-1 bg-gray-50 w-[]`}>
     {/* Header */}
     <View style={tw`bg-white px-4 py-6 shadow-sm`}>
       <View style={tw`flex-row items-center mb-2`}>
@@ -33,6 +35,8 @@ const Surprise = () => {
     </TouchableOpacity>
 
   </View>
+  <Footer />
+  </>
 );
 }
 
