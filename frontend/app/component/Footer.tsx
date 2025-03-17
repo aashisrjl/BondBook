@@ -6,6 +6,7 @@ import { TouchableOpacity, View } from 'react-native';
 import { RootStackParamList } from './types';
 const Footer = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>(); // Use react-navigation for navigation
+  console.log('Navigation object:', navigation)
 
   return (
     <View style={tw`flex-row justify-around p-2 h-14 border-t border-gray-900 bg-black mt-auto`}>
@@ -22,7 +23,7 @@ const Footer = () => {
       </TouchableOpacity>
 
 
-      <TouchableOpacity style={tw`items-center`} onPress={() => navigation.navigate('Setting')}>
+      <TouchableOpacity style={tw`items-center`} onPress={() => navigation.navigate('SettingPage')}>
         <Ionicons name="settings" size={30} color="white" />
       </TouchableOpacity>
 
