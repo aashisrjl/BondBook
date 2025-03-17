@@ -7,6 +7,7 @@ import tw from "twrnc";
 import { PlusIcon, XCircle, Play, Pause, VideoIcon, Trash2, X } from "lucide-react-native";
 import { Picker } from "@react-native-picker/picker";
 import { BASE_URL } from "@env";
+import Footer from "../../../component/Footer";
 
 const VideoGallery = () => {
   const [videos, setVideos] = useState([]);
@@ -122,7 +123,8 @@ const VideoGallery = () => {
   };
 
   return (
-    <View style={tw`flex-1 bg-gray-50 w-[31rem] mx-auto rounded-lg overflow-hidden`}>
+    <>
+    <View style={tw`flex-1 bg-gray-50 w-[] rounded-lg overflow-hidden`}>
       {/* Header */}
       <View style={tw`bg-white px-4 py-6 shadow-sm flex-row items-center`}>
         <VideoIcon size={24} color="#4B5563" />
@@ -248,6 +250,8 @@ const VideoGallery = () => {
         </Modal>
       )}
     </View>
+    <Footer />
+    </>
   );
 };
 
