@@ -53,11 +53,11 @@ const ContactSupport = () => {
 
   return (
     <>
-      <ScrollView style={tw`flex-1 p-4 bg-white rounded-xl shadow-md`}>
-        <Text style={tw`text-2xl font-bold mb-6 text-gray-800`}>Contact Support</Text>
+      <ScrollView style={tw`flex-1 p-10 bg-gray-900 text-white shadow-md`}>
+        <Text style={tw`text-2xl font-bold mb-6 text-white`}>Contact Support</Text>
         
         <View style={tw`mb-4`}>
-          <Text style={tw`text-base font-medium mb-2 text-gray-700`}>Name</Text>
+          <Text style={tw`text-base font-medium mb-2 text-gray-100`}>Name</Text>
           <TextInput
             style={tw`border border-gray-300 rounded-lg p-3 mb-4 bg-gray-50`}
             placeholder="Enter your name"
@@ -66,7 +66,7 @@ const ContactSupport = () => {
             autoCapitalize="words"
           />
           
-          <Text style={tw`text-base font-medium mb-2 text-gray-700`}>Email</Text>
+          <Text style={tw`text-base font-medium mb-2 text-gray-100`}>Email</Text>
           <TextInput
             style={tw`border border-gray-300 rounded-lg p-3 mb-4 bg-gray-50`}
             placeholder="Enter your email"
@@ -76,7 +76,7 @@ const ContactSupport = () => {
             autoCapitalize="none"
           />
           
-          <Text style={tw`text-base font-medium mb-2 text-gray-700`}>Subject</Text>
+          <Text style={tw`text-base font-medium mb-2 text-gray-100`}>Subject</Text>
           <TextInput
             style={tw`border border-gray-300 rounded-lg p-3 mb-4 bg-gray-50`}
             placeholder="Enter subject"
@@ -84,7 +84,7 @@ const ContactSupport = () => {
             onChangeText={(text) => handleChange('subject', text)}
           />
           
-          <Text style={tw`text-base font-medium mb-2 text-gray-700`}>Message</Text>
+          <Text style={tw`text-base font-medium mb-2 text-gray-100`}>Message</Text>
           <TextInput
             style={tw`border border-gray-300 rounded-lg p-3 mb-4 bg-gray-50 h-24`}
             placeholder="Enter your message"
@@ -109,7 +109,7 @@ const ContactSupport = () => {
           )}
         </View>
 
-        <Text style={tw`text-gray-500 text-sm mt-4`}>
+        <Text style={tw`text-gray-300 text-sm mt-4`}>
           You can also reach us at aashisrijal252@gmail.com or +977 9847749997.
         </Text>
       </ScrollView>
