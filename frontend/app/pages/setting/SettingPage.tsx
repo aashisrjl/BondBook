@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, ScrollView, Text, TouchableOpacity, Alert } from 'react-native';
 import tw from 'twrnc';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Footer from '../../component/Footer';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BASE_URL } from '@env';
 
 export function SettingsPage() {
   const navigation = useNavigation();
@@ -16,11 +19,11 @@ export function SettingsPage() {
     { id: 'SecurityPrivacy', title: 'Security & Privacy', icon: 'lock' },
     { id: 'AppSettings', title: 'App Settings', icon: 'settings' },
     { id: 'NotificationSec', title: 'Notifications', icon: 'help' },
-    { id: 'Legal', title: 'Legal', icon: 'gavel' },
     { id: 'AboutUs', title: 'About Us', icon: 'info' },
+    { id: 'ContactSupport', title: 'Contact Us', icon: 'person' },
     { id: 'Policies', title: 'Policies', icon: 'description' },
     { id: 'Help', title: 'Help', icon: 'support-agent' },
-    { id: 'Faq', title: 'Faq', icon: 'faq' },
+    { id: 'Faq', title: 'Faq', icon: 'chat' },
     { id: 'Logout', title: 'Logout', icon: 'logout' },
   ];
 
@@ -30,6 +33,31 @@ export function SettingsPage() {
     { id: 'Dark', title: 'Dark', icon: 'brightness-3' },
     { id: 'System', title: 'System', icon: 'settings-system-daydream' },
   ];
+  const [user,setUser] = useState(null);
+  const fetchUser = async () => {
+    const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        Alert.alert('Error', 'Please log in again');
+        return;
+      }
+
+      // Fetch user profile
+      const userResponse = await axios.get(
+        `${BASE_URL}/user/profile`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
+
+        setUser(userResponse.data.user);
+        console.log(userResponse.data.user)
+  }
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   return (
     <View style={tw`flex-1 bg-gray-900`}>
@@ -39,8 +67,8 @@ export function SettingsPage() {
           <MaterialIcons name="person" size={30} color="white" />
         </View>
         <View>
-          <Text style={tw`text-white text-xl font-bold`}>Aashish Rijal</Text>
-          <Text style={tw`text-gray-400 text-sm`}>984779997</Text>
+          <Text style={tw`text-white text-xl font-bold`}>{user?.name}</Text>
+          <Text style={tw`text-gray-400 text-sm`}>{user?.email}</Text>
         </View>
       </View>
 
