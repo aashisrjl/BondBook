@@ -14,8 +14,6 @@ import SettingPage from './pages/setting/SettingPage';
 import ProfilePage from './pages/profile/ProfilePage';
 import ChatSection from './pages/chat/chat';
 import { RootStackParamList } from './component/types';
-import { NavigationContainer } from '@react-navigation/native';
-
 import PartnerPage from './pages/profile/PartnerPage';
 import PartnerInfo from './pages/profile/PartnerInfo';
 import ForgotPassword from './pages/setting/settingComponent/forgotPassword';
@@ -46,7 +44,6 @@ const Stack = createNativeStackNavigator<RootStackParamList>(); // Use the RootS
 
 export default function RootLayout() {
   return (
-    // <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           headerStyle: { backgroundColor: 'black' },
@@ -77,6 +74,7 @@ export default function RootLayout() {
 
         <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
         <Stack.Screen name="Setting" component={SettingPage} options={{ title: 'Setting' }} />
+        <Stack.Screen name="Setting" component={SettingPage} options={{ title: 'Setting' }} />
         <Stack.Screen name="Profile" component={ProfilePage} options={{ title: 'Profile' }} />
         <Stack.Screen name="Partner" component={PartnerPage} options={{ title: 'Partner' }} />
         <Stack.Screen name="PartnerInfo" component={PartnerInfo} options={{ title: 'Partner Info' }} />
@@ -104,6 +102,5 @@ export default function RootLayout() {
         <Stack.Screen name="Chat" component={ChatSection} options={{ title: 'Chat' }} />
 
       </Stack.Navigator>
-    // </NavigationContainer>
   );
 }
