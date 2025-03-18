@@ -23,7 +23,7 @@ const Footer = () => {
       </TouchableOpacity>
 
 
-      <TouchableOpacity style={tw`items-center`} onPress={() => navigation.navigate('SettingPage')}>
+      <TouchableOpacity style={tw`items-center`} onPress={() => navigation.navigate('Setting')}>
         <Ionicons name="settings" size={30} color="white" />
       </TouchableOpacity>
 

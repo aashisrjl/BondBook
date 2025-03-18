@@ -39,13 +39,14 @@ import PartnerSection from './pages/setting/settingComponent/PartnerSection';
 import PasswordSection from './pages/setting/settingComponent/PasswordSection';
 import ProfileSection from './pages/setting/settingComponent/ProfileSection';
 import SecurityPrivacy from './pages/setting/settingComponent/SecurityPrivacy';
+import FAQ from './pages/about/faq';
 
 const Stack = createNativeStackNavigator<RootStackParamList>(); // Use the RootStackParamList for type safety
 
 
 export default function RootLayout() {
   return (
-    <NavigationContainer>
+    // <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           headerStyle: { backgroundColor: 'black' },
@@ -60,6 +61,8 @@ export default function RootLayout() {
         <Stack.Screen name="Policies" component={Policies} options={{ title: 'Policies' }} />
         <Stack.Screen name="ContactSupport" component={ContactSupport} options={{ title: 'ContactSupport' }} />
         <Stack.Screen name="Help" component={Help} options={{ title: 'Help' }} />
+        <Stack.Screen name="Faq" component={FAQ} options={{ title: 'FAQs' }} />
+
         <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
         <Stack.Screen name="SecurityPrivacy" component={SecurityPrivacy} options={{ title: 'Securities' }} />
 
@@ -73,7 +76,7 @@ export default function RootLayout() {
 
 
         <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
-        <Stack.Screen name="Setting" component={SettingPage} options={{ title: 'SettingPage' }} />
+        <Stack.Screen name="Setting" component={SettingPage} options={{ title: 'Setting' }} />
         <Stack.Screen name="Profile" component={ProfilePage} options={{ title: 'Profile' }} />
         <Stack.Screen name="Partner" component={PartnerPage} options={{ title: 'Partner' }} />
         <Stack.Screen name="PartnerInfo" component={PartnerInfo} options={{ title: 'Partner Info' }} />
@@ -101,6 +104,6 @@ export default function RootLayout() {
         <Stack.Screen name="Chat" component={ChatSection} options={{ title: 'Chat' }} />
 
       </Stack.Navigator>
-    </NavigationContainer>
+    // </NavigationContainer>
   );
 }

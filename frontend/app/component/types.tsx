@@ -3,12 +3,8 @@ export type RootStackParamList = {
     About: undefined;
     Login: undefined;
     Register: undefined;
-<<<<<<< HEAD
-
     Setting: undefined;
-=======
     SettingPage: undefined;
->>>>>>> 1eba6695 (update: update in navigation)
     Profile: undefined;
     Chat: undefined;
     Partner: undefined;
@@ -37,6 +33,7 @@ export type RootStackParamList = {
     Policies: undefined;
     ContactSupport: undefined;
     Help: undefined;
+    Faq: undefined;
 
     Logout:undefined;
     NotificationSec: undefined;
