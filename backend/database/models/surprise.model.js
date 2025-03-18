@@ -4,14 +4,11 @@ const surpiseSchema = new mongoose.Schema(
   {
     message: {
       type: String,
+      required:false
     },
     photo: {
       type: String,
-      validate(value) {
-        if (!validator.isURL(value)) {
-          throw new Error("not a valid photo", value);
-        }
-      },
+      required:false
     },
     isOpened: {
       type: Boolean,

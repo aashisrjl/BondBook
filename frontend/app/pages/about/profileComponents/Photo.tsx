@@ -8,8 +8,7 @@ import { PlusIcon, Image as ImageIcon, XCircle, X, Trash2 } from "lucide-react-n
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
-import { BASE_URL } from "@env";
-import Footer from "../../../component/Footer";
+// import { BASE_URL } from "@env";
 
 
 const Photo = () => {
@@ -26,8 +25,8 @@ const Photo = () => {
   // Fetch all photos from the backend
   const fetchPhotos = async () => {
     try {
-      console.log(BASE_URL+"/diary")
-      const res = await axios.get(`${BASE_URL}/getphoto`);
+      // console.log(BASE_URL+"/diary")
+      const res = await axios.get('http://192.168.1.74:3000/getphoto');
       setPhotos(res.data.photos);
     } catch (error) {
       console.error("Error fetching photos:", error);

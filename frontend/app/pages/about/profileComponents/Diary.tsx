@@ -31,7 +31,7 @@ const Diary = () => {
   const fetchDiaries = async () => {
     try {
       console.log(BASE_URL+"/diary")
-      const response = await axios.get(`${BASE_URL}/fetchAllDiary`);
+      const response = await axios.get('http://192.168.1.74:3000/fetchAllDiary');
       const data = await response.data.existingDiary;
       console.log("Fetched data:", data);
       setDiaryEntries(data);
