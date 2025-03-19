@@ -9,7 +9,7 @@ export type RootStackParamList = {
     Partner: undefined;
     PartnerInfo: undefined;
     ForgotPassword:undefined;
-
+    Gift:undefined;
     diary: undefined;
     reminders: undefined;
     timeline: undefined;
@@ -18,7 +18,6 @@ export type RootStackParamList = {
     music: undefined;
     address: undefined;
     surprise: undefined;
-
     partnerdiary: undefined;
     partnerreminders: undefined;
     partnertimeline: undefined;
@@ -27,19 +26,15 @@ export type RootStackParamList = {
     partnermusic: undefined;
     partneraddress: undefined;
     partnersurprise: undefined;
-
     AboutUs:undefined;
     Policies: undefined;
     ContactSupport: undefined;
     Help: undefined;
     Faq: undefined;
-
     Logout:undefined;
     NotificationSec: undefined;
     PartnerSec: undefined;
     PasswordSec: undefined;
     ProfileSec: undefined;
     SecurityPrivacy: undefined;
-
-
   };
