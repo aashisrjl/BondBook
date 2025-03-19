@@ -31,6 +31,50 @@ exports.sendSurprise = async(req,res)=>{
     }
 }
 
+exports.fetchAllSurprise = async (req, res) => {
+  try {
+    console.log("Fetch all surprise is called!");
+    const userId = req.userId;
+
+    const existingSurprise = await Surprise.find({
+      userId: userId,
+    });
+    if (!existingSurprise) {
+      return res
+        .status(500)
+        .json({ message: "There are no existing surprises available" });
+    }
+    return res
+      .status(200)
+      .json({ message: "All existing surprises are:", existingSurprise });
+  } catch (error) {
+    console.log("Error while updating the surprise is:", error);
+    return res
+      .status(500)
+      .json({ message: "Server error while updating surprises is:" });
+  }
+};
+
+exports.deleteSurprise = async(req,res)=>{
+
+  try{
+      const id = req.params.id;
+      if(!id)
+      {
+        return res.status(400).json({ message: "Surprise Id not found" });
+      }
+
+    await Surprise.findByIdAndDelete(id);
+    res.status(400).json({ message: "Surprise deleted successfully!" });
+  }
+  catch(error){
+    console.log("Error while deleting the surprises is:", error);
+    return res
+      .status(500)
+      .json({ message: "Server error while deleting Surprise is:" });
+
+  }
+}
 
 exports.getPartnerSurprise = async(req,res)=>{
     try {
@@ -65,7 +109,8 @@ exports.getPartnerSurprise = async(req,res)=>{
           .json({ message: "Server error while viewing  the surprise", error });                
         }
     }
- exports.updateSurprise = async (req, res) => {
+
+exports.updateSurprise = async (req, res) => {
         console.log("UpdateSurprise controller is called!");
         try {
           console.log("Req.params is:", req.params);
@@ -116,4 +161,8 @@ exports.getPartnerSurprise = async(req,res)=>{
             .json({ message: "Server error while updating Surprise:" });
         }
       };
+
+
+
+
 
