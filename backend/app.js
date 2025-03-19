@@ -48,6 +48,7 @@ const timelineRoute = require("./routes/timelineRoute/timeline.route")
 const photoRoute = require('./routes/photoRoute/photo.route')
 const userRoute = require('./routes/userRoute/user.route')
 const musicRoute = require('./routes/musicRoute/music.route.js');
+const surpriseRoute = require("./routes/surpriseRoute.js/surprise.route.js")
 
 app.use("/",authRoute);
 app.use("/",diaryRoute);
@@ -56,8 +57,8 @@ app.use("/",remainderRoute);
 app.use("/",timelineRoute);
 app.use("/",photoRoute);
 app.use("/",userRoute);
-app.use("/",musicRoute)
-
+app.use("/",musicRoute);
+app.use("/",surpriseRoute);
 
 connectToDatabase()
     .then(() => {
