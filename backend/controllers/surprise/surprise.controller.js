@@ -30,13 +30,58 @@ exports.sendSurprise = async (req, res) => {
   }
 };
 
-exports.getPartnerSurprise = async (req, res) => {
+exports.fetchAllSurprise = async (req, res) => {
   try {
+    console.log("Fetch all surprise is called!");
     const userId = req.userId;
-    const user = await User.findOne({ _id: userId });
-    if (!user) {
-      return res.status(400).json({ message: "User not found" });
+
+    const existingSurprise = await Surprise.find({
+      userId: userId,
+    });
+    if (!existingSurprise) {
+      return res
+        .status(500)
+        .json({ message: "There are no existing surprises available" });
     }
+    return res
+      .status(200)
+      .json({ message: "All existing surprises are:", existingSurprise });
+  } catch (error) {
+    console.log("Error while updating the surprise is:", error);
+    return res
+      .status(500)
+      .json({ message: "Server error while updating surprises is:" });
+  }
+};
+
+exports.deleteSurprise = async(req,res)=>{
+
+  try{
+      const id = req.params.id;
+      if(!id)
+      {
+        return res.status(400).json({ message: "Surprise Id not found" });
+      }
+
+    await Surprise.findByIdAndDelete(id);
+    res.status(400).json({ message: "Surprise deleted successfully!" });
+  }
+  catch(error){
+    console.log("Error while deleting the surprises is:", error);
+    return res
+      .status(500)
+      .json({ message: "Server error while deleting Surprise is:" });
+
+  }
+}
+
+exports.getPartnerSurprise = async(req,res)=>{
+    try {
+        const userId = req.userId;
+        const user = await User.findOne({ _id: userId });
+        if (!user) {
+          return res.status(400).json({ message: "User not found" });
+        }
 
     const partnerId = user.partnerId;
     if (!partnerId) {
@@ -119,30 +164,10 @@ exports.updateSurprise = async (req, res) => {
   }
 };
 
-exports.deleteSurprise = async (req, res) => {
-  console.log("DeleteSurprise controller is called!");
-  try {
-    const surpriseId = req.params._id;
-    if (!surpriseId) {
-      return res.status(400).json({ message: "Surprise ID is required" });
-    }
-    const existingSurprise = await Surprise.findById(surpriseId);
-    if (!existingSurprise) {
-      return res
-        .status(404)
-        .json({ message: "Surprise doesn't exist on database!" });
-    }
 
-    await Surprise.findByIdAndDelete(surpriseId);
 
-    res.status(200).json({ message: "Surprise has been deleted successfully" });
-  } catch (error) {
-    console.log("Error while deleting the surprise is:", error);
-    return res
-      .status(500)
-      .json({ message: "Server error while deleting Surprise:" });
-  }
-}
+//Message to the Surprise received     
+
 
 exports.getAllSurprises = async (req, res) => {
   try {
