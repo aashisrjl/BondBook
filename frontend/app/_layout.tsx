@@ -37,6 +37,7 @@ import PartnerSection from './pages/setting/settingComponent/PartnerSection';
 import PasswordSection from './pages/setting/settingComponent/PasswordSection';
 import ProfileSection from './pages/setting/settingComponent/ProfileSection';
 import SecurityPrivacy from './pages/setting/settingComponent/SecurityPrivacy';
+import Gift from './pages/gift/Gift';
 import FAQ from './pages/about/faq';
 
 const Stack = createNativeStackNavigator<RootStackParamList>(); // Use the RootStackParamList for type safety
@@ -59,6 +60,7 @@ export default function RootLayout() {
         <Stack.Screen name="ContactSupport" component={ContactSupport} options={{ title: 'ContactSupport' }} />
         <Stack.Screen name="Help" component={Help} options={{ title: 'Help' }} />
         <Stack.Screen name="Faq" component={FAQ} options={{ title: 'FAQs' }} />
+        <Stack.Screen name="Gift" component={Gift} options={{title:'Gift'}}/>
 
         <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
         <Stack.Screen name="SecurityPrivacy" component={SecurityPrivacy} options={{ title: 'Securities' }} />
