@@ -76,7 +76,6 @@ export default function RootLayout() {
 
         <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register' }} />
         <Stack.Screen name="Setting" component={SettingPage} options={{ title: 'Setting' }} />
-        <Stack.Screen name="Setting" component={SettingPage} options={{ title: 'Setting' }} />
         <Stack.Screen name="Profile" component={ProfilePage} options={{ title: 'Profile' }} />
         <Stack.Screen name="Partner" component={PartnerPage} options={{ title: 'Partner' }} />
         <Stack.Screen name="PartnerInfo" component={PartnerInfo} options={{ title: 'Partner Info' }} />

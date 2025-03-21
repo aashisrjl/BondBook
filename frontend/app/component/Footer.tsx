@@ -23,7 +23,7 @@ const Footer = () => {
       </TouchableOpacity>
 
       <TouchableOpacity style={tw`items-center`} onPress={() => navigation.navigate('Gift')}>
-        <Ionicons name="home" size={35} color="white" />
+        <Ionicons name="gift" size={35} color="white" />
       </TouchableOpacity>
 
 
