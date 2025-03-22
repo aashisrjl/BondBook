@@ -117,7 +117,7 @@ const SurprisePartner = () => {
                 Unwrap Your Surprise!
               </Text>
               <Text style={tw`text-gray-500 text-sm mt-1`}>
-                From your partner
+                "FromYourPartner " "     
               </Text>
             </TouchableOpacity>
           ))
