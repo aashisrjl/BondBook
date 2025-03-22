@@ -5,17 +5,21 @@ import tw from '../../../../tw';
 import Footer from '../../../component/Footer';
 import { BASE_URL } from '@env';
 import * as ImagePicker from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Surprise = () => {
   const [surprises, setSurprises] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [newSurprise, setNewSurprise] = useState({
     message: '',
-    photo: null, // Will store URI string
+    photo: null,
     scheduleFor: '',
     type: 'message'
   });
   const [editingSurprise, setEditingSurprise] = useState(null);
+
+  // Replace with your actual token retrieval method (e.g., AsyncStorage, Redux)
+  const token = AsyncStorage.getItem('token'); // Example, fetch from storage or context
 
   useEffect(() => {
     fetchSurprises();
@@ -23,8 +27,13 @@ const Surprise = () => {
 
   const fetchSurprises = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/fetchAllSurprise`);
+      const response = await fetch(`${BASE_URL}/fetchAllSurprise`, {
+        headers: {
+          'Authorization': `Bearer ${token}`, // Add if required
+        },
+      });
       const data = await response.json();
+      console.log('Fetched surprises:', data); // Debug log
       setSurprises(data.surprises || []);
     } catch (error) {
       console.error('Error fetching surprises:', error);
@@ -41,7 +50,6 @@ const Surprise = () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
       quality: 1,
     });
 
@@ -68,36 +76,39 @@ const Surprise = () => {
       } else if (newSurprise.photo) {
         formData.append('photo', {
           uri: newSurprise.photo,
-          type: 'image/jpeg', // Assuming JPEG, adjust if needed
+          type: 'image/jpeg',
           name: 'photo.jpg'
         });
       }
       formData.append('scheduleFor', newSurprise.scheduleFor);
 
-      if (editingSurprise) {
-        const response = await fetch(`${BASE_URL}/updateSurprise/${editingSurprise._id}`, {
-          method: 'PATCH',
-          body: formData,
-        });
-        if (response.ok) {
-          fetchSurprises();
-          setEditingSurprise(null);
-        } else {
-          Alert.alert('Error', 'Failed to update surprise');
-        }
+      const url = editingSurprise 
+        ? `${BASE_URL}/updateSurprise/${editingSurprise._id}`
+        : `${BASE_URL}/sendSurprise`;
+      const method = editingSurprise ? 'PATCH' : 'POST';
+
+      console.log('Sending request to:', url, 'with method:', method); // Debug log
+      console.log('FormData:', formData); // Debug log (note: FormData logging might be limited)
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Authorization': `Bearer ${token}`, // Add if required
+        },
+        body: formData,
+      });
+
+      const responseData = await response.json();
+      console.log('Response:', response.status, responseData); // Debug log
+
+      if (response.ok) {
+        fetchSurprises();
+        setEditingSurprise(null);
+        setModalVisible(false);
+        setNewSurprise({ message: '', photo: null, scheduleFor: '', type: 'message' });
       } else {
-        const response = await fetch(`${BASE_URL}/sendSurprise`, {
-          method: 'POST',
-          body: formData,
-        });
-        if (response.ok) {
-          fetchSurprises();
-        } else {
-          Alert.alert('Error', 'Failed to add surprise');
-        }
+        Alert.alert('Error', responseData.message || `Failed to ${editingSurprise ? 'update' : 'add'} surprise`);
       }
-      setModalVisible(false);
-      setNewSurprise({ message: '', photo: null, scheduleFor: '', type: 'message' });
     } catch (error) {
       console.error('Error saving surprise:', error);
       Alert.alert('Error', 'An error occurred while saving the surprise');
@@ -106,13 +117,21 @@ const Surprise = () => {
 
   const handleDeleteSurprise = async (id) => {
     try {
+      console.log('Deleting surprise with ID:', id); // Debug log
       const response = await fetch(`${BASE_URL}/deleteSurprise/${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`, // Add if required
+        },
       });
-      if (response.status === 200) {
+
+      const responseData = await response.json();
+      console.log('Delete response:', response.status, responseData); // Debug log
+
+      if (response.ok) { // Use response.ok to handle 200 or 204
         fetchSurprises();
       } else {
-        Alert.alert('Error', 'Failed to delete surprise');
+        Alert.alert('Error', responseData.message || 'Failed to delete surprise');
       }
     } catch (error) {
       console.error('Error deleting surprise:', error);
@@ -121,6 +140,7 @@ const Surprise = () => {
   };
 
   const handleEditSurprise = (surprise) => {
+    console.log('Editing surprise:', surprise); // Debug log
     setEditingSurprise(surprise);
     setNewSurprise({
       message: surprise.message || '',
@@ -162,7 +182,7 @@ const Surprise = () => {
                     <Text style={tw`text-gray-800 font-medium`}>Photo Surprise</Text>
                     {surprise.photo && (
                       <Image
-                        source={{ uri: BASE_URL +"/"+ surprise.photo }}
+                        source={{ uri: `${BASE_URL}/${surprise.photo}` }}
                         style={tw`w-20 h-20 mt-2 rounded`}
                       />
                     )}
@@ -170,7 +190,7 @@ const Surprise = () => {
                 )}
                 {surprise.scheduleFor && (
                   <Text style={tw`text-gray-500 text-sm`}>
-                    Scheduled for: {new Date(surprise.scheduleFor).toLocaleDateString()}
+                    Scheduled :{new Date(surprise.scheduleFor).toLocaleDateString()}
                   </Text>
                 )}
               </View>
@@ -258,7 +278,7 @@ const Surprise = () => {
                   </TouchableOpacity>
                   {newSurprise.photo && (
                     <Image
-                      source={{ uri: BASE_URL+"/"+newSurprise.photo }}
+                      source={{ uri: BASE_URL+ "/"+newSurprise.photo }}
                       style={tw`w-32 h-32 mt-2 rounded self-center`}
                     />
                   )}

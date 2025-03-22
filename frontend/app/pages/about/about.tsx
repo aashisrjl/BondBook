@@ -23,7 +23,7 @@ const AboutPage = () => {
       }
       console.log("Token:", token);
     };
-    // checkToken();
+    checkToken();
   }, [navigation]);
 
   const sections = [

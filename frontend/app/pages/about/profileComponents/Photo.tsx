@@ -8,6 +8,7 @@ import { PlusIcon, Image as ImageIcon, XCircle, X, Trash2 } from "lucide-react-n
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
+import Footer from "../../../component/Footer";
 // import { BASE_URL } from "@env";
 
 

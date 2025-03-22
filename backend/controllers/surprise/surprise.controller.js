@@ -150,7 +150,7 @@ exports.updateSurprise = async (req, res) => {
         console.log("UpdateSurprise controller is called!");
         try {
           console.log("Req.params is:", req.params);
-          const surpriseId = req.params._id;
+          const surpriseId = req.params.surpriseId;
           console.log("DiaryId is :", surpriseId);
           if (!surpriseId) {
             return res.status(400).json({ message: "Diary ID is required" });
