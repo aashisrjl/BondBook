@@ -22,11 +22,6 @@ const Footer = () => {
         <Ionicons name="home" size={35} color="white" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={tw`items-center`} onPress={() => navigation.navigate('Gift')}>
-        <Ionicons name="gift" size={35} color="white" />
-      </TouchableOpacity>
-
-
       <TouchableOpacity style={tw`items-center`} onPress={() => navigation.navigate('Setting')}>
         <Ionicons name="settings" size={30} color="white" />
       </TouchableOpacity>
